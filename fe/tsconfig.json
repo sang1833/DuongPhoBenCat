@@ -1,0 +1,26 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@components/*": ["./src/components/*"],
+      "@components": ["./src/components/index.d.ts"],
+      "@pages/*": ["./src/pages/*"],
+      "@pages": ["./src/pages/index.d.ts"],
+      "@types/*": ["./src/types/*"],
+      "@types": ["./src/types/index.d.ts"],
+      "@utils/*": ["./src/utils/*"],
+      // "@utils": ["./src/utils/index.d.ts"],
+      "@contexts/*": ["./src/contexts/*"],
+      "@contexts": ["./src/contexts/index.d.ts"],
+      // "@hooks/*": ["./src/hooks/*"],
+      // "@hooks": ["./src/hooks/index.d.ts"],
+      "@api": ["./src/generated-api/index.ts"],
+      "@api/*": ["./src/generated-api/*"],
+      "@css/*": ["./src/css/*"]
+    }
+  }
+}

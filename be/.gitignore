@@ -1,0 +1,26 @@
+# .NET Core
+bin/
+obj/
+*.db
+*.db-journal
+*.pdb
+*.log
+*.user
+*.lock.json
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.cachefile
+appsettings.json
+appsettings.Development.json
+
+# Visual Studio
+.vscode/
+.vs/
+.vscode/
+.vscode-test/
+
+# Rider
+.idea/
+.idea_modules/
