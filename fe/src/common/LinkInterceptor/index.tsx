@@ -36,8 +36,7 @@ const LinkInterceptor: React.FC<LinkInterceptorProps> = ({ children }) => {
   // Render intercepted page or the original children
   if (intercepted) {
     return (
-      // <section className="w-full h-screen flex flex-col items-center justify-center gap-4"></section>
-      <section className="w-full h-full flex items-center justify-center bg-slate-100">
+      <section className="w-full h-screen flex items-center justify-center bg-slate-100">
         <div className="bg-white p-8 rounded-lg shadow-lg max-w-md flex flex-col gap-4 text-center justify-center items-center">
           <h1 className="font-bold text-2xl mb-4 text-red-600">Chú ý!</h1>
           <p className="font-semibold text-xl mb-4 text-tailwind">
