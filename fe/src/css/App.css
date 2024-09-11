@@ -15,6 +15,11 @@ body {
   width: 100%;
 }
 
+/* leaflet container */
+.leaflet-bottom.leaflet-right {
+  @apply right-3 bottom-6 !important;
+}
+
 /* hide leaflet logo */
 .leaflet-attribution-flag {
   visibility: hidden !important;
@@ -34,11 +39,10 @@ body {
   box-sizing: border-box;
   cursor: pointer;
   font-size: 18px;
-  color: #333;
   text-align: center;
   transition: background-color 0.3s, color 0.3s;
   list-style: none;
-  @apply w-6 h-6 bg-white flex items-center justify-center shadow-3 border-2 border-solid border-neutral-300 rounded-full;
+  @apply w-6 h-6 bg-white text-black flex items-center justify-center shadow-3 border-2 border-solid border-neutral-300 rounded-full;
 }
 
 .custom-attribution-control summary:hover {
@@ -56,7 +60,7 @@ body {
 /* handle display attribution */
 .leaflet-control-attribution.leaflet-control {
   @apply absolute right-10 w-[220px] border rounded-lg border-solid border-transparent !important;
-  @apply bottom-19 xsm:bottom-14 sm:bottom-9 md:bottom-7 lg:bottom-4 !important;
+  @apply bottom-19 xsm:bottom-14 sm:bottom-9 md:bottom-7 lg:bottom-3 !important;
   @apply shadow-3 backdrop-blur-sm bg-white/30 transition-all duration-500 ease-in-out !important;
 }
 
@@ -87,7 +91,7 @@ body {
   @apply shadow-3 border-2 rounded-lg border-solid border-neutral-300 bg-white !important;
 }
 
-.leaflet-control-zoom-in,
+.leaflet-touch .leaflet-control-zoom-in,
 .leaflet-control-zoom-out {
   @apply text-black shadow-none bg-transparent !important;
 }

@@ -6,12 +6,13 @@ import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
-import RouteLayer from "./RouteLayer";
 import { MapContext } from "@contexts";
 import { StreetApi } from "@api";
-import { CustomRespone } from "@types";
+import { CustomRespone, Theme } from "@types";
+import RouteLayer from "./RouteLayer";
 import ProtomapsLayer from "./ProtomapLayer";
 import CustomAttributionControl from "./CustomAttributionControl";
+import LayerGroupControl from "./LayerGroupControl";
 
 // Fix the default icon issue in Leaflet
 const DefaultIcon = L.icon({
@@ -28,6 +29,7 @@ const MapComponent: React.FC = () => {
   const { position } = useContext(MapContext);
   const defaultCenter: [number, number] = [11.1616595, 106.594514];
   const [route, setRoute] = useState<L.GeoJSON | null>(null);
+  const [theme, setTheme] = useState<Theme>("light"); // Add state for theme
 
   const bounds: L.LatLngBoundsExpression = [
     [11.018, 106.4345], // Southwest coordinates
@@ -96,10 +98,11 @@ const MapComponent: React.FC = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         /> */}
-        <ProtomapsLayer />
+        <ProtomapsLayer theme={theme} />
         {route && <RouteLayer route={route} />}
         <CustomAttributionControl />
         <ZoomControl position="bottomright" />
+        <LayerGroupControl theme={theme} setTheme={setTheme} />
       </MapContainer>
     </>
   );

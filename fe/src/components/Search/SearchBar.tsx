@@ -50,7 +50,7 @@ const SearchBar: React.FC = () => {
   };
 
   return (
-    <search className="absolute z-9999 top-2 left-4">
+    <search className="absolute z-9999 top-6 left-6">
       <form onSubmit={handleSearch}>
         <input
           type="text"
