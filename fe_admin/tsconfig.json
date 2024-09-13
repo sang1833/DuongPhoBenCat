@@ -17,7 +17,7 @@
       "@contexts/*": ["./src/contexts/*"],
       "@contexts": ["./src/contexts/index.d.ts"],
       "@hooks/*": ["./src/hooks/*"],
-      "@hooks": ["./src/hooks/index.d.ts"],
+      "@hooks": ["./src/hooks/index.ts"],
       "@api": ["./src/generated-api/index.ts"]
     }
   }

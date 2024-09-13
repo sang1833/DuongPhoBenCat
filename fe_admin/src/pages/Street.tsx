@@ -1,6 +1,11 @@
 import { useContext, useEffect } from "react";
 import { LatLng } from "leaflet";
-import { Breadcrumb, Map, ContainedNormalButton } from "@components";
+import {
+  Breadcrumb,
+  Map,
+  ContainedNormalButton,
+  TableThree
+} from "@components";
 import { MapContext } from "@contexts";
 import { StreetApi, CreateStreetRequestDto } from "@api";
 
@@ -11,7 +16,7 @@ const Street = () => {
     navigator.geolocation.getCurrentPosition((position) => {
       setPosition([position.coords.latitude, position.coords.longitude]);
     });
-  }, []);
+  }, [setPosition]);
 
   const handlePostStreet = async () => {
     if (!waypoints || !routePolylines) {
@@ -42,7 +47,11 @@ const Street = () => {
 
   return (
     <section className="relative">
-      <Breadcrumb pageName="Street" />
+      <Breadcrumb pageName="Quản lý đường phố" />
+
+      <div className="flex flex-col gap-10">
+        <TableThree />
+      </div>
       <Map />
       <ContainedNormalButton color="primary" onClick={handlePostStreet}>
         Test

@@ -8,3 +8,5 @@ export * from "./Buttons/ContainedButton";
 export { default as UnderlineText } from "./Texts/UnderlineText";
 // icons
 export { default as MapWithPointIcon } from "./Icons/MapWithPointIcon";
+// tables
+export { default as TableThree } from "./Tables/TableThree";

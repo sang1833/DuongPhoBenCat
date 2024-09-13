@@ -16,7 +16,7 @@ export default defineConfig({
       "@images": fileURLToPath(
         new URL("src/images/index.d.ts", import.meta.url)
       ),
-      "@hooks": fileURLToPath(new URL("src/hooks/index.d.ts", import.meta.url)),
+      "@hooks": fileURLToPath(new URL("src/hooks/index.ts", import.meta.url)),
       "@contexts": fileURLToPath(
         new URL("src/contexts/index.d.ts", import.meta.url)
       ),
