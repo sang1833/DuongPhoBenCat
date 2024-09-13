@@ -1,13 +1,14 @@
 import React, { useContext, useState } from "react";
 import L from "leaflet";
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer } from "react-leaflet";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
-import Routing from "./Routing";
 import { MapContext } from "@contexts";
 import { OutlinedNormalButton } from "@components";
+import Routing from "./Routing";
+import ProtomapsLayer from "./ProtomapLayer";
 
 // Fix the default icon issue in Leaflet
 const DefaultIcon = L.icon({
@@ -44,10 +45,11 @@ const MapComponent: React.FC = () => {
           maxBounds={bounds}
           maxBoundsViscosity={1.0}
         >
-          <TileLayer
+          {/* <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
+          /> */}
+          <ProtomapsLayer theme="light" />
           <Routing />
         </MapContainer>
       )}

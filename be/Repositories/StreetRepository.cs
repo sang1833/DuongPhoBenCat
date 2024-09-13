@@ -32,7 +32,8 @@ namespace be.Repositories
 
             if (!string.IsNullOrWhiteSpace(queryObject.StreetName))
             {
-                streets = streets.Where(s => s.StreetName.Contains(queryObject.StreetName));
+                string lowerCaseStreetName = queryObject.StreetName.ToLower();
+                streets = streets.Where(s => s.StreetName.ToLower().Contains(lowerCaseStreetName));
             }
 
             if (!string.IsNullOrWhiteSpace(queryObject.StreetType))

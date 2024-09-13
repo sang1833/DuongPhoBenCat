@@ -16,8 +16,8 @@
       // "@utils": ["./src/utils/index.d.ts"],
       "@contexts/*": ["./src/contexts/*"],
       "@contexts": ["./src/contexts/index.d.ts"],
-      // "@hooks/*": ["./src/hooks/*"],
-      // "@hooks": ["./src/hooks/index.d.ts"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@hooks": ["./src/hooks/index.ts"],
       "@api": ["./src/generated-api/index.ts"],
       "@api/*": ["./src/generated-api/*"],
       "@css/*": ["./src/css/*"]

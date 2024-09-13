@@ -14,6 +14,7 @@ namespace be.Models
         [Required]
         public string StreetName { get; set; } = "";
         public string StreetType { get; set; } = "";
+        public string Address { get; set; } = "";
         public string Description { get; set; } = "";
         public required LineString Route { get; set; }
         public required LineString WayPoints { get; set; }

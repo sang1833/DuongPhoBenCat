@@ -23,10 +23,9 @@ const Routing: React.FC = () => {
     const routingControl = L.Routing.control({
       waypoints: waypoints,
       router: L.Routing.osrmv1({
-        serviceUrl:
-          import.meta.env.DEV
-            ? import.meta.env.VITE_OSRM_DEV_URL
-            : import.meta.env.VITE_OSRM_URL
+        serviceUrl: import.meta.env.DEV
+          ? import.meta.env.VITE_OSRM_DEV_URL
+          : import.meta.env.VITE_OSRM_URL
       }),
       routeWhileDragging: true,
       fitSelectedRoutes: true,

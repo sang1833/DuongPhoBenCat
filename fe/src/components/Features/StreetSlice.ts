@@ -3,15 +3,15 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { RouteResponse } from "@types";
 
 // Define the type for the state
-interface StreetState {
+export interface StreetState {
   isLoading: boolean;
-  routes: RouteResponse[];
+  streetLists: RouteResponse[];
 }
 
 // Define the initial state using the type
 const initialState: StreetState = {
   isLoading: true,
-  routes: []
+  streetLists: []
 };
 
 // Define the type for the response data
@@ -39,14 +39,21 @@ export const streetSlice = createSlice({
   initialState,
   reducers: {
     addRoute: (state, action: PayloadAction<RouteResponse>) => {
-      state.routes.push(action.payload);
+      state.streetLists.push(action.payload);
+    },
+    addFirstRoute: (state, action: PayloadAction<RouteResponse>) => {
+      state.streetLists = [action.payload];
+    },
+    addRoutes: (state, action: PayloadAction<RouteResponse[]>) => {
+      state.streetLists = action.payload;
     },
     clearRoutes: (state) => {
-      state.routes = [];
+      state.streetLists = [];
     }
   }
 });
 
-export const { addRoute, clearRoutes } = streetSlice.actions;
+export const { addRoute, addFirstRoute, addRoutes, clearRoutes } =
+  streetSlice.actions;
 
 export default streetSlice.reducer;
