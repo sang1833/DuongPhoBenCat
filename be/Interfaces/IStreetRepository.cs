@@ -10,7 +10,11 @@ namespace be.Interfaces
     public interface IStreetRepository
     {
         Task<List<Street>> GetAllAsync(StreetQueryObject queryObject);
+        Task<List<Street>> SearchAllAsync(string searchParam);
         Task<Street?> GetByIdAsync(int id);
-        Task<Street> CreateAsync(Street street);
+        Task<Street> CreateAsync(Street? street);
+        Task<Street?> UpdateAsync(Street? street, int id);
+        Task<Street?> DeleteAsync(int id);
+        Task<bool> IsStreetExistsAsync(int id);
     }
 }

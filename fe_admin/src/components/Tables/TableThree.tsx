@@ -1,4 +1,7 @@
 import { Package } from "@types";
+import { ContainedNormalButton } from "@components";
+import SearchBar from "./SearchBar";
+import DropDownFilter from "./DropdownFilter";
 
 const packageData: Package[] = [
   {
@@ -25,6 +28,15 @@ const TableThree = () => {
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
+        <div className="flex justify-between items-center">
+          <div className="flex justify-center items-center gap-2">
+            <SearchBar />
+            <DropDownFilter />
+          </div>
+          <ContainedNormalButton color="primary" className=" max-h-12">
+            {"Thêm đường"}
+          </ContainedNormalButton>
+        </div>
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
@@ -124,7 +136,7 @@ const TableThree = () => {
                         />
                       </svg>
                     </button>
-                    <button className="hover:text-primary">
+                    {/* <button className="hover:text-primary">
                       <svg
                         className="fill-current"
                         width="18"
@@ -142,7 +154,7 @@ const TableThree = () => {
                           fill=""
                         />
                       </svg>
-                    </button>
+                    </button> */}
                   </div>
                 </td>
               </tr>

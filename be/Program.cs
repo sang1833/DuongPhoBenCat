@@ -1,9 +1,12 @@
+using System.Reflection;
 using be.Data;
 using be.Helpers;
 using be.Interfaces;
 using be.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +19,11 @@ var dataSource = dataSourceBuilder.Build();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "Bản đồ Bến Cát", Version = "v1" });
+    
+    // Set the comments path for the Swagger JSON and UI.
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
 });
 builder.Services.AddCors(options =>
 {
@@ -38,6 +46,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 ));
 
 builder.Services.AddScoped<IStreetRepository, StreetRepository>();
+builder.Services.AddScoped<IStreetHistoryRepository, StreetHistoryRepository>();
+builder.Services.AddScoped<IStreetImageRepository, StreetImageRepository>();
 
 var app = builder.Build();
 

@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace be.Models
 {
-    public class StreetHistory
+    public class StreetImage
     {
         [Key]
         public int Id { get; set; }
         [Required]
-        public string HistoryName { get; set; } = "";
-        [DataType(DataType.MultilineText)]
-        public string? Content { get; set; } = "";
+        public string ImageUrl { get; set; } = "";
+        public string Description { get; set; } = "";
         public DateTime UpdatedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         [Required]

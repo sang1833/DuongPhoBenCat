@@ -16,7 +16,12 @@ namespace be.Models
         public string StreetType { get; set; } = "";
         public string Address { get; set; } = "";
         public string Description { get; set; } = "";
-        public required LineString Route { get; set; }
-        public required LineString WayPoints { get; set; }
+        public string ImageUrl { get; set; } = "";
+        public DateTime UpdatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public LineString? Route { get; set; }
+        public LineString? WayPoints { get; set; }
+        public List<StreetHistory> Histories { get; set; } = new List<StreetHistory>();
+        public List<StreetImage> Images { get; set; } = new List<StreetImage>();
     }
 }
