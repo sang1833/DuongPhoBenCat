@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using be.Dtos;
 using be.Dtos.Street;
+using be.Dtos.StreetImage;
 using be.Helpers;
 using be.Interfaces;
 using be.Mappers;
@@ -17,10 +19,14 @@ namespace be.Controllers
     public class StreetController : ControllerBase
     {
         private readonly IStreetRepository _streetRepo;
+        private readonly IStreetHistoryRepository _streetHistoryRepo;
+        private readonly IStreetImageRepository _streetImageRepo;
 
-        public StreetController(IStreetRepository streetRepository)
+        public StreetController(IStreetRepository streetRepository, IStreetHistoryRepository streetHistoryRepository, IStreetImageRepository streetImageRepository)
         {
             _streetRepo = streetRepository;
+            _streetHistoryRepo = streetHistoryRepository;
+            _streetImageRepo = streetImageRepository;
         }
 
         [HttpGet]
@@ -35,7 +41,7 @@ namespace be.Controllers
         }
 
         [HttpGet] 
-        [Route("searchAdmin")]
+        [Route("adminSearch")]
         public async Task<IActionResult> SearchAdmin([FromQuery] StreetQueryObject queryObject)
         {
             if (!ModelState.IsValid)
@@ -47,7 +53,7 @@ namespace be.Controllers
         }
 
         [HttpGet] 
-        [Route("searchUser")]
+        [Route("userSearch")]
         public async Task<IActionResult> SearchUser([FromQuery] string searchParam)
         {
             if (!ModelState.IsValid)
@@ -69,50 +75,17 @@ namespace be.Controllers
             {
                 return NotFound();
             }
-            return Ok(street.ToStreetDto());
+            StreetDto streetDto = street.ToStreetDto();
+
+            return Ok(streetDto);
         }
 
         /// <summary>
-        /// You must change Routes and WayPoints to make it work
+        /// Carefully with Route and WayPoints coordinates
         /// </summary>
-        /// <remarks>
-        /// Routes / WayPoints coordinates example (At least 2 points are required because it is a LineString):   
-        /// {
-        ///     "route": {  
-        ///       "type": "LineString",  
-        ///       "coordinates": [  
-        ///         [  
-        ///           40.712776,  
-        ///           -74.005974  
-        ///         ],  
-        ///         [  
-        ///           40.713776,  
-        ///           -74.006974   
-        ///         ]  
-        ///       ]  
-        ///     },  
-        ///     "wayPoints": {  
-        ///       "type": "LineString",  
-        ///       "coordinates": [  
-        ///         [  
-        ///           40.712776,  
-        ///          -74.005974  
-        ///         ],  
-        ///         [  
-        ///           40.713776,  
-        ///           -74.006974  
-        ///         ],  
-        ///         [  
-        ///           40.714776,  
-        ///           -74.007974  
-        ///         ]
-        ///       ]
-        ///     }
-        ///   }
-        ///   </remarks>
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateStreetRequestDto streetDto)
-        {
+        [HttpPost("adminCreate")]
+        public async Task<IActionResult> AdminCreate([FromBody] CreateStreetRequestDto streetDto)
+        {  
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Data don't meet requirement", ModelState });
             else if (streetDto == null)
@@ -121,11 +94,25 @@ namespace be.Controllers
                 return BadRequest(new { message = "At least 2 points are required for Route and WayPoints" });
 
             Street createdStreet = await _streetRepo.CreateAsync(streetDto?.ToStreetFromCreateDto());
+            
+            if (streetDto != null && streetDto.StreetImages != null)
+            {
+                foreach (CreateStreetImageRequestDto streetImage in streetDto.StreetImages)
+                {
+                    try {
+                        await _streetImageRepo.CreateAsync(streetImage.ToStreetImageFromCreateDto(createdStreet.Id));
+                    }
+                    catch (Exception e) {
+                        return BadRequest(new { message = $"Error when create image: {streetImage.ImageUrl}, Decription: ", e.Message });
+                    }
+                }
+            }
+
             return CreatedAtAction(nameof(GetById), new { id = createdStreet.Id }, createdStreet);
         }
 
         /// <summary>
-        /// You must change Routes and WayPoints to make it work
+        /// Carefully with Route and WayPoints coordinates
         /// </summary>
         /// <remarks>
         /// Routes / WayPoints coordinates example (At least 2 points are required because it is a LineString):   

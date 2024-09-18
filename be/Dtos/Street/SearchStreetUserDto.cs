@@ -7,6 +7,7 @@ namespace be.Dtos.Street
 {
     public class SearchStreetUserDto
     {
+        public required int Id { get; set; }
         public required string StreetName { get; set; }
         public string? StreetType { get; set; }
         public string? Address { get; set; }

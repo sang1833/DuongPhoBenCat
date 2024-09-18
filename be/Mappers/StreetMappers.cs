@@ -38,7 +38,7 @@ namespace be.Mappers
                 Route = street.Route,
                 WayPoints = street.WayPoints,
                 Histories = street.Histories.Select(c => c.ToStreetHistoryDto()).ToList(),
-                Images = street.Images.Select(c => c.ToStreetImageDto()).ToList()
+                Images = street.Images.Select(c => c.ToImageInStreetDto()).ToList()
             };
         }
 
@@ -60,6 +60,7 @@ namespace be.Mappers
         {
             return new SearchStreetUserDto
             {
+                Id = street.Id,
                 StreetName = street.StreetName,
                 StreetType = street.StreetType,
                 Address = street.Address,

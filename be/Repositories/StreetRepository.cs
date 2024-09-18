@@ -82,7 +82,10 @@ namespace be.Repositories
 
         public async Task<Street?> GetByIdAsync(int id)
         {
-            return await _context.Streets.FirstOrDefaultAsync(s => s.Id == id);
+            return await _context.Streets
+                .Include(c => c.Histories)
+                .Include(c => c.Images)
+                .FirstOrDefaultAsync(s => s.Id == id);
         }
 
         public Task<bool> IsStreetExistsAsync(int id)
