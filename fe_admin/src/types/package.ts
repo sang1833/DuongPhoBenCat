@@ -1,6 +1,7 @@
 export type Package = {
-  name: string;
-  address: string;
-  streetType: string;
-  updateDate: string;
+  streetName: string;
+  address?: string;
+  streetType?: string;
+  updatedDate?: string;
+  createdDate?: string;
 };

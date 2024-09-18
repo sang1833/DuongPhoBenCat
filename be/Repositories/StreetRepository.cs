@@ -93,6 +93,41 @@ namespace be.Repositories
             return _context.Streets.AnyAsync(s => s.Id == id);
         }
 
+        public async Task<List<Street>> SearchAdminAsync(StreetQueryObject queryObject)
+        {
+            IQueryable<Street> streets = _context.Streets.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(queryObject.StreetName))
+            {
+                string lowerCaseStreetName = queryObject.StreetName.ToLower();
+                streets = streets.Where(s => s.StreetName.ToLower().Contains(lowerCaseStreetName));
+            }
+
+            if (!string.IsNullOrWhiteSpace(queryObject.StreetType))
+            {
+                streets = streets.Where(s => s.StreetType == queryObject.StreetType);
+            }
+
+            if (!string.IsNullOrWhiteSpace(queryObject.SortBy))
+            {
+                if(queryObject.SortBy.Equals("StreetName", StringComparison.OrdinalIgnoreCase)){
+                    streets = queryObject.IsDecsending ? streets.OrderByDescending(x => x.StreetName) : streets.OrderBy(x => x.StreetName);
+                } else if(queryObject.SortBy.Equals("UpdatedDate", StringComparison.OrdinalIgnoreCase)){
+                    streets = queryObject.IsDecsending ? streets.OrderByDescending(x => x.UpdatedDate) : streets.OrderBy(x => x.UpdatedDate);
+                } else if(queryObject.SortBy.Equals("CreatedDate", StringComparison.OrdinalIgnoreCase)){
+                    streets = queryObject.IsDecsending ? streets.OrderByDescending(x => x.CreatedDate) : streets.OrderBy(x => x.CreatedDate);
+                } else if(queryObject.SortBy.Equals("StreetType", StringComparison.OrdinalIgnoreCase)){
+                    streets = queryObject.IsDecsending ? streets.OrderByDescending(x => x.StreetType) : streets.OrderBy(x => x.StreetType);
+                } else if(queryObject.SortBy.Equals("Address", StringComparison.OrdinalIgnoreCase)){
+                    streets = queryObject.IsDecsending ? streets.OrderByDescending(x => x.Address) : streets.OrderBy(x => x.Address);
+                } 
+            }
+
+            int skipNumber = (queryObject.PageNumber - 1) * queryObject.PageSize;
+
+            return await streets.Skip(skipNumber).Take(queryObject.PageSize).ToListAsync();
+        }
+
         public async Task<List<Street>> SearchAllAsync(string searchParam)
         {
             IQueryable<Street> streets = _context.Streets.AsQueryable();
