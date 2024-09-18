@@ -3,14 +3,32 @@ using be.Data;
 using be.Helpers;
 using be.Interfaces;
 using be.Repositories;
+using be.Services;
+using CloudinaryDotNet;
+using dotenv.net;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Npgsql;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
+DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));
+
+// Initialize Cloudinary
+var cloudinaryUrl = Environment.GetEnvironmentVariable("CLOUDINARY_URL");
+if (string.IsNullOrEmpty(cloudinaryUrl))
+{
+    throw new InvalidOperationException("Cloudinary URL is not set in environment variables.");
+}
+
+Cloudinary cloudinary = new Cloudinary(Environment.GetEnvironmentVariable("CLOUDINARY_URL"));
+cloudinary.Api.Secure = true;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
-var dataSourceBuilder = new NpgsqlDataSourceBuilder(builder.Configuration.GetConnectionString("DefaultConnection"));
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
 dataSourceBuilder.UseNetTopologySuite();
 var dataSource = dataSourceBuilder.Build();
 
@@ -45,9 +63,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(dataSource, o => o.UseNetTopologySuite()
 ));
 
+builder.Services.AddSingleton(cloudinary);
+
 builder.Services.AddScoped<IStreetRepository, StreetRepository>();
 builder.Services.AddScoped<IStreetHistoryRepository, StreetHistoryRepository>();
 builder.Services.AddScoped<IStreetImageRepository, StreetImageRepository>();
+builder.Services.AddScoped<IImageUploadService, ImageUploadService>();
 
 var app = builder.Build();
 

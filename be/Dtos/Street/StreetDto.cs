@@ -24,6 +24,6 @@ namespace be.Dtos
         public LineString? Route { get; set; }
         public LineString? WayPoints { get; set; }
         public List<StreetHistoryDto>? Histories { get; set; }
-        public List<StreetImageDto>? Images { get; set; }
+        public List<ImageInStreetDto>? Images { get; set; }
     }
 }

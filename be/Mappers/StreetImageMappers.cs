@@ -15,6 +15,7 @@ namespace be.Mappers
             return new StreetImage
             {
                 ImageUrl = createStreetImageRequestDto.ImageUrl,
+                PublicId = createStreetImageRequestDto.PublicId,
                 Description = createStreetImageRequestDto.Description ?? "",
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
@@ -28,10 +29,21 @@ namespace be.Mappers
             {
                 Id = streetImage.Id,
                 ImageUrl = streetImage.ImageUrl,
+                PublicId = streetImage.PublicId,
                 Description = streetImage.Description,
                 UpdatedDate = streetImage.UpdatedDate,
                 CreatedDate = streetImage.CreatedDate,
                 StreetId = streetImage.StreetId
+            };
+        }
+
+        public static ImageInStreetDto ToImageInStreetDto(this StreetImage streetImage)
+        {
+            return new ImageInStreetDto
+            {
+                Id = streetImage.Id,
+                ImageUrl = streetImage.ImageUrl,
+                Description = streetImage.Description
             };
         }
 
@@ -40,6 +52,7 @@ namespace be.Mappers
             return new StreetImage
             {
                 ImageUrl = updateStreetImageRequestDto.ImageUrl,
+                PublicId = updateStreetImageRequestDto.PublicId ?? "",
                 Description = updateStreetImageRequestDto.Description ?? "",
                 UpdatedDate = DateTime.Now
             };

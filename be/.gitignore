@@ -15,6 +15,12 @@ obj/
 appsettings.json
 appsettings.Development.json
 
+# Environment
+.env
+.env.development
+.env.local
+.env.production
+
 # Visual Studio
 .vscode/
 .vs/
