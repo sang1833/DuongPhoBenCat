@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import DefaultLayout from "./layout/DefaultLayout";
 import { Street } from "@pages";
 import { MapProvider } from "@contexts";
-import { InterceptPage } from "@pages";
+import { InterceptPage, StreetDetail } from "@pages";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -12,9 +12,13 @@ const App = () => {
       children: [
         {
           path: "street",
+          element: <Street />
+        },
+        {
+          path: "street-detail",
           element: (
             <MapProvider>
-              <Street />
+              <StreetDetail />
             </MapProvider>
           )
         },

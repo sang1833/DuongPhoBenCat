@@ -1,50 +1,6 @@
-import { useContext, useEffect } from "react";
-import { LatLng } from "leaflet";
-import {
-  Breadcrumb,
-  Map,
-  ContainedNormalButton,
-  TableThree
-} from "@components";
-import { MapContext } from "@contexts";
-import { StreetApi, CreateStreetRequestDto } from "@api";
+import { Breadcrumb, TableThree } from "@components";
 
 const Street = () => {
-  const { setPosition, waypoints, routePolylines } = useContext(MapContext);
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      setPosition([position.coords.latitude, position.coords.longitude]);
-    });
-  }, [setPosition]);
-
-  const handlePostStreet = async () => {
-    if (!waypoints || !routePolylines) {
-      console.error("No waypoints or route polylines to post street");
-      return;
-    }
-
-    const streetApi = new StreetApi();
-    const createStreetRequestDto: CreateStreetRequestDto = {
-      streetName: "Example Street",
-      streetType: "Residential",
-      description: "An example street",
-      wayPoints: {
-        coordinates: waypoints?.map((wp: LatLng) => [wp.lat, wp.lng])
-      },
-      route: {
-        coordinates: routePolylines?.map((wp: LatLng) => [wp.lat, wp.lng])
-      }
-    };
-
-    try {
-      const response = await streetApi.apiStreetPost(createStreetRequestDto);
-      console.log("Street created successfully:", response);
-    } catch (error) {
-      console.error("Error creating street:", error);
-    }
-  };
-
   return (
     <section className="relative">
       <Breadcrumb pageName="Quản lý đường phố" />
@@ -52,10 +8,6 @@ const Street = () => {
       <div className="flex flex-col gap-10">
         <TableThree />
       </div>
-      <Map />
-      <ContainedNormalButton color="primary" onClick={handlePostStreet}>
-        Test
-      </ContainedNormalButton>
     </section>
   );
 };

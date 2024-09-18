@@ -13,11 +13,14 @@
   "dependencies": {
     "@types/leaflet-routing-machine": "^3.2.8",
     "axios": "^1.7.7",
+    "date-fns": "^4.1.0",
+    "i18next": "^23.15.1",
     "leaflet": "^1.9.4",
     "leaflet-routing-machine": "^3.2.12",
     "lucide-react": "^0.441.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-i18next": "^15.0.2",
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.26.1",
     "url": "^0.11.4"

@@ -108,7 +108,7 @@ namespace be.Controllers
                 }
             }
 
-            return CreatedAtAction(nameof(GetById), new { id = createdStreet.Id }, createdStreet);
+            return CreatedAtAction(nameof(GetById), new { id = createdStreet.Id }, createdStreet.ToStreetDto());
         }
 
         /// <summary>
