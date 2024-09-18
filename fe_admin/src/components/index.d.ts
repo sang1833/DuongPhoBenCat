@@ -10,3 +10,5 @@ export { default as UnderlineText } from "./Texts/UnderlineText";
 export { default as MapWithPointIcon } from "./Icons/MapWithPointIcon";
 // tables
 export { default as TableThree } from "./Tables/TableThree";
+// street
+export { default as StreetImage } from "./Street/StreetImage";

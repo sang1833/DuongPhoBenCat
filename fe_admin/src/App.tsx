@@ -2,7 +2,12 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import DefaultLayout from "./layout/DefaultLayout";
 import { Street } from "@pages";
 import { MapProvider } from "@contexts";
-import { InterceptPage, StreetDetail } from "@pages";
+import {
+  InterceptPage,
+  StreetDetail,
+  StreetCreate,
+  NotFoundPage
+} from "@pages";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -15,7 +20,7 @@ const App = () => {
           element: <Street />
         },
         {
-          path: "street-detail",
+          path: "street-detail/:streetId",
           element: (
             <MapProvider>
               <StreetDetail />
@@ -23,8 +28,16 @@ const App = () => {
           )
         },
         {
+          path: "street-create",
+          element: <StreetCreate />
+        },
+        {
           path: "intercept",
           element: <InterceptPage />
+        },
+        {
+          path: "*",
+          element: <NotFoundPage />
         }
       ]
     }

@@ -35,9 +35,9 @@ namespace be.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            IEnumerable<Street> streets = await _streetRepo.GetAllAsync(queryObject);
+            (List<Street> streets, int totalPages) = await _streetRepo.GetAllAsync(queryObject);
             IEnumerable<StreetDto> streetDtos = streets.Select(s => s.ToStreetDto()).ToList();
-            return Ok(streetDtos);
+            return Ok(new { Streets = streets, TotalPages = totalPages });
         }
 
         [HttpGet] 
@@ -47,9 +47,9 @@ namespace be.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            IEnumerable<Street> streets = await _streetRepo.GetAllAsync(queryObject);
+            (List<Street> streets, int totalPages) = await _streetRepo.SearchAdminAsync(queryObject);
             IEnumerable<SearchStreetAdminDto> streetDtos = streets.Select(s => s.ToSearchStreetAdminDto()).ToList();
-            return Ok(streetDtos);
+            return Ok(new { Streets = streetDtos, TotalPages = totalPages });
         }
 
         [HttpGet] 
@@ -164,7 +164,7 @@ namespace be.Controllers
             {
                 return NotFound();
             }
-            return Ok(updatedStreet);
+            return Ok(updatedStreet.ToStreetDto());
         }
 
         [HttpDelete("{id:int}")]
@@ -180,7 +180,7 @@ namespace be.Controllers
                 return NotFound();
             }
 
-            return Ok(new { message = "Street deleted successfully", deletedStreet });
+            return Ok(new { message = "Street deleted successfully", deletedStreet});
         }
     }
 }

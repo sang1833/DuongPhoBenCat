@@ -1,15 +1,18 @@
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { parseISO, format } from "date-fns";
 import { SquarePen } from "lucide-react";
 import { ContainedNormalButton } from "@components";
-import { IStreetSearch } from "@types";
+import { IStreetSearch, IStreetSearchList } from "@types";
 import { StreetApi } from "@api";
 import { StreetListContext } from "@contexts";
 import SearchBar from "./SearchBar";
 import DropDownFilter from "./DropdownFilter";
 import UpDownSymbol from "./UpDownSymbol";
+import Pagination from "./Pagination";
 
 const TableThree = () => {
+  const navigate = useNavigate();
   const { filter } = useContext(StreetListContext);
   const [streetList, setStreetList] = useState<IStreetSearch[]>();
   const [search, setSearch] = useState<string>("");
@@ -17,6 +20,9 @@ const TableThree = () => {
   const [sortBy, setSortBy] = useState<"createdDate" | "updatedDate">(
     "createdDate"
   );
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(5);
 
   useEffect(() => {
     async function fetchStreetList() {
@@ -27,10 +33,13 @@ const TableThree = () => {
           filter,
           sortBy,
           isDesc,
-          1,
-          5
+          currentPage,
+          itemsPerPage
         );
-        setStreetList(response.data as unknown as IStreetSearch[]);
+        setStreetList((response.data as unknown as IStreetSearchList)?.streets);
+        setTotalPages(
+          (response.data as unknown as IStreetSearchList)?.totalPages
+        );
       } catch (error) {
         console.error("Error fetching street list:", error);
       }
@@ -38,7 +47,7 @@ const TableThree = () => {
 
     const debounceFetch = setTimeout(fetchStreetList, 300);
     return () => clearTimeout(debounceFetch);
-  }, [search, filter, sortBy, isDesc]);
+  }, [search, filter, sortBy, isDesc, currentPage, itemsPerPage]);
 
   const handleSort = (sortField: "createdDate" | "updatedDate") => {
     if (sortBy === sortField) {
@@ -57,7 +66,11 @@ const TableThree = () => {
             <SearchBar setSearch={setSearch} />
             <DropDownFilter />
           </div>
-          <ContainedNormalButton color="primary" className=" max-h-12">
+          <ContainedNormalButton
+            color="primary"
+            className=" max-h-12"
+            onClick={() => navigate("/street-create")}
+          >
             {"Thêm đường"}
           </ContainedNormalButton>
         </div>
@@ -86,7 +99,7 @@ const TableThree = () => {
                   </th>
                   <th
                     onClick={() => handleSort("createdDate")}
-                    className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white hover:bg-bodydark1 cursor-pointer"
+                    className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white hover:bg-bodydark1 dark:hover:bg-black cursor-pointer"
                   >
                     <div className="flex justify-between items-center">
                       <p>Ngày tạo</p>
@@ -97,7 +110,7 @@ const TableThree = () => {
                   </th>
                   <th
                     onClick={() => handleSort("updatedDate")}
-                    className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white hover:bg-bodydark1 cursor-pointer"
+                    className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white hover:bg-bodydark1 dark:hover:bg-black cursor-pointer"
                   >
                     <div className="flex justify-between items-center">
                       <p>Ngày cập nhật</p>
@@ -113,7 +126,11 @@ const TableThree = () => {
               </thead>
               <tbody>
                 {streetList?.map((packageItem, key) => (
-                  <tr key={key}>
+                  <tr
+                    key={key}
+                    onClick={() => navigate(`/street-detail/${packageItem.id}`)}
+                    className="hover:bg-gray dark:hover:bg-black"
+                  >
                     <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                       <h5 className="font-medium text-black dark:text-white">
                         {packageItem.streetName}
@@ -168,6 +185,15 @@ const TableThree = () => {
             </>
           )}
         </table>
+        <div className="flex justify-center mt-4">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            setCurrentPage={setCurrentPage}
+            itemsPerPage={itemsPerPage}
+            setItemsPerPage={setItemsPerPage}
+          />
+        </div>
       </div>
     </div>
   );

@@ -13,9 +13,11 @@ export interface IStreetListContext {
 
 export interface IStreetSearchList {
   streets: IStreetSearch[];
+  totalPages: number;
 }
 
 export interface IStreetSearch {
+  id: number;
   streetName: string;
   streetType: string;
   address: string;
