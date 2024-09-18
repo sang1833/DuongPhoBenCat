@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace be.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/streetImage")]
     public class StreetImageController : ControllerBase
     {
         private readonly IStreetImageRepository _streetImageRepo;
@@ -60,7 +60,7 @@ namespace be.Controllers
             if (!await _streetRepo.IsStreetExistsAsync(streetId))
             {
                 return BadRequest("Street not found");
-            }
+            } 
 
             StreetImage streetImage = createStreetImageRequestDto.ToStreetImageFromCreateDto(streetId);
             await _streetImageRepo.CreateAsync(streetImage);

@@ -12,10 +12,11 @@ namespace be.Models
         public int Id { get; set; }
         [Required]
         public string ImageUrl { get; set; } = "";
+        [Required]
+        public string PublicId { get; set; } = "";
         public string Description { get; set; } = "";
         public DateTime UpdatedDate { get; set; }
         public DateTime CreatedDate { get; set; }
-        [Required]
         public int StreetId { get; set; }
         public Street? Street { get; set; }
     }

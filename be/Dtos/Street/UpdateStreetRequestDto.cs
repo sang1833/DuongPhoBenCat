@@ -8,8 +8,9 @@ namespace be.Dtos.Street
 {
     public class UpdateStreetRequestDto
     {
-        [Required]
+        [Required(ErrorMessage = "StreetName is required.")]
         public required string StreetName { get; set; }
+        [MaxLength(20, ErrorMessage = "StreetType should not exceed 20 characters.")]
         public string? StreetType { get; set; }
         public string? Address { get; set; }
         public string? Description { get; set; }
