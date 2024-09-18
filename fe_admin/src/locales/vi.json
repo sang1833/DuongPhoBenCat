@@ -1,5 +1,11 @@
 {
   "searchPlaceholder": "Tìm kiếm...",
   "filterTitle": "Lọc theo",
-  "clearAll": "Xóa tất cả"
+  "clearAll": "Xóa tất cả",
+  "previous": "Trước",
+  "next": "Sau",
+  "loading": "Đang tải...",
+  "itemsPerPage": "Số dòng mỗi trang",
+  "showingPage": "Đang hiển thị trang",
+  "of": "trong tổng số"
 }

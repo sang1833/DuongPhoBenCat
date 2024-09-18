@@ -45,7 +45,7 @@ namespace be.Repositories
             return deleteStreet;
         }
 
-        public async Task<List<Street>> GetAllAsync(StreetQueryObject queryObject)
+        public async Task<(List<Street> pagedStreets, int totalPages)> GetAllAsync(StreetQueryObject queryObject)
         {
             IQueryable<Street> streets = _context.Streets.Include(c => c.Histories).Include(c => c.Images).AsQueryable();
 
@@ -75,9 +75,13 @@ namespace be.Repositories
                 } 
             }
 
+            int totalItems = await streets.CountAsync();
+            int totalPages = (int)Math.Ceiling(totalItems / (double)queryObject.PageSize);
             int skipNumber = (queryObject.PageNumber - 1) * queryObject.PageSize;
 
-            return await streets.Skip(skipNumber).Take(queryObject.PageSize).ToListAsync();
+            List<Street> pagedStreets = await streets.Skip(skipNumber).Take(queryObject.PageSize).ToListAsync();
+
+            return (pagedStreets, totalPages);
         }
 
         public async Task<Street?> GetByIdAsync(int id)
@@ -93,7 +97,7 @@ namespace be.Repositories
             return _context.Streets.AnyAsync(s => s.Id == id);
         }
 
-        public async Task<List<Street>> SearchAdminAsync(StreetQueryObject queryObject)
+        public async Task<(List<Street> pagedStreets, int totalPages)> SearchAdminAsync(StreetQueryObject queryObject)
         {
             IQueryable<Street> streets = _context.Streets.AsQueryable();
 
@@ -123,9 +127,13 @@ namespace be.Repositories
                 } 
             }
 
+            int totalItems = await streets.CountAsync();
+            int totalPages = (int)Math.Ceiling(totalItems / (double)queryObject.PageSize);
             int skipNumber = (queryObject.PageNumber - 1) * queryObject.PageSize;
 
-            return await streets.Skip(skipNumber).Take(queryObject.PageSize).ToListAsync();
+            List<Street> pagedStreets = await streets.Skip(skipNumber).Take(queryObject.PageSize).ToListAsync();
+
+            return (pagedStreets, totalPages);
         }
 
         public async Task<List<Street>> SearchAllAsync(string searchParam)
@@ -159,5 +167,6 @@ namespace be.Repositories
 
             return existingStreet;
         }
+
     }
 }

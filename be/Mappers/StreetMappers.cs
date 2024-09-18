@@ -46,6 +46,7 @@ namespace be.Mappers
         {
             return new SearchStreetAdminDto
             {
+                Id = street.Id,
                 StreetName = street.StreetName,
                 StreetType = street.StreetType,
                 Address = street.Address,

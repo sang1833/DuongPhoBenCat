@@ -1,5 +1,11 @@
 {
   "searchPlaceholder": "Search...",
   "filterTitle": "Event Types",
-  "clearAll": "Clear All"
+  "clearAll": "Clear All",
+  "previous": "Previous",
+  "next": "Next",
+  "loading": "Loading...",
+  "itemsPerPage": "Items per page",
+  "showingPage": "Showing page",
+  "of": "of"
 }
