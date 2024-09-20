@@ -7,5 +7,8 @@
   "loading": "Loading...",
   "itemsPerPage": "Items per page",
   "showingPage": "Showing page",
-  "of": "of"
+  "of": "of",
+  "ok": "OK",
+  "cancel": "Cancel",
+  "Click on the map to add markers and create a route.": "Click on the map to add markers and create a route."
 }

@@ -26,3 +26,14 @@ export interface IStreetSearch {
   updatedDate: string; // You can use Date if you plan to parse it into a Date object
   createdDate: string; // You can use Date if you plan to parse it into a Date object
 }
+
+export interface IStreetTypeoption {
+  value: string;
+  label: string;
+}
+
+export interface IStreetImage {
+  imageUrl?: string;
+  publicId?: string;
+  description?: string;
+}

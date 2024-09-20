@@ -1,10 +1,17 @@
 import { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { LatLng } from "leaflet";
 import { MapContext } from "@contexts";
-import { Breadcrumb, Map, ContainedNormalButton } from "@components";
+import {
+  Breadcrumb,
+  Map,
+  ContainedNormalButton,
+  BackButton
+} from "@components";
 import { StreetApi, CreateStreetRequestDto } from "@api";
 
 const StreetDetail = () => {
+  const navigate = useNavigate();
   const { setPosition, waypoints, routePolylines } = useContext(MapContext);
 
   useEffect(() => {
@@ -53,7 +60,8 @@ const StreetDetail = () => {
 
   return (
     <section className="relative">
-      <Breadcrumb pageName="Quản lý đường phố" />
+      <BackButton onClick={() => navigate(-1)} />
+      <Breadcrumb pageName="Chi tiết tuyến đường" />
       <Map />
       <ContainedNormalButton color="primary" onClick={handlePostStreet}>
         Test

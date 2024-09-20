@@ -7,5 +7,8 @@
   "loading": "Đang tải...",
   "itemsPerPage": "Số dòng mỗi trang",
   "showingPage": "Đang hiển thị trang",
-  "of": "trong tổng số"
+  "of": "trong tổng số",
+  "ok": "Xác nhận",
+  "cancel": "Hủy",
+  "Click on the map to add markers and create a route.": "Nhấp vào bản đồ để thêm điểm đánh dấu và tạo tuyến đường."
 }
