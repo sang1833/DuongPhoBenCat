@@ -29,7 +29,7 @@ const StreetDetail = () => {
     const streetApi = new StreetApi();
     const createStreetRequestDto: CreateStreetRequestDto = {
       streetName: "Example Street",
-      streetType: "Residential",
+      streetTypeId: 1,
       address: "Example Address",
       imageUrl: "https://example.com/image.jpg",
       description: "An example street",

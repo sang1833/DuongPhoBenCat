@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LatLng } from "leaflet";
 import { useTranslation } from "react-i18next";
@@ -13,7 +13,7 @@ import {
 } from "@components";
 import { IStreetImage, IStreetTypeoption } from "@types";
 import { MapContext } from "@contexts";
-import { CreateStreetRequestDto, StreetApi } from "@api";
+import { CreateStreetRequestDto, StreetApi, StreetTypeApi } from "@api";
 
 interface ErrorMessages {
   streetName?: string;
@@ -22,15 +22,15 @@ interface ErrorMessages {
 
 const options: IStreetTypeoption[] = [
   {
-    value: "Đường lớn",
+    value: 1,
     label: "Đường lớn"
   },
   {
-    value: "Đường hẻm",
+    value: 2,
     label: "Đường hẻm"
   },
   {
-    value: "Ngõ nhỏ",
+    value: 3,
     label: "Ngõ nhỏ"
   }
 ];
@@ -41,12 +41,37 @@ const PostStreetPage: React.FC = () => {
   const { waypoints, routePolylines } = useContext(MapContext);
 
   const [streetName, setStreetName] = useState<string>("");
-  const [streetType, setStreetType] = useState<string>("residential");
+  const [streetTypeId, setStreetTypeId] = useState<number>(1);
+  const [streetTypes, setStreetTypes] = useState<IStreetTypeoption[]>(options);
   const [isSTypeSelected, setIsSTypeSelected] = useState<boolean>(false);
   const [streetAddress, setStreetAddress] = useState<string>("");
   const [streetDescription, setStreetDescription] = useState<string>("");
   const [streetImages, setStreetImages] = useState<IStreetImage[]>([]);
   const [errors, setErrors] = useState<ErrorMessages>({});
+
+  useEffect(() => {
+    const fetchStreetTypes = async () => {
+      const streetTypeApi = new StreetTypeApi();
+      try {
+        const response = await streetTypeApi.apiStreetTypeGet();
+        setStreetTypes(
+          (
+            response.data as unknown as {
+              id: number;
+              streetTypeName: string;
+            }[]
+          ).map((type) => ({
+            value: type.id,
+            label: type.streetTypeName
+          }))
+        );
+      } catch (error) {
+        console.error("Error fetching street types:", error);
+      }
+    };
+
+    fetchStreetTypes();
+  }, []);
 
   const validateForm = () => {
     const newErrors: ErrorMessages = {};
@@ -66,7 +91,7 @@ const PostStreetPage: React.FC = () => {
     const streetApi = new StreetApi();
     const createStreetRequestDto: CreateStreetRequestDto = {
       streetName: streetName,
-      streetType: streetType,
+      streetTypeId: streetTypeId,
       address: streetAddress,
       imageUrl: "",
       description: streetDescription,
@@ -122,11 +147,11 @@ const PostStreetPage: React.FC = () => {
             <div className="w-full xl:w-1/2">
               <SelectGroupOne
                 title="Loại đường"
-                selectedOption={streetType}
-                setSelectedOption={setStreetType}
+                selectedOption={streetTypeId}
+                setSelectedOption={setStreetTypeId}
                 isOptionSelected={isSTypeSelected}
                 setIsOptionSelected={setIsSTypeSelected}
-                options={options}
+                options={streetTypes}
               />
             </div>
           </div>

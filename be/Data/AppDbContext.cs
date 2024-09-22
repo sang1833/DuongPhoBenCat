@@ -18,6 +18,21 @@ namespace be.Data
             builder.HasPostgresExtension("postgis");
 
             builder.Entity<Street>()
+                .Property(s => s.CreatedDate)
+                .ValueGeneratedOnAdd()
+                .HasDefaultValueSql("now()");
+            
+            builder.Entity<Street>()
+                .Property(s => s.UpdatedDate)
+                .ValueGeneratedOnAddOrUpdate()
+                .HasDefaultValueSql("now()");
+
+            builder.Entity<Street>()
+                .HasOne(s => s.StreetType)
+                .WithMany(sh => sh.Streets)
+                .HasForeignKey(sh => sh.StreetTypeId);
+
+            builder.Entity<Street>()
                 .HasMany(s => s.Histories)
                 .WithOne(sh => sh.Street)
                 .HasForeignKey(sh => sh.StreetId)
@@ -32,6 +47,7 @@ namespace be.Data
         }
 
         public DbSet<Street> Streets { get; set; }
+        public DbSet<StreetType> StreetTypes { get; set; }
         public DbSet<StreetHistory> StreetHistories { get; set; }
         public DbSet<StreetImage> StreetImages { get; set; }
     }

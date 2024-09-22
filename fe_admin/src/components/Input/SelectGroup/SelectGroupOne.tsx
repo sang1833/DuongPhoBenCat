@@ -7,8 +7,8 @@ const SelectGroupOne: React.FC<{
   disabled?: boolean;
   error?: string;
   options: IStreetTypeoption[];
-  selectedOption: string;
-  setSelectedOption: (arg0: string) => void;
+  selectedOption: number;
+  setSelectedOption: (arg0: number) => void;
   isOptionSelected: boolean;
   setIsOptionSelected: (arg0: boolean) => void;
 }> = ({
@@ -40,7 +40,8 @@ const SelectGroupOne: React.FC<{
           disabled={disabled}
           value={selectedOption}
           onChange={(e) => {
-            setSelectedOption(e.target.value);
+            const value = e.target.value;
+            setSelectedOption(Number(value));
             changeTextColor();
           }}
           className={

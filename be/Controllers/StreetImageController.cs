@@ -56,11 +56,8 @@ namespace be.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-            if (!await _streetRepo.IsStreetExistsAsync(streetId))
-            {
+            else if (!await _streetRepo.IsStreetExistsAsync(streetId))
                 return BadRequest("Street not found");
-            } 
 
             StreetImage streetImage = createStreetImageRequestDto.ToStreetImageFromCreateDto(streetId);
             await _streetImageRepo.CreateAsync(streetImage);

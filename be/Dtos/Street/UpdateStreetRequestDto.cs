@@ -11,7 +11,7 @@ namespace be.Dtos.Street
         [Required(ErrorMessage = "StreetName is required.")]
         public required string StreetName { get; set; }
         [MaxLength(20, ErrorMessage = "StreetType should not exceed 20 characters.")]
-        public string? StreetType { get; set; }
+        public int StreetTypeId { get; set; }
         public string? Address { get; set; }
         public string? Description { get; set; }
         public string? ImageUrl { get; set; }

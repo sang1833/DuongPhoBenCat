@@ -25,6 +25,15 @@ namespace be.Repositories
             {
                 throw new Exception("Street is null");
             }
+
+            StreetType? streetType = await _context.StreetTypes.FirstOrDefaultAsync(s => s.Id == street.StreetTypeId);
+
+            if (streetType == null)
+            {
+                throw new Exception("StreetType is null");
+            }
+
+            street.StreetType = streetType;
             
             await _context.Streets.AddAsync(street);
             await _context.SaveChangesAsync();
@@ -47,7 +56,7 @@ namespace be.Repositories
 
         public async Task<(List<Street> pagedStreets, int totalPages)> GetAllAsync(StreetQueryObject queryObject)
         {
-            IQueryable<Street> streets = _context.Streets.Include(c => c.Histories).Include(c => c.Images).AsQueryable();
+            IQueryable<Street> streets = _context.Streets.Include(c => c.StreetType).Include(c => c.Histories).Include(c => c.Images).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(queryObject.StreetName))
             {
@@ -57,7 +66,7 @@ namespace be.Repositories
 
             if (!string.IsNullOrWhiteSpace(queryObject.StreetType))
             {
-                streets = streets.Where(s => s.StreetType == queryObject.StreetType);
+                streets = streets.Where(s => s.StreetType != null && s.StreetType.StreetTypeName == queryObject.StreetType);
             }
 
             if (!string.IsNullOrWhiteSpace(queryObject.SortBy))
@@ -99,7 +108,7 @@ namespace be.Repositories
 
         public async Task<(List<Street> pagedStreets, int totalPages)> SearchAdminAsync(StreetQueryObject queryObject)
         {
-            IQueryable<Street> streets = _context.Streets.AsQueryable();
+            IQueryable<Street> streets = _context.Streets.Include(c => c.StreetType).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(queryObject.StreetName))
             {
@@ -109,7 +118,7 @@ namespace be.Repositories
 
             if (!string.IsNullOrWhiteSpace(queryObject.StreetType))
             {
-                streets = streets.Where(s => s.StreetType == queryObject.StreetType);
+                streets = streets.Where(s => s.StreetType != null && s.StreetType.StreetTypeName == queryObject.StreetType);
             }
 
             if (!string.IsNullOrWhiteSpace(queryObject.SortBy))
@@ -138,7 +147,7 @@ namespace be.Repositories
 
         public async Task<List<Street>> SearchAllAsync(string searchParam)
         {
-            IQueryable<Street> streets = _context.Streets.AsQueryable();
+            IQueryable<Street> streets = _context.Streets.Include(c => c.StreetType).AsQueryable();
                 
             string lowerCaseStreetName = searchParam.ToLower();
             streets = streets.Where(s => s.StreetName.ToLower().Contains(lowerCaseStreetName));
