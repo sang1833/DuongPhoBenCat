@@ -1,0 +1,103 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using be.Dtos.StreetType;
+using be.Interfaces;
+using be.Mappers;
+using be.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace be.Controllers
+{
+    [ApiController]
+    [Route("api/streetType")]
+    public class StreetTypeController : ControllerBase
+    {
+        private readonly IStreetTypeRepository _streetTypeRepo;
+
+        public StreetTypeController(IStreetTypeRepository streetTypeRepo)
+        {
+            _streetTypeRepo = streetTypeRepo;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            IEnumerable<StreetType> streetTypeModels = await _streetTypeRepo.GetAllAsync();
+            IEnumerable<StreetTypeDto> streetTypeDtos = streetTypeModels.Select(s => s.ToStreetTypeDto());
+
+            return Ok(streetTypeDtos);
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            StreetType? streetTypeModel = await _streetTypeRepo.GetByIdAsync(id);
+
+            if (streetTypeModel == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(streetTypeModel.ToStreetTypeDto());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateStreetTypeRequestDto createStreetTypeRequestDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            StreetType streetType = createStreetTypeRequestDto.ToStreetTypeFromCreateDto();
+            await _streetTypeRepo.CreateAsync(streetType);
+
+            return Ok(streetType.ToFullyStreetTypeDto());
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update([FromBody] UpdateStreetTypeRequestDto updateStreetTypeRequestDto, int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            StreetType? streetType = await _streetTypeRepo.GetByIdAsync(id);
+
+            if (streetType == null)
+            {
+                return NotFound();
+            }
+
+            StreetType updatingStreetType = updateStreetTypeRequestDto.ToStreetTypeFromUpdateDto();
+            StreetType? updatedStreetType = await _streetTypeRepo.UpdateAsync(updatingStreetType, id);
+
+            if (updatedStreetType == null)
+            {
+                return BadRequest("Server error");
+            }
+
+            return Ok(updatedStreetType.ToFullyStreetTypeDto());
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id){
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            StreetType? streetType = await _streetTypeRepo.DeleteAsync(id);
+
+            if (streetType == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(streetType.ToStreetTypeDto());
+        }
+    }
+}

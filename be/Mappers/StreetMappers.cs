@@ -1,5 +1,6 @@
 using be.Dtos;
 using be.Dtos.Street;
+using be.Dtos.StreetType;
 using be.Models;
 using NetTopologySuite.Geometries;
 
@@ -12,12 +13,12 @@ namespace be.Mappers
             return new Street
             {
                 StreetName = streetCreateDto.StreetName,
-                StreetType = streetCreateDto.StreetType ?? "",
+                StreetTypeId = streetCreateDto.StreetTypeId,
                 Address = streetCreateDto.Address ?? "",
                 Description = streetCreateDto.Description ?? "",    
                 ImageUrl = streetCreateDto.ImageUrl ?? "",
-                UpdatedDate = DateTime.Now,
-                CreatedDate = DateTime.Now,
+                // UpdatedDate = DateTime.Now,
+                // CreatedDate = DateTime.Now,
                 Route = new LineString(streetCreateDto?.Route?.Coordinates.Select(coord => new Coordinate(coord[0], coord[1])).ToArray()),
                 WayPoints = new LineString(streetCreateDto?.WayPoints?.Coordinates.Select(coord => new Coordinate(coord[0], coord[1])).ToArray())
             };
@@ -29,7 +30,7 @@ namespace be.Mappers
             {
                 Id = street.Id,
                 StreetName = street.StreetName,
-                StreetType = street.StreetType,
+                StreetType = street.StreetType != null ? street.StreetType.ToStreetTypeDto() : new StreetTypeDto(),
                 Address = street.Address,
                 Description = street.Description,
                 ImageUrl = street.ImageUrl,
@@ -48,7 +49,7 @@ namespace be.Mappers
             {
                 Id = street.Id,
                 StreetName = street.StreetName,
-                StreetType = street.StreetType,
+                StreetType = street.StreetType != null ? street.StreetType.ToStreetTypeDto() : new StreetTypeDto(),
                 Address = street.Address,
                 Description = street.Description,
                 ImageUrl = street.ImageUrl,
@@ -63,7 +64,7 @@ namespace be.Mappers
             {
                 Id = street.Id,
                 StreetName = street.StreetName,
-                StreetType = street.StreetType,
+                StreetType = street.StreetType != null ? street.StreetType.ToStreetTypeDto() : new StreetTypeDto(),
                 Address = street.Address,
                 Description = street.Description,
                 ImageUrl = street.ImageUrl,
@@ -75,7 +76,7 @@ namespace be.Mappers
             return new Street
             {
                 StreetName = streetUpdateDto.StreetName,
-                StreetType = streetUpdateDto.StreetType ?? "",
+                StreetTypeId = streetUpdateDto.StreetTypeId,
                 Address = streetUpdateDto.Address ?? "",
                 Description = streetUpdateDto.Description ?? "",
                 ImageUrl = streetUpdateDto.ImageUrl ?? "",

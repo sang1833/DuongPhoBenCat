@@ -55,6 +55,8 @@ namespace be.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            else if (!await _streetRepo.IsStreetExistsAsync(streetId))
+                return BadRequest("Street not found");
             
             StreetHistory streetHistoryModel = historyRequestDto.ToStreetHistoryFromCreateDto(streetId);
             await _streetHistoryRepo.CreateAsync(streetHistoryModel);

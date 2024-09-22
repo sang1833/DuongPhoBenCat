@@ -68,6 +68,7 @@ builder.Services.AddSingleton(cloudinary);
 builder.Services.AddScoped<IStreetRepository, StreetRepository>();
 builder.Services.AddScoped<IStreetHistoryRepository, StreetHistoryRepository>();
 builder.Services.AddScoped<IStreetImageRepository, StreetImageRepository>();
+builder.Services.AddScoped<IStreetTypeRepository, StreetTypeRepository>();
 builder.Services.AddScoped<IImageUploadService, ImageUploadService>();
 
 var app = builder.Build();

@@ -29,7 +29,11 @@ const App = () => {
         },
         {
           path: "street-create",
-          element: <StreetCreate />
+          element: (
+            <MapProvider>
+              <StreetCreate />
+            </MapProvider>
+          )
         },
         {
           path: "intercept",

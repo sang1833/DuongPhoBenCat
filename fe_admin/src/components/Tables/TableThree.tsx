@@ -7,7 +7,7 @@ import { IStreetSearch, IStreetSearchList } from "@types";
 import { StreetApi } from "@api";
 import { StreetListContext } from "@contexts";
 import SearchBar from "./SearchBar";
-import DropDownFilter from "./DropdownFilter";
+// import DropDownFilter from "./DropdownFilter";
 import UpDownSymbol from "./UpDownSymbol";
 import Pagination from "./Pagination";
 
@@ -64,7 +64,7 @@ const TableThree = () => {
         <div className="flex justify-between items-center">
           <div className="flex justify-center items-center gap-2">
             <SearchBar setSearch={setSearch} />
-            <DropDownFilter />
+            {/* <DropDownFilter /> */}
           </div>
           <ContainedNormalButton
             color="primary"
@@ -144,14 +144,14 @@ const TableThree = () => {
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <p
                         className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
-                          packageItem.streetType === "Đường lớn"
+                          packageItem.streetType.id === 1
                             ? "bg-blue-700 text-blue-700"
-                            : packageItem.streetType === "Đường nhỏ"
+                            : packageItem.streetType.id === 2
                             ? "bg-pink-700 text-pink-700"
                             : "bg-green-700 text-green-700"
                         }`}
                       >
-                        {packageItem.streetType}
+                        {packageItem.streetType.streetTypeName}
                       </p>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">

@@ -13,7 +13,6 @@ namespace be.Models
         public int Id {  get; set; }
         [Required]
         public string StreetName { get; set; } = "";
-        public string StreetType { get; set; } = "";
         public string Address { get; set; } = "";
         public string Description { get; set; } = "";
         public string ImageUrl { get; set; } = "";
@@ -23,5 +22,7 @@ namespace be.Models
         public LineString? WayPoints { get; set; }
         public List<StreetHistory> Histories { get; set; } = new List<StreetHistory>();
         public List<StreetImage> Images { get; set; } = new List<StreetImage>();
+        public required int StreetTypeId { get; set; }
+        public StreetType? StreetType { get; set; }
     }
 }

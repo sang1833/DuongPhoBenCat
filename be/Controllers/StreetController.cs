@@ -19,12 +19,14 @@ namespace be.Controllers
     public class StreetController : ControllerBase
     {
         private readonly IStreetRepository _streetRepo;
+        private readonly IStreetTypeRepository _streetTypeRepo;
         private readonly IStreetHistoryRepository _streetHistoryRepo;
         private readonly IStreetImageRepository _streetImageRepo;
 
-        public StreetController(IStreetRepository streetRepository, IStreetHistoryRepository streetHistoryRepository, IStreetImageRepository streetImageRepository)
+        public StreetController(IStreetRepository streetRepository, IStreetTypeRepository streetTypeRepository, IStreetHistoryRepository streetHistoryRepository, IStreetImageRepository streetImageRepository)
         {
             _streetRepo = streetRepository;
+            _streetTypeRepo = streetTypeRepository;
             _streetHistoryRepo = streetHistoryRepository;
             _streetImageRepo = streetImageRepository;
         }
@@ -37,7 +39,7 @@ namespace be.Controllers
 
             (List<Street> streets, int totalPages) = await _streetRepo.GetAllAsync(queryObject);
             IEnumerable<StreetDto> streetDtos = streets.Select(s => s.ToStreetDto()).ToList();
-            return Ok(new { Streets = streets, TotalPages = totalPages });
+            return Ok(new { Streets = streetDtos, TotalPages = totalPages });
         }
 
         [HttpGet] 
@@ -88,6 +90,8 @@ namespace be.Controllers
         {  
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Data don't meet requirement", ModelState });
+            else if (!await _streetTypeRepo.IsStreetTypeExistsAsync(streetDto.StreetTypeId))
+                return BadRequest("Street type not found");
             else if (streetDto == null)
                 return BadRequest(new { message = "Street data is required" });
             else if (streetDto?.Route?.Coordinates.Count < 2 || streetDto?.WayPoints?.Coordinates.Count < 2)

@@ -19,10 +19,26 @@ export interface IStreetSearchList {
 export interface IStreetSearch {
   id: number;
   streetName: string;
-  streetType: string;
+  streetType: IStreetType;
   address: string;
   description: string;
   imageUrl: string;
   updatedDate: string; // You can use Date if you plan to parse it into a Date object
   createdDate: string; // You can use Date if you plan to parse it into a Date object
+}
+
+export interface IStreetType {
+  id: number;
+  streetTypeName: string;
+}
+
+export interface IStreetTypeoption {
+  value: number;
+  label: string;
+}
+
+export interface IStreetImage {
+  imageUrl?: string;
+  publicId?: string;
+  description?: string;
 }

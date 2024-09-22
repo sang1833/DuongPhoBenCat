@@ -41,6 +41,7 @@ const MapComponent: React.FC = () => {
         <MapContainer
           center={position || defaultCenter}
           zoom={13}
+          minZoom={12}
           style={{ height: "90vh", width: "100%" }}
           maxBounds={bounds}
           maxBoundsViscosity={1.0}

@@ -81,10 +81,10 @@ export interface CreateStreetRequestDto {
     'streetName': string;
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof CreateStreetRequestDto
      */
-    'streetType'?: string | null;
+    'streetTypeId': number;
     /**
      * 
      * @type {string}
@@ -121,6 +121,19 @@ export interface CreateStreetRequestDto {
      * @memberof CreateStreetRequestDto
      */
     'streetImages'?: Array<CreateStreetImageRequestDto> | null;
+}
+/**
+ * 
+ * @export
+ * @interface CreateStreetTypeRequestDto
+ */
+export interface CreateStreetTypeRequestDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateStreetTypeRequestDto
+     */
+    'streetTypeName'?: string | null;
 }
 /**
  * 
@@ -193,10 +206,10 @@ export interface UpdateStreetRequestDto {
     'streetName': string;
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof UpdateStreetRequestDto
      */
-    'streetType'?: string | null;
+    'streetTypeId'?: number;
     /**
      * 
      * @type {string}
@@ -227,6 +240,19 @@ export interface UpdateStreetRequestDto {
      * @memberof UpdateStreetRequestDto
      */
     'wayPoints'?: GeoJsonLineStringDto;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateStreetTypeRequestDto
+ */
+export interface UpdateStreetTypeRequestDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateStreetTypeRequestDto
+     */
+    'streetTypeName'?: string | null;
 }
 
 /**
@@ -1732,6 +1758,370 @@ export class StreetImageApi extends BaseAPI {
      */
     public apiStreetImageStreetIdPost(streetId: number, createStreetImageRequestDto?: CreateStreetImageRequestDto, options?: RawAxiosRequestConfig) {
         return StreetImageApiFp(this.configuration).apiStreetImageStreetIdPost(streetId, createStreetImageRequestDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * StreetTypeApi - axios parameter creator
+ * @export
+ */
+export const StreetTypeApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetTypeGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/streetType`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetTypeIdDelete: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('apiStreetTypeIdDelete', 'id', id)
+            const localVarPath = `/api/streetType/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetTypeIdGet: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('apiStreetTypeIdGet', 'id', id)
+            const localVarPath = `/api/streetType/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateStreetTypeRequestDto} [updateStreetTypeRequestDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetTypeIdPut: async (id: number, updateStreetTypeRequestDto?: UpdateStreetTypeRequestDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('apiStreetTypeIdPut', 'id', id)
+            const localVarPath = `/api/streetType/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateStreetTypeRequestDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {CreateStreetTypeRequestDto} [createStreetTypeRequestDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetTypePost: async (createStreetTypeRequestDto?: CreateStreetTypeRequestDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/streetType`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createStreetTypeRequestDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * StreetTypeApi - functional programming interface
+ * @export
+ */
+export const StreetTypeApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = StreetTypeApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiStreetTypeGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetTypeGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StreetTypeApi.apiStreetTypeGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiStreetTypeIdDelete(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetTypeIdDelete(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StreetTypeApi.apiStreetTypeIdDelete']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiStreetTypeIdGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetTypeIdGet(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StreetTypeApi.apiStreetTypeIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateStreetTypeRequestDto} [updateStreetTypeRequestDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiStreetTypeIdPut(id: number, updateStreetTypeRequestDto?: UpdateStreetTypeRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetTypeIdPut(id, updateStreetTypeRequestDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StreetTypeApi.apiStreetTypeIdPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {CreateStreetTypeRequestDto} [createStreetTypeRequestDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiStreetTypePost(createStreetTypeRequestDto?: CreateStreetTypeRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetTypePost(createStreetTypeRequestDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StreetTypeApi.apiStreetTypePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * StreetTypeApi - factory interface
+ * @export
+ */
+export const StreetTypeApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = StreetTypeApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetTypeGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiStreetTypeGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetTypeIdDelete(id: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiStreetTypeIdDelete(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetTypeIdGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiStreetTypeIdGet(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateStreetTypeRequestDto} [updateStreetTypeRequestDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetTypeIdPut(id: number, updateStreetTypeRequestDto?: UpdateStreetTypeRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiStreetTypeIdPut(id, updateStreetTypeRequestDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {CreateStreetTypeRequestDto} [createStreetTypeRequestDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetTypePost(createStreetTypeRequestDto?: CreateStreetTypeRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiStreetTypePost(createStreetTypeRequestDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * StreetTypeApi - object-oriented interface
+ * @export
+ * @class StreetTypeApi
+ * @extends {BaseAPI}
+ */
+export class StreetTypeApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StreetTypeApi
+     */
+    public apiStreetTypeGet(options?: RawAxiosRequestConfig) {
+        return StreetTypeApiFp(this.configuration).apiStreetTypeGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StreetTypeApi
+     */
+    public apiStreetTypeIdDelete(id: number, options?: RawAxiosRequestConfig) {
+        return StreetTypeApiFp(this.configuration).apiStreetTypeIdDelete(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StreetTypeApi
+     */
+    public apiStreetTypeIdGet(id: number, options?: RawAxiosRequestConfig) {
+        return StreetTypeApiFp(this.configuration).apiStreetTypeIdGet(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {UpdateStreetTypeRequestDto} [updateStreetTypeRequestDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StreetTypeApi
+     */
+    public apiStreetTypeIdPut(id: number, updateStreetTypeRequestDto?: UpdateStreetTypeRequestDto, options?: RawAxiosRequestConfig) {
+        return StreetTypeApiFp(this.configuration).apiStreetTypeIdPut(id, updateStreetTypeRequestDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {CreateStreetTypeRequestDto} [createStreetTypeRequestDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StreetTypeApi
+     */
+    public apiStreetTypePost(createStreetTypeRequestDto?: CreateStreetTypeRequestDto, options?: RawAxiosRequestConfig) {
+        return StreetTypeApiFp(this.configuration).apiStreetTypePost(createStreetTypeRequestDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
