@@ -60,8 +60,7 @@ namespace be.Repositories
 
             if (!string.IsNullOrWhiteSpace(queryObject.StreetName))
             {
-                string lowerCaseStreetName = queryObject.StreetName.ToLower();
-                streets = streets.Where(s => s.StreetName.ToLower().Contains(lowerCaseStreetName));
+                streets = streets.Where(s => EF.Functions.Like(s.StreetName.ToLower(), $"%{queryObject.StreetName}%"));
             }
 
             if (!string.IsNullOrWhiteSpace(queryObject.StreetType))
@@ -112,8 +111,7 @@ namespace be.Repositories
 
             if (!string.IsNullOrWhiteSpace(queryObject.StreetName))
             {
-                string lowerCaseStreetName = queryObject.StreetName.ToLower();
-                streets = streets.Where(s => s.StreetName.ToLower().Contains(lowerCaseStreetName));
+                streets = streets.Where(s => EF.Functions.Like(s.StreetName.ToLower(), $"%{queryObject.StreetName}%"));
             }
 
             if (!string.IsNullOrWhiteSpace(queryObject.StreetType))
@@ -149,8 +147,7 @@ namespace be.Repositories
         {
             IQueryable<Street> streets = _context.Streets.Include(c => c.StreetType).AsQueryable();
                 
-            string lowerCaseStreetName = searchParam.ToLower();
-            streets = streets.Where(s => s.StreetName.ToLower().Contains(lowerCaseStreetName));
+            streets = streets.Where(s => EF.Functions.Like(s.StreetName.ToLower(), $"%{searchParam}%"));
             
             return await streets.Skip(0).Take(5).ToListAsync();
         }

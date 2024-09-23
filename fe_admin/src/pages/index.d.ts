@@ -1,4 +1,5 @@
 export { default as Street } from "./Street";
+export { default as StreetType } from "./StreetType";
 export { default as InterceptPage } from "./InterceptPage";
 export { default as StreetDetail } from "./StreetDetail";
 export { default as StreetCreate } from "./StreetCreate";

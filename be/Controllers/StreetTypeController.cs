@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using be.Dtos.StreetType;
+using be.Helpers;
 using be.Interfaces;
 using be.Mappers;
 using be.Models;
@@ -22,15 +23,15 @@ namespace be.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] STypeQueryObject queryObject)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            IEnumerable<StreetType> streetTypeModels = await _streetTypeRepo.GetAllAsync();
+            (IEnumerable<StreetType> streetTypeModels, int totalPages) = await _streetTypeRepo.GetAllAsync(queryObject);
             IEnumerable<StreetTypeDto> streetTypeDtos = streetTypeModels.Select(s => s.ToStreetTypeDto());
 
-            return Ok(streetTypeDtos);
+            return Ok(new { streetTypes = streetTypeDtos, totalPages });
         }
 
         [HttpGet("{id:int}")]
