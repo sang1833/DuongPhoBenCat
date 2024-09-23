@@ -14,5 +14,6 @@ export { default as SelectGroupOne } from "./Input/SelectGroup/SelectGroupOne";
 export { default as MapWithPointIcon } from "./Icons/MapWithPointIcon";
 // tables
 export { default as TableThree } from "./Tables/TableThree";
+export { default as TableThreeSType } from "./Tables/TableThreeSType";
 // street
 export { default as StreetImage } from "./Street/StreetImage";

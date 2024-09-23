@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using be.Data;
+using be.Helpers;
 using be.Interfaces;
 using be.Models;
 using Microsoft.EntityFrameworkCore;
@@ -47,9 +49,22 @@ namespace be.Repositories
             return streetType;
         }
 
-        public async Task<List<StreetType>> GetAllAsync()
+        public async Task<(List<StreetType>, int totalPages)> GetAllAsync(STypeQueryObject queryObject)
         {
-            return await _context.StreetTypes.ToListAsync();
+            IQueryable<StreetType> streetTypes = _context.StreetTypes.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(queryObject.StreetTypeName))
+            {
+                streetTypes = streetTypes.Where(s => EF.Functions.Like(s.StreetTypeName.ToLower(), $"%{queryObject.StreetTypeName}%"));
+            }
+
+            int totalItems = await streetTypes.CountAsync();
+            int totalPages = (int)Math.Ceiling((double)totalItems / queryObject.PageSize);
+            int skipNumber = (queryObject.PageNumber - 1) * queryObject.PageSize;
+
+            List<StreetType> streetTypeList = await streetTypes.Skip(skipNumber).Take(queryObject.PageSize).ToListAsync();
+
+            return (streetTypeList, totalPages);
         }
 
         public async Task<StreetType?> GetByIdAsync(int id)

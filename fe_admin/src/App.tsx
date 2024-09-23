@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import DefaultLayout from "./layout/DefaultLayout";
-import { Street } from "@pages";
+import { Street, StreetType } from "@pages";
 import { MapProvider } from "@contexts";
 import {
   InterceptPage,
@@ -16,11 +16,15 @@ const App = () => {
       element: <DefaultLayout />,
       children: [
         {
-          path: "street",
+          path: "map/street-type",
+          element: <StreetType />
+        },
+        {
+          path: "map/street",
           element: <Street />
         },
         {
-          path: "street-detail/:streetId",
+          path: "map/street-detail/:streetId",
           element: (
             <MapProvider>
               <StreetDetail />
@@ -28,7 +32,7 @@ const App = () => {
           )
         },
         {
-          path: "street-create",
+          path: "map/street-create",
           element: (
             <MapProvider>
               <StreetCreate />

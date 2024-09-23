@@ -7,7 +7,7 @@ namespace be.Helpers
 {
     public class StreetQueryObject : QueryObject
     {
-        public string? StreetName { get; set; } = null;
-        public string? StreetType { get; set; } = null;
+        public string? StreetName { get; set; } = string.Empty;
+        public string? StreetType { get; set; } = string.Empty;
     }
 }
