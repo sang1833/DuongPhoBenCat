@@ -66,6 +66,7 @@ namespace be.Controllers
         }
 
         [HttpPost]
+        [Route("noStreetId")]
         public async Task<IActionResult> CreateWithNoStreet([FromBody] CreateStreetImageRequestDto createStreetImageRequestDto)
         {
             if (!ModelState.IsValid)

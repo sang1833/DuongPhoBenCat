@@ -50,9 +50,8 @@ const PostStreetTypePage: React.FC = () => {
     } catch (error) {
       toast.error("Tạo loại tuyến đường thất bại");
       console.error("Error creating street:", error);
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

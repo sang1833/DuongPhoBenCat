@@ -135,32 +135,32 @@ const ChangeStreetPage: React.FC = () => {
 
   const handlePutStreet = async () => {
     setLoading(true);
-    if (!waypoints || !routePolylines) {
-      console.error("No waypoints or route polylines to post street");
-      return;
-    }
-
-    const streetApi = new StreetApi();
-    const updateStreetRequestDto: UpdateStreetRequestDto = {
-      streetName: streetName,
-      streetTypeId: streetTypeId,
-      address: streetAddress,
-      imageUrl: "",
-      description: streetDescription,
-      wayPoints: {
-        coordinates: waypoints?.map((wp: LatLng) => [wp.lat, wp.lng])
-      },
-      route: {
-        coordinates: routePolylines?.map((wp: LatLng) => [wp.lat, wp.lng])
-      },
-      streetImages: streetImages.map((image) => ({
-        imageUrl: image.imageUrl || "",
-        publicId: image.publicId || "",
-        description: image.description || ""
-      }))
-    };
-
     try {
+      if (!waypoints || !routePolylines) {
+        console.error("No waypoints or route polylines to post street");
+        return;
+      }
+
+      const streetApi = new StreetApi();
+      const updateStreetRequestDto: UpdateStreetRequestDto = {
+        streetName: streetName,
+        streetTypeId: streetTypeId,
+        address: streetAddress,
+        imageUrl: "",
+        description: streetDescription,
+        wayPoints: {
+          coordinates: waypoints?.map((wp: LatLng) => [wp.lat, wp.lng])
+        },
+        route: {
+          coordinates: routePolylines?.map((wp: LatLng) => [wp.lat, wp.lng])
+        },
+        streetImages: streetImages.map((image) => ({
+          imageUrl: image.imageUrl || "",
+          publicId: image.publicId || "",
+          description: image.description || ""
+        }))
+      };
+
       const response = await streetApi.apiStreetIdPut(
         parseInt(streetId || ""),
         updateStreetRequestDto
@@ -172,9 +172,8 @@ const ChangeStreetPage: React.FC = () => {
     } catch (error) {
       console.error("Error creating street:", error);
       toast.error("Cập nhật tuyến đường thất bại");
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -190,7 +189,7 @@ const ChangeStreetPage: React.FC = () => {
       <BackButton onClick={() => navigate(-1)} />
       <Breadcrumb pageName="Tạo tuyến đường" />
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5.5 p-6.5">
+        <form onSubmit={handleSubmit}>
           <fieldset disabled={loading} className="flex flex-col gap-5.5 p-6.5">
             <div className="flex flex-col gap-6 xl:flex-row">
               <div className="w-full xl:w-1/2">
@@ -261,7 +260,7 @@ const ChangeStreetPage: React.FC = () => {
             <div className="flex justify-center items-center gap-4">
               <button
                 type="submit"
-                className={` flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-theme-color-primary 
+                className={`flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-theme-color-primary 
                 ${
                   errors.streetAddress || errors.streetName ? "bg-red-700" : ""
                 }`}

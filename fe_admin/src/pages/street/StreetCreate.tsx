@@ -100,32 +100,33 @@ const PostStreetPage: React.FC = () => {
 
   const handlePostStreet = async () => {
     setLoading(true);
-    if (!waypoints || !routePolylines) {
-      console.error("No waypoints or route polylines to post street");
-      return;
-    }
-
-    const streetApi = new StreetApi();
-    const createStreetRequestDto: CreateStreetRequestDto = {
-      streetName: streetName,
-      streetTypeId: streetTypeId,
-      address: streetAddress,
-      imageUrl: "",
-      description: streetDescription,
-      wayPoints: {
-        coordinates: waypoints?.map((wp: LatLng) => [wp.lat, wp.lng])
-      },
-      route: {
-        coordinates: routePolylines?.map((wp: LatLng) => [wp.lat, wp.lng])
-      },
-      streetImages: streetImages.map((image) => ({
-        imageUrl: image.imageUrl || "",
-        publicId: image.publicId || "",
-        description: image.description || ""
-      }))
-    };
 
     try {
+      if (!waypoints || !routePolylines) {
+        console.error("No waypoints or route polylines to post street");
+        return;
+      }
+
+      const streetApi = new StreetApi();
+      const createStreetRequestDto: CreateStreetRequestDto = {
+        streetName: streetName,
+        streetTypeId: streetTypeId,
+        address: streetAddress,
+        imageUrl: "",
+        description: streetDescription,
+        wayPoints: {
+          coordinates: waypoints?.map((wp: LatLng) => [wp.lat, wp.lng])
+        },
+        route: {
+          coordinates: routePolylines?.map((wp: LatLng) => [wp.lat, wp.lng])
+        },
+        streetImages: streetImages.map((image) => ({
+          imageUrl: image.imageUrl || "",
+          publicId: image.publicId || "",
+          description: image.description || ""
+        }))
+      };
+
       const response = await streetApi.apiStreetAdminCreatePost(
         createStreetRequestDto
       );
@@ -136,9 +137,8 @@ const PostStreetPage: React.FC = () => {
     } catch (error) {
       toast.error("Tạo tuyến đường thất bại");
       console.error("Error creating street:", error);
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -154,7 +154,7 @@ const PostStreetPage: React.FC = () => {
       <BackButton onClick={() => navigate(-1)} />
       <Breadcrumb pageName="Tạo tuyến đường" />
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5.5 p-6.5">
+        <form onSubmit={handleSubmit}>
           <fieldset disabled={loading} className="flex flex-col gap-5.5 p-6.5">
             <div className="flex flex-col gap-6 xl:flex-row">
               <div className="w-full xl:w-1/2">
