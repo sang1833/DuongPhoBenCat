@@ -55,7 +55,7 @@ namespace be.Repositories
 
             if (!string.IsNullOrWhiteSpace(queryObject.StreetTypeName))
             {
-                streetTypes = streetTypes.Where(s => EF.Functions.Like(s.StreetTypeName.ToLower(), $"%{queryObject.StreetTypeName}%"));
+                streetTypes = streetTypes.Where(s => EF.Functions.ILike(s.StreetTypeName.ToLower(), $"%{queryObject.StreetTypeName}%"));
             }
 
             int totalItems = await streetTypes.CountAsync();

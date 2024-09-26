@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { LatLng } from "leaflet";
 import { useTranslation } from "react-i18next";
 import {
@@ -7,17 +7,26 @@ import {
   Breadcrumb,
   Input,
   Map,
+  OutlinedNormalButton,
   SelectGroupOne,
   StreetImage,
   TextArea
 } from "@components";
-import { IStreetImage, IStreetTypeoption } from "@types";
+import {
+  IStreet,
+  IStreetImage,
+  IStreetType,
+  IStreetTypeList,
+  IStreetTypeoption
+} from "@types";
 import { MapContext } from "@contexts";
-import { CreateStreetRequestDto, StreetApi, StreetTypeApi } from "@api";
+import { StreetApi, StreetTypeApi, UpdateStreetRequestDto } from "@api";
+import { toast } from "react-toastify";
 
 interface ErrorMessages {
   streetName?: string;
   streetAddress?: string;
+  streetWaypoint?: string;
 }
 
 const options: IStreetTypeoption[] = [
@@ -35,10 +44,11 @@ const options: IStreetTypeoption[] = [
   }
 ];
 
-const PostStreetPage: React.FC = () => {
+const ChangeStreetPage: React.FC = () => {
   const { t } = useTranslation();
+  const { streetId } = useParams();
   const navigate = useNavigate();
-  const { waypoints, routePolylines } = useContext(MapContext);
+  const { waypoints, routePolylines, setWaypoints } = useContext(MapContext);
 
   const [streetName, setStreetName] = useState<string>("");
   const [streetTypeId, setStreetTypeId] = useState<number>(1);
@@ -50,21 +60,55 @@ const PostStreetPage: React.FC = () => {
   const [errors, setErrors] = useState<ErrorMessages>({});
 
   useEffect(() => {
+    const fetchStreets = async () => {
+      const streetApi = new StreetApi();
+      try {
+        const _streetId = parseInt(streetId?.toString() || "");
+        const response = await streetApi.apiStreetIdGet(_streetId);
+
+        const streetData = response.data as unknown as IStreet;
+        setWaypoints(
+          streetData.wayPoints.coordinates.map(
+            (coord: [number, number]) => new LatLng(coord[0], coord[1])
+          )
+        );
+        setStreetName(streetData.streetName);
+        setStreetTypeId(streetData.streetTypeId);
+        setStreetAddress(streetData.address);
+        setStreetDescription(streetData.description);
+        setStreetImages(
+          streetData.images.map((image: IStreetImage) => ({
+            imageUrl: image.imageUrl,
+            publicId: image.publicId,
+            description: image.description
+          }))
+        );
+      } catch (error) {
+        console.error("Error fetching streets:", error);
+      }
+    };
+
+    fetchStreets();
+  }, [setWaypoints, streetId]);
+
+  useEffect(() => {
     const fetchStreetTypes = async () => {
       const streetTypeApi = new StreetTypeApi();
       try {
         const response = await streetTypeApi.apiStreetTypeGet();
-        setStreetTypes(
-          (
-            response.data as unknown as {
-              id: number;
-              streetTypeName: string;
-            }[]
-          ).map((type) => ({
-            value: type.id,
-            label: type.streetTypeName
-          }))
-        );
+        const data: IStreetType[] =
+          (response.data as unknown as IStreetTypeList)?.streetTypes || [];
+
+        if (Array.isArray(data)) {
+          setStreetTypes(
+            data.map((type) => {
+              return {
+                value: type.id,
+                label: type.streetTypeName
+              };
+            })
+          );
+        }
       } catch (error) {
         console.error("Error fetching street types:", error);
       }
@@ -79,17 +123,23 @@ const PostStreetPage: React.FC = () => {
     if (!streetAddress.trim())
       newErrors.streetAddress = "Phải có địa chỉ đường";
     setErrors(newErrors);
+    if (
+      (waypoints as LatLng[]).length < 2 ||
+      (routePolylines as LatLng[])?.length < 2
+    )
+      newErrors.streetWaypoint = "Phải có toạ độ tuyến đường";
+    setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handlePostStreet = async () => {
+  const handlePutStreet = async () => {
     if (!waypoints || !routePolylines) {
       console.error("No waypoints or route polylines to post street");
       return;
     }
 
     const streetApi = new StreetApi();
-    const createStreetRequestDto: CreateStreetRequestDto = {
+    const updateStreetRequestDto: UpdateStreetRequestDto = {
       streetName: streetName,
       streetTypeId: streetTypeId,
       address: streetAddress,
@@ -109,12 +159,17 @@ const PostStreetPage: React.FC = () => {
     };
 
     try {
-      const response = await streetApi.apiStreetAdminCreatePost(
-        createStreetRequestDto
+      const response = await streetApi.apiStreetIdPut(
+        parseInt(streetId || ""),
+        updateStreetRequestDto
       );
-      alert("Street created successfully:" + response);
+      if (response.status === 200) {
+        toast.success("Cập nhật thành công");
+        navigate("/map/street");
+      }
     } catch (error) {
       console.error("Error creating street:", error);
+      toast.error("Cập nhật tuyến đường thất bại");
     }
   };
 
@@ -122,7 +177,7 @@ const PostStreetPage: React.FC = () => {
     e.preventDefault();
     if (validateForm()) {
       // Submit form data
-      handlePostStreet();
+      handlePutStreet();
     }
   };
 
@@ -180,9 +235,14 @@ const PostStreetPage: React.FC = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Tuyến đường
+              Tuyến đường <span className="text-meta-1">*</span>
             </label>
             <Map />
+            {errors.streetWaypoint && (
+              <p className="mt-2 text-sm text-red-600">
+                {errors.streetWaypoint}
+              </p>
+            )}
             <p className="mt-2 text-sm text-gray-500">
               {t("Click on the map to add markers and create a route.")}
             </p>
@@ -193,16 +253,25 @@ const PostStreetPage: React.FC = () => {
             setStreetImages={setStreetImages}
           />
 
-          <div>
+          <div className="flex justify-center items-center gap-4">
             <button
               type="submit"
-              className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-theme-color-primary 
+              className={` flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-theme-color-primary 
                 ${
                   errors.streetAddress || errors.streetName ? "bg-red-700" : ""
                 }`}
             >
               {t("ok")}
             </button>
+            <OutlinedNormalButton
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault();
+                navigate(-1);
+              }}
+              className="text-red-600"
+            >
+              {t("cancel")}
+            </OutlinedNormalButton>
           </div>
         </form>
       </div>
@@ -210,4 +279,4 @@ const PostStreetPage: React.FC = () => {
   );
 };
 
-export default PostStreetPage;
+export default ChangeStreetPage;

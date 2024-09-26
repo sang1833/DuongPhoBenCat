@@ -60,7 +60,7 @@ namespace be.Repositories
 
             if (!string.IsNullOrWhiteSpace(queryObject.StreetName))
             {
-                streets = streets.Where(s => EF.Functions.Like(s.StreetName.ToLower(), $"%{queryObject.StreetName}%"));
+                streets = streets.Where(s => EF.Functions.ILike(s.StreetName.ToLower(), $"%{queryObject.StreetName}%"));
             }
 
             if (!string.IsNullOrWhiteSpace(queryObject.StreetType))
@@ -95,6 +95,7 @@ namespace be.Repositories
         public async Task<Street?> GetByIdAsync(int id)
         {
             return await _context.Streets
+                .Include(c => c.StreetType)
                 .Include(c => c.Histories)
                 .Include(c => c.Images)
                 .FirstOrDefaultAsync(s => s.Id == id);
@@ -111,7 +112,7 @@ namespace be.Repositories
 
             if (!string.IsNullOrWhiteSpace(queryObject.StreetName))
             {
-                streets = streets.Where(s => EF.Functions.Like(s.StreetName.ToLower(), $"%{queryObject.StreetName}%"));
+                streets = streets.Where(s => EF.Functions.ILike(s.StreetName.ToLower(), $"%{queryObject.StreetName}%"));
             }
 
             if (!string.IsNullOrWhiteSpace(queryObject.StreetType))

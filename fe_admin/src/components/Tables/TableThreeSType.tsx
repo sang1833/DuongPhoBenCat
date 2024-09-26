@@ -1,20 +1,23 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { parseISO, format } from "date-fns";
-import { SquarePen } from "lucide-react";
-import { ContainedNormalButton } from "@components";
-import { IStreetSearch, IStreetSearchList } from "@types";
-import { StreetApi } from "@api";
+import { FileX2, SquarePen } from "lucide-react";
+import { toast } from "react-toastify";
+import { ContainedNormalButton, OutlinedNormalButton } from "@components";
+import { IStreetType, IStreetTypeList } from "@types";
+import { StreetTypeApi } from "@api";
 import { StreetListContext } from "@contexts";
+import { closeModal, openModal } from "../Features/ModalSlice";
 import SearchBar from "./SearchBar";
-// import DropDownFilter from "./DropdownFilter";
 import UpDownSymbol from "./UpDownSymbol";
 import Pagination from "./Pagination";
 
 const TableThree = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { filter } = useContext(StreetListContext);
-  const [streetList, setStreetList] = useState<IStreetSearch[]>();
+  const [streetTypeList, setStreetTypeList] = useState<IStreetType[]>();
   const [search, setSearch] = useState<string>("");
   const [isDesc, setIsDesc] = useState<boolean>(true);
   const [sortBy, setSortBy] = useState<"createdDate" | "updatedDate">(
@@ -27,21 +30,22 @@ const TableThree = () => {
   useEffect(() => {
     async function fetchStreetList() {
       try {
-        const streetApi = new StreetApi();
-        const response = await streetApi.apiStreetAdminSearchGet(
+        const streetTypeApi = new StreetTypeApi();
+        const response = await streetTypeApi.apiStreetTypeGet(
           search,
-          filter,
           sortBy,
           isDesc,
           currentPage,
           itemsPerPage
         );
-        setStreetList((response.data as unknown as IStreetSearchList)?.streets);
+        setStreetTypeList(
+          (response.data as unknown as IStreetTypeList)?.streetTypes
+        );
         setTotalPages(
-          (response.data as unknown as IStreetSearchList)?.totalPages
+          (response.data as unknown as IStreetTypeList)?.totalPages || 0
         );
       } catch (error) {
-        console.error("Error fetching street list:", error);
+        console.error("Error fetching streetType list:", error);
       }
     }
 
@@ -58,29 +62,74 @@ const TableThree = () => {
     }
   };
 
+  const handleDeleteSType = async (id: number) => {
+    try {
+      const streetTypeApi = new StreetTypeApi();
+      const respone = await streetTypeApi.apiStreetTypeIdDelete(id);
+      if (respone.status === 200 || respone.status === 204) {
+        setStreetTypeList((prev) =>
+          prev?.filter((streetType) => streetType.id !== id)
+        );
+        toast.success("Xoá loại đường thành công");
+      }
+    } catch (error) {
+      console.error("Error deleting streetType:", error);
+      toast.error("Xoá loại đường thất bại");
+    }
+  };
+
+  const handleOpenModal = (deleteId: number) => {
+    dispatch(
+      openModal({
+        title: "Xoá loại đường",
+        content: (
+          <div>
+            <h3>Bạn có chắc muốn xoá loại đường này?</h3>
+            <div className="flex justify-center items-center gap-3 mt-5">
+              <ContainedNormalButton
+                color="primary"
+                onClick={() => {
+                  handleDeleteSType(deleteId);
+                  dispatch(closeModal());
+                }}
+              >
+                Xoá
+              </ContainedNormalButton>
+              <OutlinedNormalButton
+                color="red-700"
+                onClick={() => dispatch(closeModal())}
+              >
+                Huỷ
+              </OutlinedNormalButton>
+            </div>
+          </div>
+        )
+      })
+    );
+  };
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
         <div className="flex justify-between items-center">
           <div className="flex justify-center items-center gap-2">
             <SearchBar setSearch={setSearch} />
-            {/* <DropDownFilter /> */}
           </div>
           <ContainedNormalButton
             color="primary"
             className=" max-h-12"
-            onClick={() => navigate("/street-create")}
+            onClick={() => navigate("/map/street-type-create")}
           >
-            {"Thêm đường"}
+            {"Thêm tuyến đường"}
           </ContainedNormalButton>
         </div>
         <table className="w-full table-auto">
-          {!streetList && (
+          {!streetTypeList && (
             <thead className="flex justify-center items-center h-20">
               <p className="text-black dark:text-white">Đang tải dữ liệu...</p>
             </thead>
           )}
-          {streetList?.length === 0 ? (
+          {streetTypeList?.length === 0 ? (
             <thead className="flex justify-center items-center h-20">
               <p className="text-black dark:text-white">Không có dữ liệu</p>
             </thead>
@@ -89,6 +138,9 @@ const TableThree = () => {
               <thead>
                 <tr className="bg-gray-2 text-left dark:bg-meta-4">
                   <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                    STT
+                  </th>
+                  <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
                     Tên loại đường
                   </th>
                   <th
@@ -119,33 +171,22 @@ const TableThree = () => {
                 </tr>
               </thead>
               <tbody>
-                {streetList?.map((packageItem, key) => (
+                {streetTypeList?.map((packageItem, key) => (
                   <tr
                     key={key}
-                    onClick={() => navigate(`/street-detail/${packageItem.id}`)}
+                    onClick={() =>
+                      navigate(`/map/street-type-detail/${packageItem.id}`)
+                    }
                     className="hover:bg-gray dark:hover:bg-black"
                   >
                     <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                       <h5 className="font-medium text-black dark:text-white">
-                        {packageItem.streetName}
+                        {key + 1}
                       </h5>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <p className="text-black dark:text-white">
-                        {packageItem.address}
-                      </p>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p
-                        className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
-                          packageItem.streetType.id === 1
-                            ? "bg-blue-700 text-blue-700"
-                            : packageItem.streetType.id === 2
-                            ? "bg-pink-700 text-pink-700"
-                            : "bg-green-700 text-green-700"
-                        }`}
-                      >
-                        {packageItem.streetType.streetTypeName}
+                        {packageItem.streetTypeName}
                       </p>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
@@ -170,6 +211,15 @@ const TableThree = () => {
                       <div className="flex items-center space-x-3.5">
                         <button className="hover:text-primary">
                           <SquarePen />
+                        </button>
+                        <button
+                          className="z-9999 text-red-700 hover:text-red-500"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenModal(packageItem.id);
+                          }}
+                        >
+                          <FileX2 />
                         </button>
                       </div>
                     </td>

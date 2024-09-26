@@ -27,9 +27,34 @@ export interface IStreetSearch {
   createdDate: string; // You can use Date if you plan to parse it into a Date object
 }
 
+export interface IStreet {
+  id: number;
+  streetName: string;
+  streetTypeId: number;
+  address: string;
+  description: string;
+  imageUrl: string;
+  images: IStreetImage[];
+  updatedDate: string; // You can use Date if you plan to parse it into a Date object
+  createdDate: string; // You can use Date if you plan to parse it into a Date object
+  wayPoints: {
+    coordinates: [number, number][];
+  };
+  route: {
+    coordinates: [number, number][];
+  };
+}
+
 export interface IStreetType {
   id: number;
   streetTypeName: string;
+  createdDate?: string;
+  updatedDate?: string;
+}
+
+export interface IStreetTypeList {
+  streetTypes: IStreetType[];
+  totalPages?: number;
 }
 
 export interface IStreetTypeoption {

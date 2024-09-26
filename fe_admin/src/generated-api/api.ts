@@ -184,7 +184,7 @@ export interface UpdateStreetImageRequestDto {
      * @type {string}
      * @memberof UpdateStreetImageRequestDto
      */
-    'publicId'?: string | null;
+    'publicId': string;
     /**
      * 
      * @type {string}
@@ -209,7 +209,7 @@ export interface UpdateStreetRequestDto {
      * @type {number}
      * @memberof UpdateStreetRequestDto
      */
-    'streetTypeId'?: number;
+    'streetTypeId': number;
     /**
      * 
      * @type {string}
@@ -240,6 +240,12 @@ export interface UpdateStreetRequestDto {
      * @memberof UpdateStreetRequestDto
      */
     'wayPoints'?: GeoJsonLineStringDto;
+    /**
+     * 
+     * @type {Array<CreateStreetImageRequestDto>}
+     * @memberof UpdateStreetRequestDto
+     */
+    'streetImages'?: Array<CreateStreetImageRequestDto> | null;
 }
 /**
  * 
@@ -1771,10 +1777,15 @@ export const StreetTypeApiAxiosParamCreator = function (configuration?: Configur
     return {
         /**
          * 
+         * @param {string} [streetTypeName] 
+         * @param {string} [sortBy] 
+         * @param {boolean} [isDecsending] 
+         * @param {number} [pageNumber] 
+         * @param {number} [pageSize] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStreetTypeGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiStreetTypeGet: async (streetTypeName?: string, sortBy?: string, isDecsending?: boolean, pageNumber?: number, pageSize?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/streetType`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1786,6 +1797,26 @@ export const StreetTypeApiAxiosParamCreator = function (configuration?: Configur
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (streetTypeName !== undefined) {
+                localVarQueryParameter['StreetTypeName'] = streetTypeName;
+            }
+
+            if (sortBy !== undefined) {
+                localVarQueryParameter['SortBy'] = sortBy;
+            }
+
+            if (isDecsending !== undefined) {
+                localVarQueryParameter['IsDecsending'] = isDecsending;
+            }
+
+            if (pageNumber !== undefined) {
+                localVarQueryParameter['PageNumber'] = pageNumber;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['PageSize'] = pageSize;
+            }
 
 
     
@@ -1946,11 +1977,16 @@ export const StreetTypeApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} [streetTypeName] 
+         * @param {string} [sortBy] 
+         * @param {boolean} [isDecsending] 
+         * @param {number} [pageNumber] 
+         * @param {number} [pageSize] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStreetTypeGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetTypeGet(options);
+        async apiStreetTypeGet(streetTypeName?: string, sortBy?: string, isDecsending?: boolean, pageNumber?: number, pageSize?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetTypeGet(streetTypeName, sortBy, isDecsending, pageNumber, pageSize, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StreetTypeApi.apiStreetTypeGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2016,11 +2052,16 @@ export const StreetTypeApiFactory = function (configuration?: Configuration, bas
     return {
         /**
          * 
+         * @param {string} [streetTypeName] 
+         * @param {string} [sortBy] 
+         * @param {boolean} [isDecsending] 
+         * @param {number} [pageNumber] 
+         * @param {number} [pageSize] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStreetTypeGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.apiStreetTypeGet(options).then((request) => request(axios, basePath));
+        apiStreetTypeGet(streetTypeName?: string, sortBy?: string, isDecsending?: boolean, pageNumber?: number, pageSize?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiStreetTypeGet(streetTypeName, sortBy, isDecsending, pageNumber, pageSize, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2071,12 +2112,17 @@ export const StreetTypeApiFactory = function (configuration?: Configuration, bas
 export class StreetTypeApi extends BaseAPI {
     /**
      * 
+     * @param {string} [streetTypeName] 
+     * @param {string} [sortBy] 
+     * @param {boolean} [isDecsending] 
+     * @param {number} [pageNumber] 
+     * @param {number} [pageSize] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof StreetTypeApi
      */
-    public apiStreetTypeGet(options?: RawAxiosRequestConfig) {
-        return StreetTypeApiFp(this.configuration).apiStreetTypeGet(options).then((request) => request(this.axios, this.basePath));
+    public apiStreetTypeGet(streetTypeName?: string, sortBy?: string, isDecsending?: boolean, pageNumber?: number, pageSize?: number, options?: RawAxiosRequestConfig) {
+        return StreetTypeApiFp(this.configuration).apiStreetTypeGet(streetTypeName, sortBy, isDecsending, pageNumber, pageSize, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

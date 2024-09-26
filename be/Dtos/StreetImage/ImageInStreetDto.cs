@@ -8,7 +8,8 @@ namespace be.Dtos.StreetImage
     public class ImageInStreetDto
     {
         public int Id { get; set; }
-        public required string ImageUrl { get; set; }
+        public string ImageUrl { get; set; } = "";
+        public string PublicId { get; set; } = "";
         public string? Description { get; set; }
     }
 }

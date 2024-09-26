@@ -29,9 +29,9 @@ namespace be.Controllers
                 return BadRequest(ModelState);
 
             (IEnumerable<StreetType> streetTypeModels, int totalPages) = await _streetTypeRepo.GetAllAsync(queryObject);
-            IEnumerable<StreetTypeDto> streetTypeDtos = streetTypeModels.Select(s => s.ToStreetTypeDto());
+            IEnumerable<FullyStreetTypeDto> fStreetTypeDtos = streetTypeModels.Select(s => s.ToFullyStreetTypeDto());
 
-            return Ok(new { streetTypes = streetTypeDtos, totalPages });
+            return Ok(new { streetTypes = fStreetTypeDtos, totalPages });
         }
 
         [HttpGet("{id:int}")]
