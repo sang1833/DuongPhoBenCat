@@ -10,7 +10,7 @@ namespace be.Mappers
 {
     public static class StreetImageMappers
     {
-        public static StreetImage ToStreetImageFromCreateDto(this CreateStreetImageRequestDto createStreetImageRequestDto, int streetId)
+        public static StreetImage ToStreetImageFromCreateDto(this CreateStreetImageRequestDto createStreetImageRequestDto, int? streetId)
         {
             return new StreetImage
             {

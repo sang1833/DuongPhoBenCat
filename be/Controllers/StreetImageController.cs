@@ -64,6 +64,18 @@ namespace be.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = streetImage.Id }, streetImage.ToStreetImageDto());
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateWithNoStreet([FromBody] CreateStreetImageRequestDto createStreetImageRequestDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            StreetImage streetImage = createStreetImageRequestDto.ToStreetImageFromCreateDto(null);
+            await _streetImageRepo.CreateAsync(streetImage);
+
+            return CreatedAtAction(nameof(GetById), new { id = streetImage.Id }, streetImage.ToStreetImageDto());
+        }
         
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateStreetImageRequestDto updateStreetImageDto)

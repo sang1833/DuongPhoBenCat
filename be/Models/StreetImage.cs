@@ -17,7 +17,7 @@ namespace be.Models
         public string Description { get; set; } = "";
         public DateTime UpdatedDate { get; set; }
         public DateTime CreatedDate { get; set; }
-        public int StreetId { get; set; }
+        public int? StreetId { get; set; }
         public Street? Street { get; set; }
     }
 }

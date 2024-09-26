@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using be.Dtos.StreetImage;
 
-namespace be.Dtos.StreetHistory
+namespace be.Dtos.StreetImage
 {
     public class UpdateStreetImageRequestDto : CreateStreetImageRequestDto
     {
