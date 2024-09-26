@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 export const ContainedNormalButton: React.FC<{
   children: ReactNode;
   color: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
 }> = ({ children, color, onClick, className }) => {
   return (

@@ -10,6 +10,10 @@ export { default as UnderlineText } from "./Texts/UnderlineText";
 export { default as Input } from "./Input/Input";
 export { default as TextArea } from "./Input/TextArea";
 export { default as SelectGroupOne } from "./Input/SelectGroup/SelectGroupOne";
+export { default as DefaultModal } from "./Modals/DefaultModal";
+export { default as DefaultForm } from "./Forms/DefaultForm";
+// slices
+export { default as ModalReducer } from "./Features/ModalSlice";
 // icons
 export { default as MapWithPointIcon } from "./Icons/MapWithPointIcon";
 // tables

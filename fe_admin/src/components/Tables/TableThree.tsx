@@ -1,18 +1,21 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { parseISO, format } from "date-fns";
-import { SquarePen } from "lucide-react";
-import { ContainedNormalButton } from "@components";
+import { FileX2, SquarePen } from "lucide-react";
+import { ContainedNormalButton, OutlinedNormalButton } from "@components";
 import { IStreetSearch, IStreetSearchList } from "@types";
 import { StreetApi } from "@api";
 import { StreetListContext } from "@contexts";
+import { closeModal, openModal } from "../Features/ModalSlice";
 import SearchBar from "./SearchBar";
-// import DropDownFilter from "./DropdownFilter";
 import UpDownSymbol from "./UpDownSymbol";
 import Pagination from "./Pagination";
+import { toast } from "react-toastify";
 
 const TableThree = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { filter } = useContext(StreetListContext);
   const [streetList, setStreetList] = useState<IStreetSearch[]>();
   const [search, setSearch] = useState<string>("");
@@ -58,6 +61,50 @@ const TableThree = () => {
     }
   };
 
+  const handleDeleteStreet = async (id: number) => {
+    try {
+      const streetApi = new StreetApi();
+      const respone = await streetApi.apiStreetIdDelete(id);
+      if (respone.status === 200 || respone.status === 204) {
+        setStreetList((prev) => prev?.filter((street) => street.id !== id));
+        toast.success("Xoá thành công");
+      }
+    } catch (error) {
+      console.error("Error deleting street type:", error);
+      toast.error("Xoá đường thất bại");
+    }
+  };
+
+  const handleOpenModal = (deleteId: number) => {
+    dispatch(
+      openModal({
+        title: "Xoá đường",
+        content: (
+          <div>
+            <h3>Bạn có chắc muốn xoá tuyến đường này?</h3>
+            <div className="flex justify-center items-center gap-3 mt-5">
+              <ContainedNormalButton
+                color="primary"
+                onClick={() => {
+                  handleDeleteStreet(deleteId);
+                  dispatch(closeModal());
+                }}
+              >
+                Xoá
+              </ContainedNormalButton>
+              <OutlinedNormalButton
+                color="red-700"
+                onClick={() => dispatch(closeModal())}
+              >
+                Huỷ
+              </OutlinedNormalButton>
+            </div>
+          </div>
+        )
+      })
+    );
+  };
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
@@ -69,7 +116,7 @@ const TableThree = () => {
           <ContainedNormalButton
             color="primary"
             className=" max-h-12"
-            onClick={() => navigate("/street-create")}
+            onClick={() => navigate("/map/street-create")}
           >
             {"Thêm đường"}
           </ContainedNormalButton>
@@ -128,7 +175,9 @@ const TableThree = () => {
                 {streetList?.map((packageItem, key) => (
                   <tr
                     key={key}
-                    onClick={() => navigate(`/street-detail/${packageItem.id}`)}
+                    onClick={() =>
+                      navigate(`/map/street-detail/${packageItem.id}`)
+                    }
                     className="hover:bg-gray dark:hover:bg-black"
                   >
                     <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
@@ -176,6 +225,15 @@ const TableThree = () => {
                       <div className="flex items-center space-x-3.5">
                         <button className="hover:text-primary">
                           <SquarePen />
+                        </button>
+                        <button
+                          className="z-9999 text-red-700 hover:text-red-500"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenModal(packageItem.id);
+                          }}
+                        >
+                          <FileX2 />
                         </button>
                       </div>
                     </td>

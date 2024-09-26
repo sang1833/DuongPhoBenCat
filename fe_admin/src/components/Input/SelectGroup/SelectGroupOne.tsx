@@ -39,6 +39,7 @@ const SelectGroupOne: React.FC<{
           id={id}
           disabled={disabled}
           value={selectedOption}
+          defaultValue={selectedOption}
           onChange={(e) => {
             const value = e.target.value;
             setSelectedOption(Number(value));

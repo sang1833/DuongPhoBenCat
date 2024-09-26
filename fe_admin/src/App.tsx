@@ -1,12 +1,15 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import DefaultLayout from "./layout/DefaultLayout";
-import { Street, StreetType } from "@pages";
 import { MapProvider } from "@contexts";
 import {
   InterceptPage,
   StreetDetail,
   StreetCreate,
-  NotFoundPage
+  NotFoundPage,
+  Street,
+  StreetType,
+  StreetTypeCreate,
+  StreetTypeDetail
 } from "@pages";
 
 const App = () => {
@@ -18,6 +21,14 @@ const App = () => {
         {
           path: "map/street-type",
           element: <StreetType />
+        },
+        {
+          path: "map/street-type-detail/:streetTypeId",
+          element: <StreetTypeDetail />
+        },
+        {
+          path: "map/street-type-create",
+          element: <StreetTypeCreate />
         },
         {
           path: "map/street",

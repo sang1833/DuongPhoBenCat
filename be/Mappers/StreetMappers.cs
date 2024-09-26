@@ -30,6 +30,7 @@ namespace be.Mappers
             {
                 Id = street.Id,
                 StreetName = street.StreetName,
+                StreetTypeId = street.StreetTypeId,
                 StreetType = street.StreetType != null ? street.StreetType.ToStreetTypeDto() : new StreetTypeDto(),
                 Address = street.Address,
                 Description = street.Description,

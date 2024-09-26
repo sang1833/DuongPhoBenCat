@@ -16,6 +16,7 @@ namespace be.Dtos
         public int Id { get; set; }
         [Required]
         public required string StreetName { get; set; }
+        public int StreetTypeId { get; set; }
         public StreetTypeDto? StreetType { get; set; }
         public string? Address { get; set; }
         public string? Description { get; set; }

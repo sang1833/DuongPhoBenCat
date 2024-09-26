@@ -7,6 +7,6 @@ namespace be.Helpers
 {
     public class STypeQueryObject : QueryObject
     {
-        public string StreetTypeName { get; set; } = string.Empty;
+        public string? StreetTypeName { get; set; } = string.Empty;
     }
 }

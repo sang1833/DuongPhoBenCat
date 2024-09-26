@@ -9,8 +9,8 @@ namespace be.Dtos.StreetImage
     public class StreetImageDto
     {
         public int Id { get; set; }
-        public required string ImageUrl { get; set; }
-        public required string PublicId { get; set; }
+        public string ImageUrl { get; set; } = "";
+        public string PublicId { get; set; } = "";
         public string? Description { get; set; }
         public DateTime UpdatedDate { get; set; }
         public DateTime CreatedDate { get; set; }

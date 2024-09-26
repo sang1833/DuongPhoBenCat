@@ -43,6 +43,7 @@ namespace be.Mappers
             {
                 Id = streetImage.Id,
                 ImageUrl = streetImage.ImageUrl,
+                PublicId = streetImage.PublicId,
                 Description = streetImage.Description
             };
         }

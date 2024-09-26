@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { Header, Sidebar } from "@components";
+import { DefaultModal, Header, Sidebar } from "@components";
 import LinkInterceptor from "../common/LinkInterceptor";
 
 const DefaultLayout: React.FC = () => {
@@ -32,6 +32,7 @@ const DefaultLayout: React.FC = () => {
                 <Outlet />
               </div>
             </main>
+            <DefaultModal />
             {/* <!-- ===== Main Content End ===== --> */}
           </div>
           {/* <!-- ===== Content Area End ===== --> */}

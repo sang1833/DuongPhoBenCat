@@ -163,12 +163,82 @@ namespace be.Controllers
             else if (streetDto?.Route?.Coordinates.Count < 2 || streetDto?.WayPoints?.Coordinates.Count < 2)
                 return BadRequest(new { message = "At least 2 points are required for Route and WayPoints" });
 
+            List<StreetImage> existingImages = await _streetImageRepo.GetImagesByStreetIdAsync(id);
             Street? updatedStreet = await _streetRepo.UpdateAsync(streetDto?.ToStreetFromUpdateDto(), id);
+
+            IActionResult updateImagesResult = await UpdateStreetImages(id, streetDto.StreetImages, existingImages);
+            if (updateImagesResult is BadRequestObjectResult)
+            {
+                return BadRequest(updateImagesResult);
+            }
+
             if (updatedStreet == null)
             {
                 return NotFound();
             }
             return Ok(updatedStreet.ToStreetDto());
+        }
+        private async Task<IActionResult> UpdateStreetImages(int streetId, List<CreateStreetImageRequestDto> streetImages, List<StreetImage> existingImages)
+        {
+            // Find images to delete
+            var imagesToDelete = existingImages.Where(ei => !streetImages.Any(si => si.PublicId == ei.PublicId)).ToList();
+
+            // Find images to update
+            var imagesToUpdate = existingImages.Where(ei => streetImages.Any(si => si.PublicId == ei.PublicId && si.Description != ei.Description)).ToList();
+
+            // Find images to create
+            var imagesToCreate = streetImages.Where(si => !existingImages.Any(ei => ei.PublicId == si.PublicId)).ToList();
+
+            // Delete images
+            foreach (var image in imagesToDelete)
+            {
+                try
+                {
+                    await _streetImageRepo.DeleteAsync(image.Id);
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(new { message = $"Error when deleting image: {image.ImageUrl}, Description: {e.Message}" });
+                }
+            }
+
+            // Update images
+            foreach (var image in imagesToUpdate)
+            {
+                var updatedImage = streetImages.First(si => si.PublicId == image.PublicId);
+                image.Description = updatedImage.Description;
+                try
+                {
+                    await _streetImageRepo.UpdatePublicIdAsync(image);
+                    throw new Exception("Error when updating image");
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(new { message = $"Error when updating image: {image.ImageUrl}, Description: {e.Message}" });
+                }
+            }
+
+            // Create new images
+            foreach (var image in imagesToCreate)
+            {
+                var newImage = new StreetImage
+                {
+                    StreetId = streetId,
+                    ImageUrl = image.ImageUrl,
+                    PublicId = image.PublicId,
+                    Description = image.Description
+                };
+                try
+                {
+                    await _streetImageRepo.CreateAsync(newImage);
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(new { message = $"Error when creating image: {image.ImageUrl}, Description: {e.Message}" });
+                }
+            }
+
+            return Ok();
         }
 
         [HttpDelete("{id:int}")]
