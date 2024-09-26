@@ -65,8 +65,7 @@ namespace be.Controllers
             return CreatedAtAction(nameof(GetById), new { id = streetImage.Id }, streetImage.ToStreetImageDto());
         }
 
-        [HttpPost]
-        [Route("noStreetId")]
+        [HttpPost("noStreetId")]
         public async Task<IActionResult> CreateWithNoStreet([FromBody] CreateStreetImageRequestDto createStreetImageRequestDto)
         {
             if (!ModelState.IsValid)

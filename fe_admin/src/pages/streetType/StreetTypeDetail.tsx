@@ -68,7 +68,6 @@ const ChangeStreetTypePage: React.FC = () => {
         toast.success("Cập nhật thành công");
         navigate("/map/street-type");
       }
-      setLoading(false);
     } catch (error) {
       toast.error("Cập nhật loại tuyến đường thất bại");
       console.error("Error creating street:", error);

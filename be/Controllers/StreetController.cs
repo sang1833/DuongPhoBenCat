@@ -164,7 +164,15 @@ namespace be.Controllers
                 return BadRequest(new { message = "At least 2 points are required for Route and WayPoints" });
 
             List<StreetImage> existingImages = await _streetImageRepo.GetImagesByStreetIdAsync(id);
-            List<CreateStreetImageRequestDto> newStreetImages = streetDto?.StreetImages?.Count > 0 ? streetDto.StreetImages : new List<CreateStreetImageRequestDto>();
+            List<CreateStreetImageRequestDto> newStreetImages;
+            if (streetDto?.StreetImages?.Count > 0)
+            {
+                newStreetImages = streetDto.StreetImages;
+            }
+            else
+            {
+                newStreetImages = new List<CreateStreetImageRequestDto>();
+            }
             Street? updatedStreet = await _streetRepo.UpdateAsync(streetDto?.ToStreetFromUpdateDto(), id);
 
             IActionResult updateImagesResult = await UpdateStreetImagesAsync(id, newStreetImages, existingImages);
@@ -181,14 +189,16 @@ namespace be.Controllers
         }
         private async Task<IActionResult> UpdateStreetImagesAsync(int streetId, List<CreateStreetImageRequestDto> streetImages, List<StreetImage> existingImages)
         {
+            var existingImagesDict = existingImages.ToDictionary(ei => ei.PublicId);
+
             // Find images to delete
             List<StreetImage> streetImagesToDelete = existingImages.Where(ei => !streetImages.Any(si => si.PublicId == ei.PublicId)).ToList();
 
             // Find images to update
-            List<StreetImage>  streetImagesToUpdate = existingImages.Where(ei => streetImages.Any(si => si.PublicId == ei.PublicId && si.Description != ei.Description)).ToList();
+            List<StreetImage> streetImagesToUpdate = existingImages.Where(ei => streetImages.Any(si => si.PublicId == ei.PublicId && si.Description != ei.Description)).ToList();
 
             // Find images to create
-            List<CreateStreetImageRequestDto>  streetImagesToCreate = streetImages.Where(si => !existingImages.Any(ei => ei.PublicId == si.PublicId)).ToList();
+            List<CreateStreetImageRequestDto> streetImagesToCreate = streetImages.Where(si => !existingImagesDict.ContainsKey(si.PublicId)).ToList();
 
             // Delete images
             foreach (StreetImage image in streetImagesToDelete)
