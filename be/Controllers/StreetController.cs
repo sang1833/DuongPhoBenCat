@@ -164,9 +164,18 @@ namespace be.Controllers
                 return BadRequest(new { message = "At least 2 points are required for Route and WayPoints" });
 
             List<StreetImage> existingImages = await _streetImageRepo.GetImagesByStreetIdAsync(id);
+            List<CreateStreetImageRequestDto> newStreetImages;
+            if (streetDto?.StreetImages?.Count > 0)
+            {
+                newStreetImages = streetDto.StreetImages;
+            }
+            else
+            {
+                newStreetImages = new List<CreateStreetImageRequestDto>();
+            }
             Street? updatedStreet = await _streetRepo.UpdateAsync(streetDto?.ToStreetFromUpdateDto(), id);
 
-            IActionResult updateImagesResult = await UpdateStreetImages(id, streetDto.StreetImages, existingImages);
+            IActionResult updateImagesResult = await UpdateStreetImagesAsync(id, newStreetImages, existingImages);
             if (updateImagesResult is BadRequestObjectResult)
             {
                 return BadRequest(updateImagesResult);
@@ -178,19 +187,21 @@ namespace be.Controllers
             }
             return Ok(updatedStreet.ToStreetDto());
         }
-        private async Task<IActionResult> UpdateStreetImages(int streetId, List<CreateStreetImageRequestDto> streetImages, List<StreetImage> existingImages)
+        private async Task<IActionResult> UpdateStreetImagesAsync(int streetId, List<CreateStreetImageRequestDto> streetImages, List<StreetImage> existingImages)
         {
+            var existingImagesDict = existingImages.ToDictionary(ei => ei.PublicId);
+
             // Find images to delete
-            var imagesToDelete = existingImages.Where(ei => !streetImages.Any(si => si.PublicId == ei.PublicId)).ToList();
+            List<StreetImage> streetImagesToDelete = existingImages.Where(ei => !streetImages.Any(si => si.PublicId == ei.PublicId)).ToList();
 
             // Find images to update
-            var imagesToUpdate = existingImages.Where(ei => streetImages.Any(si => si.PublicId == ei.PublicId && si.Description != ei.Description)).ToList();
+            List<StreetImage> streetImagesToUpdate = existingImages.Where(ei => streetImages.Any(si => si.PublicId == ei.PublicId && si.Description != ei.Description)).ToList();
 
             // Find images to create
-            var imagesToCreate = streetImages.Where(si => !existingImages.Any(ei => ei.PublicId == si.PublicId)).ToList();
+            List<CreateStreetImageRequestDto> streetImagesToCreate = streetImages.Where(si => !existingImagesDict.ContainsKey(si.PublicId)).ToList();
 
             // Delete images
-            foreach (var image in imagesToDelete)
+            foreach (StreetImage image in streetImagesToDelete)
             {
                 try
                 {
@@ -203,14 +214,13 @@ namespace be.Controllers
             }
 
             // Update images
-            foreach (var image in imagesToUpdate)
+            foreach (StreetImage image in streetImagesToUpdate)
             {
-                var updatedImage = streetImages.First(si => si.PublicId == image.PublicId);
-                image.Description = updatedImage.Description;
+                CreateStreetImageRequestDto streetImageToUpdate = streetImages.First(si => si.PublicId == image.PublicId);
+                image.Description = streetImageToUpdate.Description ?? "";
                 try
                 {
                     await _streetImageRepo.UpdatePublicIdAsync(image);
-                    throw new Exception("Error when updating image");
                 }
                 catch (Exception e)
                 {
@@ -219,14 +229,14 @@ namespace be.Controllers
             }
 
             // Create new images
-            foreach (var image in imagesToCreate)
+            foreach (CreateStreetImageRequestDto streetImageToCreate in streetImagesToCreate)
             {
-                var newImage = new StreetImage
+                StreetImage newImage = new StreetImage
                 {
                     StreetId = streetId,
-                    ImageUrl = image.ImageUrl,
-                    PublicId = image.PublicId,
-                    Description = image.Description
+                    ImageUrl = streetImageToCreate.ImageUrl,
+                    PublicId = streetImageToCreate.PublicId,
+                    Description = streetImageToCreate.Description ?? ""
                 };
                 try
                 {
@@ -234,7 +244,7 @@ namespace be.Controllers
                 }
                 catch (Exception e)
                 {
-                    return BadRequest(new { message = $"Error when creating image: {image.ImageUrl}, Description: {e.Message}" });
+                    return BadRequest(new { message = $"Error when creating image: {streetImageToCreate.ImageUrl}, Description: {e.Message}" });
                 }
             }
 

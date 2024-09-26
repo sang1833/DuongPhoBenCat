@@ -54,6 +54,7 @@ const PostStreetPage: React.FC = () => {
   const [streetAddress, setStreetAddress] = useState<string>("");
   const [streetDescription, setStreetDescription] = useState<string>("");
   const [streetImages, setStreetImages] = useState<IStreetImage[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<ErrorMessages>({});
 
   useEffect(() => {
@@ -98,32 +99,34 @@ const PostStreetPage: React.FC = () => {
   };
 
   const handlePostStreet = async () => {
-    if (!waypoints || !routePolylines) {
-      console.error("No waypoints or route polylines to post street");
-      return;
-    }
-
-    const streetApi = new StreetApi();
-    const createStreetRequestDto: CreateStreetRequestDto = {
-      streetName: streetName,
-      streetTypeId: streetTypeId,
-      address: streetAddress,
-      imageUrl: "",
-      description: streetDescription,
-      wayPoints: {
-        coordinates: waypoints?.map((wp: LatLng) => [wp.lat, wp.lng])
-      },
-      route: {
-        coordinates: routePolylines?.map((wp: LatLng) => [wp.lat, wp.lng])
-      },
-      streetImages: streetImages.map((image) => ({
-        imageUrl: image.imageUrl || "",
-        publicId: image.publicId || "",
-        description: image.description || ""
-      }))
-    };
+    setLoading(true);
 
     try {
+      if (!waypoints || !routePolylines) {
+        console.error("No waypoints or route polylines to post street");
+        return;
+      }
+
+      const streetApi = new StreetApi();
+      const createStreetRequestDto: CreateStreetRequestDto = {
+        streetName: streetName,
+        streetTypeId: streetTypeId,
+        address: streetAddress,
+        imageUrl: "",
+        description: streetDescription,
+        wayPoints: {
+          coordinates: waypoints?.map((wp: LatLng) => [wp.lat, wp.lng])
+        },
+        route: {
+          coordinates: routePolylines?.map((wp: LatLng) => [wp.lat, wp.lng])
+        },
+        streetImages: streetImages.map((image) => ({
+          imageUrl: image.imageUrl || "",
+          publicId: image.publicId || "",
+          description: image.description || ""
+        }))
+      };
+
       const response = await streetApi.apiStreetAdminCreatePost(
         createStreetRequestDto
       );
@@ -135,6 +138,7 @@ const PostStreetPage: React.FC = () => {
       toast.error("Tạo tuyến đường thất bại");
       console.error("Error creating street:", error);
     }
+    setLoading(false);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -150,84 +154,86 @@ const PostStreetPage: React.FC = () => {
       <BackButton onClick={() => navigate(-1)} />
       <Breadcrumb pageName="Tạo tuyến đường" />
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5.5 p-6.5">
-          <div className="flex flex-col gap-6 xl:flex-row">
-            <div className="w-full xl:w-1/2">
+        <form onSubmit={handleSubmit}>
+          <fieldset disabled={loading} className="flex flex-col gap-5.5 p-6.5">
+            <div className="flex flex-col gap-6 xl:flex-row">
+              <div className="w-full xl:w-1/2">
+                <Input
+                  title="Tên đường"
+                  placeholder="Nhập tên đường"
+                  type="text"
+                  value={streetName}
+                  onChange={(e) => setStreetName(e.target.value)}
+                  required
+                  error={errors.streetName}
+                />
+              </div>
+              <div className="w-full xl:w-1/2">
+                <SelectGroupOne
+                  title="Loại đường"
+                  selectedOption={streetTypeId}
+                  setSelectedOption={setStreetTypeId}
+                  isOptionSelected={isSTypeSelected}
+                  setIsOptionSelected={setIsSTypeSelected}
+                  options={streetTypes}
+                />
+              </div>
+            </div>
+
+            <div>
               <Input
-                title="Tên đường"
-                placeholder="Nhập tên đường"
+                title="Địa chỉ"
+                placeholder="Nhập địa chỉ"
                 type="text"
-                value={streetName}
-                onChange={(e) => setStreetName(e.target.value)}
+                value={streetAddress}
+                onChange={(e) => setStreetAddress(e.target.value)}
                 required
-                error={errors.streetName}
+                error={errors.streetAddress}
               />
             </div>
-            <div className="w-full xl:w-1/2">
-              <SelectGroupOne
-                title="Loại đường"
-                selectedOption={streetTypeId}
-                setSelectedOption={setStreetTypeId}
-                isOptionSelected={isSTypeSelected}
-                setIsOptionSelected={setIsSTypeSelected}
-                options={streetTypes}
+
+            <div>
+              <TextArea
+                title="Mô tả"
+                placeholder="Nhập mô tả"
+                rows={6}
+                value={streetDescription}
+                onChange={(e) => setStreetDescription(e.target.value)}
               />
             </div>
-          </div>
 
-          <div>
-            <Input
-              title="Địa chỉ"
-              placeholder="Nhập địa chỉ"
-              type="text"
-              value={streetAddress}
-              onChange={(e) => setStreetAddress(e.target.value)}
-              required
-              error={errors.streetAddress}
-            />
-          </div>
-
-          <div>
-            <TextArea
-              title="Mô tả"
-              placeholder="Nhập mô tả"
-              rows={6}
-              value={streetDescription}
-              onChange={(e) => setStreetDescription(e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Tuyến đường <span className="text-meta-1">*</span>
-            </label>
-            <Map />
-            {errors.streetWaypoint && (
-              <p className="mt-2 text-sm text-red-600">
-                {errors.streetWaypoint}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Tuyến đường <span className="text-meta-1">*</span>
+              </label>
+              <Map />
+              {errors.streetWaypoint && (
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.streetWaypoint}
+                </p>
+              )}
+              <p className="mt-2 text-sm text-gray-500">
+                {t("Click on the map to add markers and create a route.")}
               </p>
-            )}
-            <p className="mt-2 text-sm text-gray-500">
-              {t("Click on the map to add markers and create a route.")}
-            </p>
-          </div>
+            </div>
 
-          <StreetImage
-            streetImages={streetImages}
-            setStreetImages={setStreetImages}
-          />
+            <StreetImage
+              streetImages={streetImages}
+              setStreetImages={setStreetImages}
+            />
 
-          <div>
-            <button
-              type="submit"
-              className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-theme-color-primary 
+            <div>
+              <button
+                type="submit"
+                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-theme-color-primary 
                 ${
                   errors.streetAddress || errors.streetName ? "bg-red-700" : ""
                 }`}
-            >
-              {t("ok")}
-            </button>
-          </div>
+              >
+                {t("ok")}
+              </button>
+            </div>
+          </fieldset>
         </form>
       </div>
     </div>
