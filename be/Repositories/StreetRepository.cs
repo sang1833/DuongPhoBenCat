@@ -162,7 +162,7 @@ namespace be.Repositories
             }
 
             existingStreet.StreetName = streetModel.StreetName;
-            existingStreet.StreetType = streetModel.StreetType;
+            existingStreet.StreetTypeId = streetModel.StreetTypeId;
             existingStreet.Address = streetModel.Address;
             existingStreet.Description = streetModel.Description;
             existingStreet.ImageUrl = streetModel.ImageUrl;

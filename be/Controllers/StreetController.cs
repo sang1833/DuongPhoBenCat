@@ -224,7 +224,7 @@ namespace be.Controllers
                 }
                 catch (Exception e)
                 {
-                    return BadRequest(new { message = $"Error when updating image: {image.ImageUrl}, Description: {e.Message}" });
+                    Console.WriteLine(new { message = $"Error when updating image: {image.ImageUrl}, Description: {e.Message}" });
                 }
             }
 

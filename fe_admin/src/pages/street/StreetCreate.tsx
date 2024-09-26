@@ -104,6 +104,7 @@ const PostStreetPage: React.FC = () => {
     try {
       if (!waypoints || !routePolylines) {
         console.error("No waypoints or route polylines to post street");
+        setLoading(false);
         return;
       }
 
