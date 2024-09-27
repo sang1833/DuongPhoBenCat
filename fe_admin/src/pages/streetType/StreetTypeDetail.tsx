@@ -1,7 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { BackButton, Breadcrumb, Input } from "@components";
+import {
+  BackButton,
+  Breadcrumb,
+  Input,
+  OutlinedNormalButton
+} from "@components";
 import { MapContext } from "@contexts";
 import { StreetTypeApi, UpdateStreetTypeRequestDto } from "@api";
 import { IStreetType } from "@types";
@@ -104,14 +109,23 @@ const ChangeStreetTypePage: React.FC = () => {
               </div>
             </div>
 
-            <div>
+            <div className="flex justify-center items-center gap-4">
               <button
                 type="submit"
-                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-theme-color-primary 
+                className={`flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-theme-color-primary 
                 ${errors.streetTypeName ? "bg-red-700" : ""}`}
               >
                 {t("ok")}
               </button>
+              <OutlinedNormalButton
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  navigate(-1);
+                }}
+                className="text-red-600"
+              >
+                {t("cancel")}
+              </OutlinedNormalButton>
             </div>
           </fieldset>
         </form>

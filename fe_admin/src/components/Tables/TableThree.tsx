@@ -199,7 +199,7 @@ const TableThree = () => {
                       </p>
                     </td>
                     <td className="max-w-[140px] border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p
+                      {/* <p
                         className={`inline-flex rounded-full truncate bg-opacity-10 py-1 px-3 text-sm font-medium ${
                           packageItem.streetType.id === 1
                             ? "bg-blue-700 text-blue-700"
@@ -208,6 +208,8 @@ const TableThree = () => {
                             : "bg-green-700 text-green-700"
                         }`}
                       >
+                      </p> */}
+                      <p className="text-black dark:text-white truncate">
                         {packageItem.streetType.streetTypeName}
                       </p>
                     </td>
