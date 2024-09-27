@@ -30,7 +30,8 @@ namespace be.Data
             builder.Entity<Street>()
                 .HasOne(s => s.StreetType)
                 .WithMany(sh => sh.Streets)
-                .HasForeignKey(sh => sh.StreetTypeId);
+                .HasForeignKey(sh => sh.StreetTypeId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Street>()
                 .HasMany(s => s.Histories)

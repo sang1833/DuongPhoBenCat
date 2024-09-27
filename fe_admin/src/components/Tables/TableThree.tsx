@@ -135,7 +135,10 @@ const TableThree = () => {
             <>
               <thead>
                 <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                  <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                  <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                    STT
+                  </th>
+                  <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white">
                     Tên đường
                   </th>
                   <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
@@ -180,19 +183,24 @@ const TableThree = () => {
                     }
                     className="hover:bg-gray dark:hover:bg-black"
                   >
-                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                      <h5 className="font-medium text-black dark:text-white">
+                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark md:pl-4 xl:pl-11">
+                      <div className="font-medium text-black dark:text-white">
+                        {key + 1}
+                      </div>
+                    </td>
+                    <td className="max-w-[220px] border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                      <h5 className="text-black dark:text-white truncate">
                         {packageItem.streetName}
                       </h5>
                     </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
+                    <td className="max-w-[140px] border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                      <p className="text-black dark:text-white truncate">
                         {packageItem.address}
                       </p>
                     </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p
-                        className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
+                    <td className="max-w-[140px] border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                      {/* <p
+                        className={`inline-flex rounded-full truncate bg-opacity-10 py-1 px-3 text-sm font-medium ${
                           packageItem.streetType.id === 1
                             ? "bg-blue-700 text-blue-700"
                             : packageItem.streetType.id === 2
@@ -200,6 +208,8 @@ const TableThree = () => {
                             : "bg-green-700 text-green-700"
                         }`}
                       >
+                      </p> */}
+                      <p className="text-black dark:text-white truncate">
                         {packageItem.streetType.streetTypeName}
                       </p>
                     </td>

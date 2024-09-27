@@ -8,6 +8,7 @@ import {
   Breadcrumb,
   Input,
   Map,
+  OutlinedNormalButton,
   SelectGroupOne,
   StreetImage,
   TextArea
@@ -104,6 +105,7 @@ const PostStreetPage: React.FC = () => {
     try {
       if (!waypoints || !routePolylines) {
         console.error("No waypoints or route polylines to post street");
+        setLoading(false);
         return;
       }
 
@@ -222,16 +224,25 @@ const PostStreetPage: React.FC = () => {
               setStreetImages={setStreetImages}
             />
 
-            <div>
+            <div className="flex justify-center items-center gap-4">
               <button
                 type="submit"
-                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-theme-color-primary 
+                className={`flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-theme-color-primary 
                 ${
                   errors.streetAddress || errors.streetName ? "bg-red-700" : ""
                 }`}
               >
                 {t("ok")}
               </button>
+              <OutlinedNormalButton
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  navigate(-1);
+                }}
+                className="text-red-600"
+              >
+                {t("cancel")}
+              </OutlinedNormalButton>
             </div>
           </fieldset>
         </form>

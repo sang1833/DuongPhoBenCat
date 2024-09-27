@@ -71,15 +71,25 @@ namespace be.Repositories
             if (!string.IsNullOrWhiteSpace(queryObject.SortBy))
             {
                 if(queryObject.SortBy.Equals("StreetName", StringComparison.OrdinalIgnoreCase)){
-                    streets = queryObject.IsDecsending ? streets.OrderByDescending(x => x.StreetName) : streets.OrderBy(x => x.StreetName);
+                    streets = queryObject.IsDecsending 
+                    ? streets.OrderByDescending(x => x.StreetName) 
+                    : streets.OrderBy(x => x.StreetName);
                 } else if(queryObject.SortBy.Equals("UpdatedDate", StringComparison.OrdinalIgnoreCase)){
-                    streets = queryObject.IsDecsending ? streets.OrderByDescending(x => x.UpdatedDate) : streets.OrderBy(x => x.UpdatedDate);
+                    streets = queryObject.IsDecsending 
+                    ? streets.OrderByDescending(x => x.UpdatedDate) 
+                    : streets.OrderBy(x => x.UpdatedDate);
                 } else if(queryObject.SortBy.Equals("CreatedDate", StringComparison.OrdinalIgnoreCase)){
-                    streets = queryObject.IsDecsending ? streets.OrderByDescending(x => x.CreatedDate) : streets.OrderBy(x => x.CreatedDate);
+                    streets = queryObject.IsDecsending 
+                    ? streets.OrderByDescending(x => x.CreatedDate) 
+                    : streets.OrderBy(x => x.CreatedDate);
                 } else if(queryObject.SortBy.Equals("StreetType", StringComparison.OrdinalIgnoreCase)){
-                    streets = queryObject.IsDecsending ? streets.OrderByDescending(x => x.StreetType) : streets.OrderBy(x => x.StreetType);
+                    streets = queryObject.IsDecsending 
+                    ? streets.OrderByDescending(x => x.StreetType) 
+                    : streets.OrderBy(x => x.StreetType);
                 } else if(queryObject.SortBy.Equals("Address", StringComparison.OrdinalIgnoreCase)){
-                    streets = queryObject.IsDecsending ? streets.OrderByDescending(x => x.Address) : streets.OrderBy(x => x.Address);
+                    streets = queryObject.IsDecsending 
+                    ? streets.OrderByDescending(x => x.Address) 
+                    : streets.OrderBy(x => x.Address);
                 } 
             }
 
@@ -123,15 +133,25 @@ namespace be.Repositories
             if (!string.IsNullOrWhiteSpace(queryObject.SortBy))
             {
                 if(queryObject.SortBy.Equals("StreetName", StringComparison.OrdinalIgnoreCase)){
-                    streets = queryObject.IsDecsending ? streets.OrderByDescending(x => x.StreetName) : streets.OrderBy(x => x.StreetName);
+                    streets = queryObject.IsDecsending 
+                    ? streets.OrderByDescending(x => x.StreetName) 
+                    : streets.OrderBy(x => x.StreetName);
                 } else if(queryObject.SortBy.Equals("UpdatedDate", StringComparison.OrdinalIgnoreCase)){
-                    streets = queryObject.IsDecsending ? streets.OrderByDescending(x => x.UpdatedDate) : streets.OrderBy(x => x.UpdatedDate);
+                    streets = queryObject.IsDecsending 
+                    ? streets.OrderByDescending(x => x.UpdatedDate) 
+                    : streets.OrderBy(x => x.UpdatedDate);
                 } else if(queryObject.SortBy.Equals("CreatedDate", StringComparison.OrdinalIgnoreCase)){
-                    streets = queryObject.IsDecsending ? streets.OrderByDescending(x => x.CreatedDate) : streets.OrderBy(x => x.CreatedDate);
+                    streets = queryObject.IsDecsending 
+                    ? streets.OrderByDescending(x => x.CreatedDate) 
+                    : streets.OrderBy(x => x.CreatedDate);
                 } else if(queryObject.SortBy.Equals("StreetType", StringComparison.OrdinalIgnoreCase)){
-                    streets = queryObject.IsDecsending ? streets.OrderByDescending(x => x.StreetType) : streets.OrderBy(x => x.StreetType);
+                    streets = queryObject.IsDecsending 
+                    ? streets.OrderByDescending(x => x.StreetType) 
+                    : streets.OrderBy(x => x.StreetType);
                 } else if(queryObject.SortBy.Equals("Address", StringComparison.OrdinalIgnoreCase)){
-                    streets = queryObject.IsDecsending ? streets.OrderByDescending(x => x.Address) : streets.OrderBy(x => x.Address);
+                    streets = queryObject.IsDecsending 
+                    ? streets.OrderByDescending(x => x.Address) 
+                    : streets.OrderBy(x => x.Address);
                 } 
             }
 
@@ -162,7 +182,7 @@ namespace be.Repositories
             }
 
             existingStreet.StreetName = streetModel.StreetName;
-            existingStreet.StreetType = streetModel.StreetType;
+            existingStreet.StreetTypeId = streetModel.StreetTypeId;
             existingStreet.Address = streetModel.Address;
             existingStreet.Description = streetModel.Description;
             existingStreet.ImageUrl = streetModel.ImageUrl;

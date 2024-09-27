@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using be.Data;
 using be.Helpers;
@@ -56,6 +57,27 @@ namespace be.Repositories
             if (!string.IsNullOrWhiteSpace(queryObject.StreetTypeName))
             {
                 streetTypes = streetTypes.Where(s => EF.Functions.ILike(s.StreetTypeName.ToLower(), $"%{queryObject.StreetTypeName}%"));
+            }
+
+            if (!string.IsNullOrWhiteSpace(queryObject.SortBy))
+            {
+                var columnSelectors = new Dictionary<string, Expression<Func<StreetType, object>>>
+                {
+                    { "streetTypeName", s => s.StreetTypeName },
+                    { "createdDate", s => s.CreatedDate },
+                    { "updatedDate", s => s.UpdatedDate }
+                };
+
+                if (columnSelectors.TryGetValue(queryObject.SortBy, out var selectedColumn))
+                {
+                    streetTypes = queryObject.IsDecsending
+                        ? streetTypes.OrderByDescending(selectedColumn)
+                        : streetTypes.OrderBy(selectedColumn);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid sortBy");
+                }
             }
 
             int totalItems = await streetTypes.CountAsync();
