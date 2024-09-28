@@ -10,6 +10,7 @@ using be.Helpers;
 using be.Interfaces;
 using be.Mappers;
 using be.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace be.Controllers
@@ -31,7 +32,7 @@ namespace be.Controllers
             _streetImageRepo = streetImageRepository;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public async Task<IActionResult> GetAll([FromQuery] StreetQueryObject queryObject)
         {
             if (!ModelState.IsValid)
@@ -42,7 +43,7 @@ namespace be.Controllers
             return Ok(new { Streets = streetDtos, TotalPages = totalPages });
         }
 
-        [HttpGet] 
+        [HttpGet, Authorize] 
         [Route("adminSearch")]
         public async Task<IActionResult> SearchAdmin([FromQuery] StreetQueryObject queryObject)
         {
@@ -85,7 +86,7 @@ namespace be.Controllers
         /// <summary>
         /// Carefully with Route and WayPoints coordinates
         /// </summary>
-        [HttpPost("adminCreate")]
+        [HttpPost("adminCreate"), Authorize]
         public async Task<IActionResult> AdminCreate([FromBody] CreateStreetRequestDto streetDto)
         {  
             if (!ModelState.IsValid)
@@ -153,7 +154,7 @@ namespace be.Controllers
         ///     }
         ///   }
         ///   </remarks>
-        [HttpPut("{id:int}")]
+        [HttpPut("{id:int}"), Authorize]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateStreetRequestDto streetDto)
         {
             if (!ModelState.IsValid)
@@ -251,7 +252,7 @@ namespace be.Controllers
             return Ok();
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id:int}"), Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> Delete(int id)
         {
             if (!ModelState.IsValid)

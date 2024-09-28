@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using be.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace be.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -15,6 +17,7 @@ namespace be.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
             builder.HasPostgresExtension("postgis");
 
             builder.Entity<Street>()
@@ -39,12 +42,21 @@ namespace be.Data
                 .HasForeignKey(sh => sh.StreetId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-
             builder.Entity<Street>()
                 .HasMany(s => s.Images)
                 .WithOne(si => si.Street)
                 .HasForeignKey(si => si.StreetId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            List<IdentityRole> roles = new List<IdentityRole>
+            {
+                new IdentityRole {Name = "SuperAdmin", NormalizedName = "SUPADMIN"},
+                new IdentityRole {Name = "Admin", NormalizedName = "ADMIN"},
+                new IdentityRole {Name = "Collab", NormalizedName = "COLLAB"},
+                new IdentityRole {Name = "Director", NormalizedName = "DIRECTOR"}
+            };
+
+            builder.Entity<IdentityRole>().HasData(roles);
         }
 
         public DbSet<Street> Streets { get; set; }

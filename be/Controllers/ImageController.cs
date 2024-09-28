@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using be.Interfaces;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace be.Controllers
@@ -22,7 +23,7 @@ namespace be.Controllers
             _env = env;
         }
         
-        [HttpPost("upload")]
+        [HttpPost("upload"), Authorize]
         public IActionResult UploadImage(IFormFile file)
         {
             try
@@ -42,7 +43,7 @@ namespace be.Controllers
             }
         }
 
-        [HttpDelete("delete/{publicId}")]
+        [HttpDelete("delete/{publicId}"), Authorize]
         public IActionResult DeleteImage(string publicId)
         {
             if (string.IsNullOrWhiteSpace(publicId))

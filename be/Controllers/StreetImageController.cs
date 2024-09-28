@@ -7,6 +7,7 @@ using be.Dtos.StreetImage;
 using be.Interfaces;
 using be.Mappers;
 using be.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace be.Controllers
@@ -51,7 +52,7 @@ namespace be.Controllers
             return Ok(streetImage.ToStreetImageDto());
         }
 
-        [HttpPost("{streetId}")]
+        [HttpPost("{streetId}"), Authorize]
         public async Task<IActionResult> Create([FromRoute] int streetId, [FromBody] CreateStreetImageRequestDto createStreetImageRequestDto)
         {
             if (!ModelState.IsValid)
@@ -65,7 +66,7 @@ namespace be.Controllers
             return CreatedAtAction(nameof(GetById), new { id = streetImage.Id }, streetImage.ToStreetImageDto());
         }
 
-        [HttpPost("noStreetId")]
+        [HttpPost("noStreetId"), Authorize]
         public async Task<IActionResult> CreateWithNoStreet([FromBody] CreateStreetImageRequestDto createStreetImageRequestDto)
         {
             if (!ModelState.IsValid)
@@ -77,7 +78,7 @@ namespace be.Controllers
             return CreatedAtAction(nameof(GetById), new { id = streetImage.Id }, streetImage.ToStreetImageDto());
         }
         
-        [HttpPut("{id:int}")]
+        [HttpPut("{id:int}"), Authorize]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateStreetImageRequestDto updateStreetImageDto)
         {
             if (!ModelState.IsValid)
@@ -94,7 +95,7 @@ namespace be.Controllers
             return Ok(updatedStreetImage.ToStreetImageDto());
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id:int}"), Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> Delete(int id)
         {
             if (!ModelState.IsValid)
