@@ -6,6 +6,7 @@ using be.Dtos.StreetHistory;
 using be.Interfaces;
 using be.Mappers;
 using be.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace be.Controllers
@@ -50,7 +51,7 @@ namespace be.Controllers
             return Ok(streetHistoryDto);
         }
 
-        [HttpPost("{streetId}")]
+        [HttpPost("{streetId}"), Authorize]
         public async Task<IActionResult> Create([FromRoute] int streetId, [FromBody] CreateStreetHistoryRequestDto historyRequestDto)
         {
             if (!ModelState.IsValid)
@@ -64,7 +65,7 @@ namespace be.Controllers
             return CreatedAtAction(nameof(GetById), new { id = streetHistoryModel.Id }, streetHistoryModel.ToStreetHistoryDto());
         }
         
-        [HttpPut("{id:int}")]
+        [HttpPut("{id:int}"), Authorize]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateStreetHistoryRequestDto streetHistoryDto)
         {
             if (!ModelState.IsValid)
@@ -79,7 +80,7 @@ namespace be.Controllers
             return Ok(updatedStreetHistory.ToStreetHistoryDto());
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id:int}"), Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> Delete(int id)
         {
             if (!ModelState.IsValid)

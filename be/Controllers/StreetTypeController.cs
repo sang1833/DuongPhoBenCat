@@ -7,6 +7,7 @@ using be.Helpers;
 using be.Interfaces;
 using be.Mappers;
 using be.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace be.Controllers
@@ -50,7 +51,7 @@ namespace be.Controllers
             return Ok(streetTypeModel.ToStreetTypeDto());
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> Create([FromBody] CreateStreetTypeRequestDto createStreetTypeRequestDto)
         {
             if (!ModelState.IsValid)
@@ -62,7 +63,7 @@ namespace be.Controllers
             return Ok(streetType.ToFullyStreetTypeDto());
         }
 
-        [HttpPut("{id:int}")]
+        [HttpPut("{id:int}"), Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> Update([FromBody] UpdateStreetTypeRequestDto updateStreetTypeRequestDto, int id)
         {
             if (!ModelState.IsValid)
@@ -86,7 +87,7 @@ namespace be.Controllers
             return Ok(updatedStreetType.ToFullyStreetTypeDto());
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id:int}"), Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> Delete(int id){
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
