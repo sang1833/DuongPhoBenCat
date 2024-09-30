@@ -6,6 +6,7 @@ using api.Dtos.Account;
 using be.Dtos.Account;
 using be.Interfaces;
 using be.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +27,54 @@ namespace be.Controllers
             _signInManager = signInManager;
         }
 
-        [HttpPost("register/{userType}")]
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginDto loginDto){
+            try
+            {
+                if(!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                AppUser? appUser = await _userManager.FindByNameAsync(loginDto.Username);
+
+                if(appUser == null)
+                    return Unauthorized("Dont have account");
+                
+                Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.CheckPasswordSignInAsync(appUser, loginDto.Password, false);
+
+                if(!result.Succeeded)
+                    return Unauthorized("Invalid username or password");
+
+                IList<string> role = await _userManager.GetRolesAsync(appUser);
+
+                // Response.Cookies.Append("Auth", _tokenService.CreateToken(appUser), new CookieOptions
+                // {
+                //     HttpOnly = true,
+                //     Secure = true,
+                //     SameSite = SameSiteMode.Strict,
+                //     Expires = DateTimeOffset.UtcNow.AddMinutes(
+                //         int.Parse(
+                //             Environment.GetEnvironmentVariable("JWT_EXPIRES_IN") 
+                //             ?? throw new InvalidOperationException("Jwt expiration minutes is not set in environment variables.")
+                //         )
+                //     )
+                // });
+
+                return Ok(
+                    new NewUserDto {
+                        Username = appUser.UserName,
+                        Email = appUser.Email,
+                        Role = role[0],
+                        Token = _tokenService.CreateToken(appUser)
+                    }
+                );
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpPost("adminRegister/{userType}"), Authorize(Roles = "SupAdmin")]
         public async Task<IActionResult> Register([FromRoute] string userType, [FromBody]RegisterDto registerDto)
         {
             try {
@@ -50,9 +98,8 @@ namespace be.Controllers
                 if(roleResult.Succeeded){
                     return Ok(
                         new NewUserDto {
-                            UserName = appUser.UserName,
-                            Email = appUser.Email,
-                            Token = _tokenService.CreateToken(appUser)
+                            Username = appUser.UserName,
+                            Email = appUser.Email
                         }
                     ); 
                 } else {

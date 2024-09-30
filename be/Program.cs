@@ -44,11 +44,14 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "Bản đồ Bến Cát", Version = "v1" });
 
-    c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -58,7 +61,7 @@ builder.Services.AddSwaggerGen(c =>
             {
                 Reference = new OpenApiReference
                 {
-                    Id = "oauth2",
+                    Id = "Bearer",
                     Type = ReferenceType.SecurityScheme,
                 },
             },
@@ -115,7 +118,12 @@ builder.Services.AddAuthentication(options =>
 builder.Services.ConfigureApplicationCookie(options => 
 {
     options.Cookie.HttpOnly = true;
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(
+        int.Parse(
+            Environment.GetEnvironmentVariable("JWT_EXPIRES_IN") 
+            ?? throw new InvalidOperationException("Jwt expiration minutes is not set in environment variables.")
+        )
+    );
     options.LoginPath = "/api/auth/login";
     options.AccessDeniedPath = "/api/auth/access-denied";
     options.SlidingExpiration = true;
