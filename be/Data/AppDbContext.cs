@@ -50,7 +50,7 @@ namespace be.Data
 
             List<IdentityRole> roles = new List<IdentityRole>
             {
-                new IdentityRole {Name = "SuperAdmin", NormalizedName = "SUPADMIN"},
+                new IdentityRole {Name = "SupAdmin", NormalizedName = "SUPADMIN"},
                 new IdentityRole {Name = "Admin", NormalizedName = "ADMIN"},
                 new IdentityRole {Name = "Collab", NormalizedName = "COLLAB"},
                 new IdentityRole {Name = "Director", NormalizedName = "DIRECTOR"}
