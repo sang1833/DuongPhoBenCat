@@ -95,7 +95,7 @@ namespace be.Controllers
             return Ok(updatedStreetImage.ToStreetImageDto());
         }
 
-        [HttpDelete("{id:int}"), Authorize(Roles = "Admin,SuperAdmin")]
+        [HttpDelete("{id:int}"), Authorize(Roles = "Admin,SupAdmin")]
         public async Task<IActionResult> Delete(int id)
         {
             if (!ModelState.IsValid)

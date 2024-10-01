@@ -258,7 +258,7 @@ namespace be.Migrations
                 values: new object[,]
                 {
                     { "a2ed574c-0332-4ea1-8185-87d7278ff92b", null, "Admin", "ADMIN" },
-                    { "b4aa6642-de68-4174-b2d3-17835b328bcc", null, "SuperAdmin", "SUPADMIN" },
+                    { "b4aa6642-de68-4174-b2d3-17835b328bcc", null, "SupAdmin", "SUPADMIN" },
                     { "e6f282da-6af5-4692-8f14-c2566a50279f", null, "Director", "DIRECTOR" },
                     { "f928c1fc-7d45-4011-bfdd-e3994b680d8e", null, "Collab", "COLLAB" }
                 });

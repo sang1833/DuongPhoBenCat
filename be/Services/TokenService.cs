@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using be.Interfaces;
@@ -22,13 +23,23 @@ namespace be.Services
                 ?? throw new InvalidOperationException("Jwt secret is not set in environment variables.")
             ));
         }
-        
-        public string CreateToken(AppUser user)
+
+        public string CreateRefreshToken()
+        {
+            return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+        }
+
+        public string CreateToken(AppUser user, IList<string> roles)
         {
             List<Claim> claims = new List<Claim>{
                 new Claim(JwtRegisteredClaimNames.Email, user.Email ?? ""),
-                new Claim(JwtRegisteredClaimNames.GivenName, user.UserName ?? "")
+                new Claim(JwtRegisteredClaimNames.GivenName, user.UserName ?? ""),
             };
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
+            }
+
             SigningCredentials creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor

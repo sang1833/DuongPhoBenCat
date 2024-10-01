@@ -51,7 +51,7 @@ namespace be.Controllers
             return Ok(streetTypeModel.ToStreetTypeDto());
         }
 
-        [HttpPost, Authorize(Roles = "Admin,SuperAdmin")]
+        [HttpPost, Authorize(Roles = "Admin,SupAdmin")]
         public async Task<IActionResult> Create([FromBody] CreateStreetTypeRequestDto createStreetTypeRequestDto)
         {
             if (!ModelState.IsValid)
@@ -63,7 +63,7 @@ namespace be.Controllers
             return Ok(streetType.ToFullyStreetTypeDto());
         }
 
-        [HttpPut("{id:int}"), Authorize(Roles = "Admin,SuperAdmin")]
+        [HttpPut("{id:int}"), Authorize(Roles = "Admin,SupAdmin")]
         public async Task<IActionResult> Update([FromBody] UpdateStreetTypeRequestDto updateStreetTypeRequestDto, int id)
         {
             if (!ModelState.IsValid)
@@ -87,7 +87,7 @@ namespace be.Controllers
             return Ok(updatedStreetType.ToFullyStreetTypeDto());
         }
 
-        [HttpDelete("{id:int}"), Authorize(Roles = "Admin,SuperAdmin")]
+        [HttpDelete("{id:int}"), Authorize(Roles = "Admin,SupAdmin")]
         public async Task<IActionResult> Delete(int id){
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

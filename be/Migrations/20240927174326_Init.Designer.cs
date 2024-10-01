@@ -56,7 +56,7 @@ namespace be.Migrations
                         new
                         {
                             Id = "b4aa6642-de68-4174-b2d3-17835b328bcc",
-                            Name = "SuperAdmin",
+                            Name = "SupAdmin",
                             NormalizedName = "SUPADMIN"
                         },
                         new
