@@ -32,7 +32,7 @@ namespace be.Controllers
             _streetImageRepo = streetImageRepository;
         }
 
-        [HttpGet, Authorize]
+        [HttpGet, Authorize(Roles = "Admin,SupAdmin")]
         public async Task<IActionResult> GetAll([FromQuery] StreetQueryObject queryObject)
         {
             if (!ModelState.IsValid)
@@ -252,7 +252,7 @@ namespace be.Controllers
             return Ok();
         }
 
-        [HttpDelete("{id:int}"), Authorize(Roles = "Admin,SuperAdmin")]
+        [HttpDelete("{id:int}"), Authorize(Roles = "Admin,SupAdmin")]
         public async Task<IActionResult> Delete(int id)
         {
             if (!ModelState.IsValid)

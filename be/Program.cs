@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using be.Data;
 using be.Helpers;
@@ -39,7 +40,6 @@ dataSourceBuilder.UseNetTopologySuite();
 var dataSource = dataSourceBuilder.Build();
 
 // Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "Bản đồ Bến Cát", Version = "v1" });
@@ -112,30 +112,45 @@ builder.Services.AddAuthentication(options =>
                 )
         ),
     };
+
+    // Read the token from the cookie
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = (context) =>
+        {
+            context.Token = context.Request.Cookies["auth"];
+            return Task.CompletedTask;
+        }
+    };
 });
 
 
-builder.Services.ConfigureApplicationCookie(options => 
-{
-    options.Cookie.HttpOnly = true;
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(
-        int.Parse(
-            Environment.GetEnvironmentVariable("JWT_EXPIRES_IN") 
-            ?? throw new InvalidOperationException("Jwt expiration minutes is not set in environment variables.")
-        )
-    );
-    options.LoginPath = "/api/auth/login";
-    options.AccessDeniedPath = "/api/auth/access-denied";
-    options.SlidingExpiration = true;
-});
+// builder.Services.ConfigureApplicationCookie(options => 
+// {
+//     options.Cookie.HttpOnly = true;
+//     options.ExpireTimeSpan = TimeSpan.FromMinutes(
+//         int.Parse(
+//             Environment.GetEnvironmentVariable("JWT_EXPIRES_IN") 
+//             ?? throw new InvalidOperationException("Jwt expiration minutes is not set in environment variables.")
+//         )
+//     );
+//     options.LoginPath = "/api/auth/login";
+//     options.AccessDeniedPath = "/api/auth/access-denied";
+//     options.SlidingExpiration = true;
+// });
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", builder =>
+    options.AddPolicy("BePolicy", builder =>
     {
-        builder.AllowAnyOrigin()
+        builder.WithOrigins(
+            Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGINS")
+            ?.Split(",")
+            ?? throw new InvalidOperationException("CORS_ALLOWED_ORIGINS is not set in environment variables.")
+        )
                .AllowAnyMethod()
-               .AllowAnyHeader();
+               .AllowAnyHeader()
+               .AllowCredentials();
     });
 });
 builder.Services.AddControllers().AddNewtonsoftJson(options => 
@@ -166,7 +181,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("AllowAll");
+app.UseCors("BePolicy");
 
 app.UseHttpsRedirection();
 
