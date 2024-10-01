@@ -77,7 +77,7 @@ namespace be.Controllers
                     new NewUserDto {
                         Username = appUser.UserName,
                         Email = appUser.Email,
-                        Role = roles[0]
+                        Role = roles.Count > 0 ? roles[0] : "NoRole"
                     }
                 );
             }
