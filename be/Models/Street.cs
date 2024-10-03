@@ -20,6 +20,7 @@ namespace be.Models
         public DateTime CreatedDate { get; set; }
         public LineString? Route { get; set; }
         public LineString? WayPoints { get; set; }
+        public bool IsApproved { get; set; }
         public List<StreetHistory> Histories { get; set; } = new List<StreetHistory>();
         public List<StreetImage> Images { get; set; } = new List<StreetImage>();
         public required int StreetTypeId { get; set; }

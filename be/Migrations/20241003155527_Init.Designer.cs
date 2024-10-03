@@ -13,7 +13,7 @@ using be.Data;
 namespace be.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240927174326_Init")]
+    [Migration("20241003155527_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -55,25 +55,25 @@ namespace be.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b4aa6642-de68-4174-b2d3-17835b328bcc",
+                            Id = "62b61ab6-0933-4779-b05e-8f5f1d57a3a1",
                             Name = "SupAdmin",
                             NormalizedName = "SUPADMIN"
                         },
                         new
                         {
-                            Id = "a2ed574c-0332-4ea1-8185-87d7278ff92b",
+                            Id = "90601e52-fc5d-4763-a9bd-4581cc55d25b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "f928c1fc-7d45-4011-bfdd-e3994b680d8e",
+                            Id = "82ef78af-4f0e-4ff1-a9b4-286b50192789",
                             Name = "Collab",
                             NormalizedName = "COLLAB"
                         },
                         new
                         {
-                            Id = "e6f282da-6af5-4692-8f14-c2566a50279f",
+                            Id = "4655b822-f6d2-43fa-8a9f-868f93530bbd",
                             Name = "Director",
                             NormalizedName = "DIRECTOR"
                         });
@@ -247,6 +247,24 @@ namespace be.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "f43f1931-6031-4a91-83d5-5e0aa18208e0",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "81f20988-ce79-4e29-9cb9-1a39cdc52048",
+                            Email = "Super@admin.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "SUPER@ADMIN.COM",
+                            NormalizedUserName = "SUPERADMIN",
+                            PasswordHash = "AQAAAAIAAYagAAAAECObh4W1RcUPYWFQ2uD54cRN/6AMeOOt5nbUgf6V3IxJZbIChkiBgP9fiM0tS5Ef5Q==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "2LL4LT5A2IUGN45Q755T3ZYA2CVRWIY2",
+                            TwoFactorEnabled = false,
+                            UserName = "SuperAdmin"
+                        });
                 });
 
             modelBuilder.Entity("be.Models.Street", b =>
@@ -273,6 +291,9 @@ namespace be.Migrations
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("boolean");
 
                     b.Property<LineString>("Route")
                         .HasColumnType("geometry");
@@ -375,18 +396,45 @@ namespace be.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("now()");
 
                     b.Property<string>("StreetTypeName")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("now()");
 
                     b.HasKey("Id");
 
                     b.ToTable("StreetTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StreetTypeName = "Đường lớn",
+                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StreetTypeName = "Đường nhỏ",
+                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StreetTypeName = "Hẻm",
+                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

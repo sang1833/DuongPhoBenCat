@@ -64,8 +64,8 @@ namespace be.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     StreetTypeName = table.Column<string>(type: "text", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "now()")
                 },
                 constraints: table =>
                 {
@@ -192,6 +192,7 @@ namespace be.Migrations
                     CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "now()"),
                     Route = table.Column<LineString>(type: "geometry", nullable: true),
                     WayPoints = table.Column<LineString>(type: "geometry", nullable: true),
+                    IsApproved = table.Column<bool>(type: "boolean", nullable: false),
                     StreetTypeId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -257,10 +258,25 @@ namespace be.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "a2ed574c-0332-4ea1-8185-87d7278ff92b", null, "Admin", "ADMIN" },
-                    { "b4aa6642-de68-4174-b2d3-17835b328bcc", null, "SupAdmin", "SUPADMIN" },
-                    { "e6f282da-6af5-4692-8f14-c2566a50279f", null, "Director", "DIRECTOR" },
-                    { "f928c1fc-7d45-4011-bfdd-e3994b680d8e", null, "Collab", "COLLAB" }
+                    { "4655b822-f6d2-43fa-8a9f-868f93530bbd", null, "Director", "DIRECTOR" },
+                    { "62b61ab6-0933-4779-b05e-8f5f1d57a3a1", null, "SupAdmin", "SUPADMIN" },
+                    { "82ef78af-4f0e-4ff1-a9b4-286b50192789", null, "Collab", "COLLAB" },
+                    { "90601e52-fc5d-4763-a9bd-4581cc55d25b", null, "Admin", "ADMIN" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "f43f1931-6031-4a91-83d5-5e0aa18208e0", 0, "81f20988-ce79-4e29-9cb9-1a39cdc52048", "Super@admin.com", true, false, null, "SUPER@ADMIN.COM", "SUPERADMIN", "AQAAAAIAAYagAAAAECObh4W1RcUPYWFQ2uD54cRN/6AMeOOt5nbUgf6V3IxJZbIChkiBgP9fiM0tS5Ef5Q==", null, false, "2LL4LT5A2IUGN45Q755T3ZYA2CVRWIY2", false, "SuperAdmin" });
+
+            migrationBuilder.InsertData(
+                table: "StreetTypes",
+                columns: new[] { "Id", "StreetTypeName" },
+                values: new object[,]
+                {
+                    { 1, "Đường lớn" },
+                    { 2, "Đường nhỏ" },
+                    { 3, "Hẻm" }
                 });
 
             migrationBuilder.CreateIndex(
