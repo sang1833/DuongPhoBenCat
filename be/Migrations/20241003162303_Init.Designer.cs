@@ -13,7 +13,7 @@ using be.Data;
 namespace be.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241003155527_Init")]
+    [Migration("20241003162303_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -55,25 +55,25 @@ namespace be.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "62b61ab6-0933-4779-b05e-8f5f1d57a3a1",
+                            Id = "527c755c-9563-417a-aa48-79ef14ec20cd",
                             Name = "SupAdmin",
                             NormalizedName = "SUPADMIN"
                         },
                         new
                         {
-                            Id = "90601e52-fc5d-4763-a9bd-4581cc55d25b",
+                            Id = "7b1cf6d4-8c84-4d97-89f7-c58f63749937",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "82ef78af-4f0e-4ff1-a9b4-286b50192789",
+                            Id = "7fe6f864-03b4-485e-befb-d2adf0642155",
                             Name = "Collab",
                             NormalizedName = "COLLAB"
                         },
                         new
                         {
-                            Id = "4655b822-f6d2-43fa-8a9f-868f93530bbd",
+                            Id = "1e7be8ab-0997-4d22-b662-6450f915c2cc",
                             Name = "Director",
                             NormalizedName = "DIRECTOR"
                         });
@@ -247,24 +247,6 @@ namespace be.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "f43f1931-6031-4a91-83d5-5e0aa18208e0",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "81f20988-ce79-4e29-9cb9-1a39cdc52048",
-                            Email = "Super@admin.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "SUPER@ADMIN.COM",
-                            NormalizedUserName = "SUPERADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAECObh4W1RcUPYWFQ2uD54cRN/6AMeOOt5nbUgf6V3IxJZbIChkiBgP9fiM0tS5Ef5Q==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "2LL4LT5A2IUGN45Q755T3ZYA2CVRWIY2",
-                            TwoFactorEnabled = false,
-                            UserName = "SuperAdmin"
-                        });
                 });
 
             modelBuilder.Entity("be.Models.Street", b =>

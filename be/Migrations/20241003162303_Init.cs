@@ -258,16 +258,11 @@ namespace be.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "4655b822-f6d2-43fa-8a9f-868f93530bbd", null, "Director", "DIRECTOR" },
-                    { "62b61ab6-0933-4779-b05e-8f5f1d57a3a1", null, "SupAdmin", "SUPADMIN" },
-                    { "82ef78af-4f0e-4ff1-a9b4-286b50192789", null, "Collab", "COLLAB" },
-                    { "90601e52-fc5d-4763-a9bd-4581cc55d25b", null, "Admin", "ADMIN" }
+                    { "1e7be8ab-0997-4d22-b662-6450f915c2cc", null, "Director", "DIRECTOR" },
+                    { "527c755c-9563-417a-aa48-79ef14ec20cd", null, "SupAdmin", "SUPADMIN" },
+                    { "7b1cf6d4-8c84-4d97-89f7-c58f63749937", null, "Admin", "ADMIN" },
+                    { "7fe6f864-03b4-485e-befb-d2adf0642155", null, "Collab", "COLLAB" }
                 });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "f43f1931-6031-4a91-83d5-5e0aa18208e0", 0, "81f20988-ce79-4e29-9cb9-1a39cdc52048", "Super@admin.com", true, false, null, "SUPER@ADMIN.COM", "SUPERADMIN", "AQAAAAIAAYagAAAAECObh4W1RcUPYWFQ2uD54cRN/6AMeOOt5nbUgf6V3IxJZbIChkiBgP9fiM0tS5Ef5Q==", null, false, "2LL4LT5A2IUGN45Q755T3ZYA2CVRWIY2", false, "SuperAdmin" });
 
             migrationBuilder.InsertData(
                 table: "StreetTypes",
