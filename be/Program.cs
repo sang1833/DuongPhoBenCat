@@ -44,30 +44,30 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "Bản đồ Bến Cát", Version = "v1" });
 
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        In = ParameterLocation.Header,
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
-    });
+    // c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    // {
+    //     In = ParameterLocation.Header,
+    //     Name = "Authorization",
+    //     Type = SecuritySchemeType.ApiKey,
+    //     Scheme = "Bearer",
+    //     BearerFormat = "JWT",
+    //     Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
+    // });
 
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Id = "Bearer",
-                    Type = ReferenceType.SecurityScheme,
-                },
-            },
-            new string[] { }
-        }
-    });
+    // c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    // {
+    //     {
+    //         new OpenApiSecurityScheme
+    //         {
+    //             Reference = new OpenApiReference
+    //             {
+    //                 Id = "Bearer",
+    //                 Type = ReferenceType.SecurityScheme,
+    //             },
+    //         },
+    //         new string[] { }
+    //     }
+    // });
     
     // Set the comments path for the Swagger JSON and UI.
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -124,21 +124,6 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-
-// builder.Services.ConfigureApplicationCookie(options => 
-// {
-//     options.Cookie.HttpOnly = true;
-//     options.ExpireTimeSpan = TimeSpan.FromMinutes(
-//         int.Parse(
-//             Environment.GetEnvironmentVariable("JWT_EXPIRES_IN") 
-//             ?? throw new InvalidOperationException("Jwt expiration minutes is not set in environment variables.")
-//         )
-//     );
-//     options.LoginPath = "/api/auth/login";
-//     options.AccessDeniedPath = "/api/auth/access-denied";
-//     options.SlidingExpiration = true;
-// });
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("BePolicy", builder =>
@@ -189,6 +174,24 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Seed the database
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+        var userManager = services.GetRequiredService<UserManager<AppUser>>();
+        await context.Database.MigrateAsync();
+        await SeedData.Initialize(services, userManager);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding the database.");
+    }
+}
 
 app.Run();
 

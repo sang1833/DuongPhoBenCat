@@ -23,6 +23,7 @@ namespace be.Dtos
         public string? ImageUrl { get; set; }
         public DateTime UpdatedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public bool IsApproved { get; set; }
         public LineString? Route { get; set; }
         public LineString? WayPoints { get; set; }
         public List<StreetHistoryDto>? Histories { get; set; }

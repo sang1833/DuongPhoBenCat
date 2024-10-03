@@ -9,6 +9,7 @@ using be.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace be.Controllers
 {
@@ -39,7 +40,7 @@ namespace be.Controllers
                 if(appUser == null)
                     return Unauthorized("Dont have account");
                 
-                Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.CheckPasswordSignInAsync(appUser, loginDto.Password, false);
+                SignInResult result = await _signInManager.CheckPasswordSignInAsync(appUser, loginDto.Password, false);
 
                 if(!result.Succeeded)
                     return Unauthorized("Invalid username or password");
@@ -87,7 +88,8 @@ namespace be.Controllers
             }
         }
 
-        [HttpPost("adminRegister/{userType}"), Authorize(Roles = "SupAdmin")]
+        // [HttpPost("adminRegister/{userType}"), Authorize(Roles = "SupAdmin")]
+        [HttpPost("adminRegister/{userType}")]
         public async Task<IActionResult> Register([FromRoute] string userType, [FromBody]RegisterDto registerDto)
         {
             try {
@@ -139,7 +141,7 @@ namespace be.Controllers
             }
         }
 
-        [HttpPost("refresh-token")]
+        [HttpPost("refreshToken")]
         public async Task<IActionResult> RefreshToken()
         {
             string? refreshToken = Request.Cookies["_re"];
@@ -178,6 +180,73 @@ namespace be.Controllers
             Response.Cookies.Append("auth", newAccessToken, cookieOptions);
 
             return Ok(new { message = "Token refreshed successfully" });
+        }
+
+        [HttpPost("changePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            string? username = Request.Cookies["usr"];
+            if (username == null)
+            {
+                return Unauthorized("No username found");
+            }
+
+            AppUser? appUser = await _userManager.FindByNameAsync(username);
+            if (appUser == null)
+            {
+                return Unauthorized("User not found");
+            }
+
+            var result = await _userManager.ChangePasswordAsync(appUser, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok("Password changed successfully");
+        }
+        
+        [HttpPut("adminChangeUser/{userName}")]
+        [Authorize(Roles = "SupAdmin")]
+        public async Task<IActionResult> AdminChangeUser([FromRoute] string userName, [FromBody] RegisterDto registerDto)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            AppUser? appUser = await _userManager.FindByNameAsync(userName);
+            if (appUser == null)
+            {
+                return Unauthorized("User not found");
+            }
+
+            var setEmailResult = await _userManager.SetEmailAsync(appUser, registerDto.Email);
+            if (!setEmailResult.Succeeded)
+            {
+                return BadRequest(setEmailResult.Errors);
+            }
+
+            var setUserNameResult = await _userManager.SetUserNameAsync(appUser, registerDto.Username);
+            if (!setUserNameResult.Succeeded)
+            {
+                return BadRequest(setUserNameResult.Errors);
+            }
+
+            var removePasswordResult = await _userManager.RemovePasswordAsync(appUser);
+            if (!removePasswordResult.Succeeded)
+            {
+                return BadRequest(removePasswordResult.Errors);
+            }
+
+            var addPasswordResult = await _userManager.AddPasswordAsync(appUser, registerDto.Password);
+            if (!addPasswordResult.Succeeded)
+            {
+                return BadRequest(addPasswordResult.Errors);
+            }
+
+            return Ok("Password changed successfully");
         }
     }
 }

@@ -86,20 +86,24 @@ namespace be.Controllers
         /// <summary>
         /// Carefully with Route and WayPoints coordinates
         /// </summary>
-        [HttpPost("adminCreate"), Authorize]
-        public async Task<IActionResult> AdminCreate([FromBody] CreateStreetRequestDto streetDto)
+        [HttpPost("create"), Authorize]
+        public async Task<IActionResult> Create([FromBody] CreateStreetRequestDto streetDto)
         {  
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Data don't meet requirement", ModelState });
             else if (!await _streetTypeRepo.IsStreetTypeExistsAsync(streetDto.StreetTypeId))
                 return BadRequest("Street type not found");
-            else if (streetDto == null)
-                return BadRequest(new { message = "Street data is required" });
             else if (streetDto?.Route?.Coordinates.Count < 2 || streetDto?.WayPoints?.Coordinates.Count < 2)
                 return BadRequest(new { message = "At least 2 points are required for Route and WayPoints" });
 
-            Street createdStreet = await _streetRepo.CreateAsync(streetDto?.ToStreetFromCreateDto());
-            
+            if (streetDto == null)
+                return BadRequest(new { message = "Street data is required" });
+
+            Street createdStreet = streetDto.ToStreetFromCreateDto();
+            createdStreet.IsApproved = User.IsInRole("Admin") || User.IsInRole("SupAdmin");
+
+            createdStreet = await _streetRepo.CreateAsync(createdStreet);
+
             if (streetDto != null && streetDto.StreetImages != null)
             {
                 foreach (CreateStreetImageRequestDto streetImage in streetDto.StreetImages)
@@ -164,17 +168,20 @@ namespace be.Controllers
             else if (streetDto?.Route?.Coordinates.Count < 2 || streetDto?.WayPoints?.Coordinates.Count < 2)
                 return BadRequest(new { message = "At least 2 points are required for Route and WayPoints" });
 
+            Street? existingStreet = await _streetRepo.GetByIdAsync(id);
+            if (existingStreet == null || streetDto == null)
+            {
+                return NotFound();
+            }
+
+            Street? updatedStreet = streetDto.ToStreetFromUpdateDto();
+            updatedStreet.Id = id;
+            updatedStreet.IsApproved = User.IsInRole("Admin") || User.IsInRole("SupAdmin");
+
+            updatedStreet = await _streetRepo.UpdateAsync(updatedStreet, id);
+
             List<StreetImage> existingImages = await _streetImageRepo.GetImagesByStreetIdAsync(id);
-            List<CreateStreetImageRequestDto> newStreetImages;
-            if (streetDto?.StreetImages?.Count > 0)
-            {
-                newStreetImages = streetDto.StreetImages;
-            }
-            else
-            {
-                newStreetImages = new List<CreateStreetImageRequestDto>();
-            }
-            Street? updatedStreet = await _streetRepo.UpdateAsync(streetDto?.ToStreetFromUpdateDto(), id);
+            List<CreateStreetImageRequestDto> newStreetImages = streetDto?.StreetImages ?? new List<CreateStreetImageRequestDto>();
 
             IActionResult updateImagesResult = await UpdateStreetImagesAsync(id, newStreetImages, existingImages);
             if (updateImagesResult is BadRequestObjectResult)
@@ -266,6 +273,36 @@ namespace be.Controllers
             }
 
             return Ok(new { message = "Street deleted successfully", deletedStreet});
+        }
+    
+        [HttpPost("{id:int}/approveStreet"), Authorize(Roles = "Admin,SupAdmin")]
+        public async Task<IActionResult> ApproveStreet(int id)
+        {
+            Street? street = await _streetRepo.GetByIdAsync(id);
+            if (street == null)
+            {
+                return NotFound();
+            }
+        
+            street.IsApproved = true;
+            await _streetRepo.UpdateAsync(street, id);
+        
+            return Ok(new { message = "Street approved successfully", street = street.ToStreetDto() });
+        }
+        
+        [HttpPost("{id:int}/rejectStreet"), Authorize(Roles = "Admin,SupAdmin")]
+        public async Task<IActionResult> RejectStreet(int id)
+        {
+            Street? street = await _streetRepo.GetByIdAsync(id);
+            if (street == null)
+            {
+                return NotFound();
+            }
+        
+            street.IsApproved = false;
+            await _streetRepo.UpdateAsync(street, id);
+        
+            return Ok(new { message = "Street rejected successfully", street = street.ToStreetDto() });
         }
     }
 }

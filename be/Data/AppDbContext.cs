@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using be.Helpers;
 using be.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -57,6 +58,22 @@ namespace be.Data
             };
 
             builder.Entity<IdentityRole>().HasData(roles);
+
+            builder.Entity<StreetType>()
+                .Property(s => s.CreatedDate)
+                .ValueGeneratedOnAdd()
+                .HasDefaultValueSql("now()");
+            
+            builder.Entity<StreetType>()
+                .Property(s => s.UpdatedDate)
+                .ValueGeneratedOnAddOrUpdate()
+                .HasDefaultValueSql("now()");
+
+            builder.Entity<StreetType>().HasData(
+                new StreetType {Id = 1, StreetTypeName = "Đường lớn"},
+                new StreetType {Id = 2, StreetTypeName = "Đường nhỏ"},
+                new StreetType {Id = 3, StreetTypeName = "Hẻm"}
+            );
         }
 
         public DbSet<Street> Streets { get; set; }
