@@ -183,7 +183,7 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<AppDbContext>();
         var userManager = services.GetRequiredService<UserManager<AppUser>>();
-        await context.Database.MigrateAsync();
+        // await context.Database.MigrateAsync();
         await SeedData.Initialize(services, userManager);
     }
     catch (Exception ex)

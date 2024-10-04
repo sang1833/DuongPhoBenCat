@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using be.Dtos;
 using be.Dtos.Street;
 using be.Dtos.StreetImage;
@@ -33,7 +28,7 @@ namespace be.Controllers
         }
 
         [HttpGet, Authorize(Roles = "Admin,SupAdmin")]
-        public async Task<IActionResult> GetAll([FromQuery] StreetQueryObject queryObject)
+        public async Task<ActionResult<(StreetDto, int)>> GetAll([FromQuery] StreetQueryObject queryObject)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -43,9 +38,9 @@ namespace be.Controllers
             return Ok(new { Streets = streetDtos, TotalPages = totalPages });
         }
 
-        [HttpGet, Authorize] 
+        [HttpGet, Authorize]
         [Route("adminSearch")]
-        public async Task<IActionResult> SearchAdmin([FromQuery] StreetQueryObject queryObject)
+        public async Task<ActionResult<(StreetDto, int)>> SearchAdmin([FromQuery] StreetQueryObject queryObject)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -55,9 +50,9 @@ namespace be.Controllers
             return Ok(new { Streets = streetDtos, TotalPages = totalPages });
         }
 
-        [HttpGet] 
+        [HttpGet]
         [Route("userSearch")]
-        public async Task<IActionResult> SearchUser([FromQuery] string searchParam)
+        public async Task<ActionResult<StreetDto>> SearchUser([FromQuery] string searchParam)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -67,8 +62,8 @@ namespace be.Controllers
             return Ok(streetDtos);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpGet("{id:int}"), Authorize]
+        public async Task<ActionResult<StreetDto>> GetById([FromRoute] int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -83,12 +78,28 @@ namespace be.Controllers
             return Ok(streetDto);
         }
 
+        [HttpGet("userGetDetail/{streetId:int}")]
+        public async Task<ActionResult<StreetDto>> GetByIdUser([FromRoute] int streetId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            Street? street = await _streetRepo.GetByIdUserAsync(streetId);
+            if (street == null)
+            {
+                return NotFound();
+            }
+            StreetDto streetDto = street.ToStreetDto();
+
+            return Ok(streetDto);
+        }
+
         /// <summary>
         /// Carefully with Route and WayPoints coordinates
         /// </summary>
         [HttpPost("create"), Authorize]
-        public async Task<IActionResult> Create([FromBody] CreateStreetRequestDto streetDto)
-        {  
+        public async Task<ActionResult<(string, StreetDto)>> Create([FromBody] CreateStreetRequestDto streetDto)
+        {
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Data don't meet requirement", ModelState });
             else if (!await _streetTypeRepo.IsStreetTypeExistsAsync(streetDto.StreetTypeId))
@@ -108,10 +119,12 @@ namespace be.Controllers
             {
                 foreach (CreateStreetImageRequestDto streetImage in streetDto.StreetImages)
                 {
-                    try {
+                    try
+                    {
                         await _streetImageRepo.CreateAsync(streetImage.ToStreetImageFromCreateDto(createdStreet.Id));
                     }
-                    catch (Exception e) {
+                    catch (Exception e)
+                    {
                         return BadRequest(new { message = $"Error when create image: {streetImage.ImageUrl}, Decription: ", e.Message });
                     }
                 }
@@ -159,7 +172,7 @@ namespace be.Controllers
         ///   }
         ///   </remarks>
         [HttpPut("{id:int}"), Authorize]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateStreetRequestDto streetDto)
+        public async Task<ActionResult<StreetDto>> Update(int id, [FromBody] UpdateStreetRequestDto streetDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Data don't meet requirement", ModelState });
@@ -260,7 +273,7 @@ namespace be.Controllers
         }
 
         [HttpDelete("{id:int}"), Authorize(Roles = "Admin,SupAdmin")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult<(string, Street)>> Delete(int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -272,36 +285,36 @@ namespace be.Controllers
                 return NotFound();
             }
 
-            return Ok(new { message = "Street deleted successfully", deletedStreet});
+            return Ok(new { message = "Street deleted successfully", deletedStreet });
         }
-    
+
         [HttpPost("{id:int}/approveStreet"), Authorize(Roles = "Admin,SupAdmin")]
-        public async Task<IActionResult> ApproveStreet(int id)
+        public async Task<ActionResult<(string, StreetDto)>> ApproveStreet(int id)
         {
             Street? street = await _streetRepo.GetByIdAsync(id);
             if (street == null)
             {
                 return NotFound();
             }
-        
+
             street.IsApproved = true;
             await _streetRepo.UpdateAsync(street, id);
-        
+
             return Ok(new { message = "Street approved successfully", street = street.ToStreetDto() });
         }
-        
+
         [HttpPost("{id:int}/rejectStreet"), Authorize(Roles = "Admin,SupAdmin")]
-        public async Task<IActionResult> RejectStreet(int id)
+        public async Task<ActionResult<(string, StreetDto)>> RejectStreet(int id)
         {
             Street? street = await _streetRepo.GetByIdAsync(id);
             if (street == null)
             {
                 return NotFound();
             }
-        
+
             street.IsApproved = false;
             await _streetRepo.UpdateAsync(street, id);
-        
+
             return Ok(new { message = "Street rejected successfully", street = street.ToStreetDto() });
         }
     }
