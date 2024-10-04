@@ -15,7 +15,7 @@ namespace be.Mappers
                 StreetName = streetCreateDto.StreetName,
                 StreetTypeId = streetCreateDto.StreetTypeId,
                 Address = streetCreateDto.Address ?? "",
-                Description = streetCreateDto.Description ?? "",    
+                Description = streetCreateDto.Description ?? "",
                 ImageUrl = streetCreateDto.ImageUrl ?? "",
                 // UpdatedDate = DateTime.Now,
                 // CreatedDate = DateTime.Now,
@@ -37,6 +37,7 @@ namespace be.Mappers
                 ImageUrl = street.ImageUrl,
                 UpdatedDate = street.UpdatedDate,
                 CreatedDate = street.CreatedDate,
+                IsApproved = street.IsApproved,
                 Route = street.Route,
                 WayPoints = street.WayPoints,
                 Histories = street.Histories.Select(c => c.ToStreetHistoryDto()).ToList(),
@@ -54,6 +55,7 @@ namespace be.Mappers
                 Address = street.Address,
                 Description = street.Description,
                 ImageUrl = street.ImageUrl,
+                IsApproved = street.IsApproved,
                 UpdatedDate = street.UpdatedDate,
                 CreatedDate = street.CreatedDate
             };

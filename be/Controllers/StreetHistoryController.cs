@@ -25,7 +25,7 @@ namespace be.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<StreetHistoryDto>> GetAll()
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -36,7 +36,7 @@ namespace be.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById(int id){
+        public async Task<ActionResult<StreetHistoryDto>> GetById(int id){
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -52,7 +52,7 @@ namespace be.Controllers
         }
 
         [HttpPost("{streetId}"), Authorize]
-        public async Task<IActionResult> Create([FromRoute] int streetId, [FromBody] CreateStreetHistoryRequestDto historyRequestDto)
+        public async Task<ActionResult<(string, StreetHistoryDto)>> Create([FromRoute] int streetId, [FromBody] CreateStreetHistoryRequestDto historyRequestDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -66,7 +66,7 @@ namespace be.Controllers
         }
         
         [HttpPut("{id:int}"), Authorize]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateStreetHistoryRequestDto streetHistoryDto)
+        public async Task<ActionResult<StreetHistoryDto>> Update(int id, [FromBody] UpdateStreetHistoryRequestDto streetHistoryDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -81,7 +81,7 @@ namespace be.Controllers
         }
 
         [HttpDelete("{id:int}"), Authorize(Roles = "Admin,SupAdmin")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult<(string, StreetHistory)>> Delete(int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
