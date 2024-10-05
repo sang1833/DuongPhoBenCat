@@ -21,6 +21,7 @@ import {
 } from "@types";
 import { MapContext } from "@contexts";
 import { CreateStreetRequestDto, StreetApi, StreetTypeApi } from "@api";
+import { RefreshToken } from "@utils";
 
 interface ErrorMessages {
   streetName?: string;
@@ -129,12 +130,14 @@ const PostStreetPage: React.FC = () => {
         }))
       };
 
-      const response = await streetApi.apiStreetAdminCreatePost(
+      const response = await streetApi.apiStreetCreatePost(
         createStreetRequestDto
       );
       if (response.status === 200 || response.status === 201) {
         toast.success("Tạo thành công");
         navigate("/map/street");
+      } else if (response.status === 403) {
+        RefreshToken();
       }
     } catch (error) {
       toast.error("Tạo tuyến đường thất bại");
