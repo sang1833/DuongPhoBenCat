@@ -1,4 +1,4 @@
-import { IStreetListContext } from "@types";
+import { IStreetListContext } from "@types/index";
 import { createContext, ReactNode, useState } from "react";
 
 export const StreetListContext = createContext<IStreetListContext>({

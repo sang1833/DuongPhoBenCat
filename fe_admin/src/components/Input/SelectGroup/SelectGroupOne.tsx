@@ -1,4 +1,4 @@
-import { IStreetTypeoption } from "@types";
+import { IStreetTypeoption } from "@types/index";
 
 const SelectGroupOne: React.FC<{
   title: string;

@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { ISearchBarProps } from "@types";
+import { ISearchBarProps } from "@types/index";
 
 const SearchBar: React.FC<ISearchBarProps> = ({ setSearch }) => {
   const { t } = useTranslation();

@@ -20,6 +20,12 @@ namespace be.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly DateTimeOffset rtExpireTime = DateTime.UtcNow.AddDays(
+            int.Parse(
+                Environment.GetEnvironmentVariable("REFRESH_TOKEN_EXPIRES_IN") 
+                ?? throw new InvalidOperationException("Jwt expiration minutes is not set in environment variables.")
+            )
+        );
 
         public AuthController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager)
         {
@@ -49,31 +55,25 @@ namespace be.Controllers
 
                 string accessToken = _tokenService.CreateToken(appUser, roles);
                 string refreshToken = _tokenService.CreateRefreshToken();
-                DateTimeOffset expireTime = DateTime.UtcNow.AddDays(
-                        int.Parse(
-                            Environment.GetEnvironmentVariable("REFRESH_TOKEN_EXPIRES_IN") 
-                            ?? throw new InvalidOperationException("Jwt expiration minutes is not set in environment variables.")
-                        )
-                    );
 
                 CookieOptions cookieOptions = new CookieOptions
                 {
                     HttpOnly = true,
                     SameSite = SameSiteMode.Strict,
                     Secure = true,
-                    Expires = expireTime
+                    Expires = rtExpireTime
                 };
                 Response.Cookies.Append("auth", accessToken, cookieOptions);
 
                 // Set Refresh Token as HttpOnly cookie
                 Response.Cookies.Append("_re", refreshToken, cookieOptions);
 
-                Response.Cookies.Append("isLogin", expireTime.ToString(), new CookieOptions
+                Response.Cookies.Append("isLogin", rtExpireTime.ToString(), new CookieOptions
                 {
                     HttpOnly = false,
                     SameSite = SameSiteMode.Strict,
                     Secure = true,
-                    Expires = expireTime
+                    Expires = rtExpireTime
                 });
                 return Ok(
                     new NewUserDto {
@@ -177,12 +177,7 @@ namespace be.Controllers
                 HttpOnly = true,
                 Secure = true,
                 SameSite = SameSiteMode.Strict,
-                Expires = DateTime.UtcNow.AddDays(
-                    int.Parse(
-                        Environment.GetEnvironmentVariable("REFRESH_TOKEN_EXPIRES_IN") 
-                        ?? throw new InvalidOperationException("Jwt expiration minutes is not set in environment variables.")
-                    )
-                )
+                Expires = rtExpireTime
             };
             Response.Cookies.Append("auth", newAccessToken, cookieOptions);
 
