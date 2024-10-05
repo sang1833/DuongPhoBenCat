@@ -49,31 +49,32 @@ namespace be.Controllers
 
                 string accessToken = _tokenService.CreateToken(appUser, roles);
                 string refreshToken = _tokenService.CreateRefreshToken();
+                DateTimeOffset expireTime = DateTime.UtcNow.AddDays(
+                        int.Parse(
+                            Environment.GetEnvironmentVariable("REFRESH_TOKEN_EXPIRES_IN") 
+                            ?? throw new InvalidOperationException("Jwt expiration minutes is not set in environment variables.")
+                        )
+                    );
 
                 CookieOptions cookieOptions = new CookieOptions
                 {
                     HttpOnly = true,
                     SameSite = SameSiteMode.Strict,
                     Secure = true,
-                    Expires = DateTime.UtcNow.AddMinutes(
-                        int.Parse(
-                            Environment.GetEnvironmentVariable("JWT_EXPIRES_IN") 
-                            ?? throw new InvalidOperationException("Jwt expiration minutes is not set in environment variables.")
-                        )
-                    )
+                    Expires = expireTime
                 };
                 Response.Cookies.Append("auth", accessToken, cookieOptions);
 
                 // Set Refresh Token as HttpOnly cookie
-                cookieOptions.Expires = DateTime.UtcNow.AddDays(
-                    int.Parse(
-                        Environment.GetEnvironmentVariable("REFRESH_TOKEN_EXPIRES_IN") 
-                        ?? throw new InvalidOperationException("Jwt refresh expiration days is not set in environment variables.")
-                    )
-                );
-                Response.Cookies.Append("usr", loginDto.Username, cookieOptions);
                 Response.Cookies.Append("_re", refreshToken, cookieOptions);
 
+                Response.Cookies.Append("isLogin", expireTime.ToString(), new CookieOptions
+                {
+                    HttpOnly = false,
+                    SameSite = SameSiteMode.Strict,
+                    Secure = true,
+                    Expires = expireTime
+                });
                 return Ok(
                     new NewUserDto {
                         Username = appUser.UserName,
@@ -131,7 +132,6 @@ namespace be.Controllers
             try
             {
                 Response.Cookies.Delete("auth");
-                Response.Cookies.Delete("usr");
                 Response.Cookies.Delete("_re");
                 return Ok("Logout success");
             }
@@ -149,10 +149,17 @@ namespace be.Controllers
             {
                 return Unauthorized(new { message = "No refresh token found" });
             }
-            string? username = Request.Cookies["usr"];
-            if (username == null)
+            string? token = Request.Cookies["auth"];
+            string? username;
+            if (token == null)
             {
-                return Unauthorized(new { message = "No username found" });
+                return Unauthorized(new { message = "No token found" });
+            } else {
+                username = _tokenService.GetUsernameFromToken(token);
+                if (username == null)
+                {
+                    return Unauthorized(new { message = "No username found" });
+                }
             }
 
             AppUser? appUser = await _userManager.FindByNameAsync(username);
@@ -170,16 +177,16 @@ namespace be.Controllers
                 HttpOnly = true,
                 Secure = true,
                 SameSite = SameSiteMode.Strict,
-                Expires = DateTime.UtcNow.AddMinutes(
+                Expires = DateTime.UtcNow.AddDays(
                     int.Parse(
-                        Environment.GetEnvironmentVariable("JWT_EXPIRES_IN") 
+                        Environment.GetEnvironmentVariable("REFRESH_TOKEN_EXPIRES_IN") 
                         ?? throw new InvalidOperationException("Jwt expiration minutes is not set in environment variables.")
                     )
                 )
             };
             Response.Cookies.Append("auth", newAccessToken, cookieOptions);
 
-            return Ok(new { message = "Token refreshed successfully" });
+            return Ok(new { message = "Token refreshed successfully", token = newAccessToken });
         }
 
         [HttpPost("changePassword")]
@@ -188,10 +195,17 @@ namespace be.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            string? username = Request.Cookies["usr"];
-            if (username == null)
+            string? token = Request.Cookies["auth"];
+            string? username;
+            if (token == null)
             {
-                return Unauthorized("No username found");
+                return Unauthorized(new { message = "No token found" });
+            } else {
+                username = _tokenService.GetUsernameFromToken(token);
+                if (username == null)
+                {
+                    return Unauthorized(new { message = "No username found" });
+                }
             }
 
             AppUser? appUser = await _userManager.FindByNameAsync(username);

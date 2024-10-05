@@ -10,5 +10,6 @@ namespace be.Interfaces
     {
         string CreateToken(AppUser user, IList<string> roles);
         string CreateRefreshToken();
+        string? GetUsernameFromToken(string token);
     }
 }

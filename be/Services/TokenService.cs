@@ -61,5 +61,22 @@ namespace be.Services
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+        public string? GetUsernameFromToken(string token)
+        {
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            ClaimsPrincipal principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = _key,
+                ValidateIssuer = true,
+                ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER"),
+                ValidateAudience = true,
+                ValidAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
+                ValidateLifetime = true
+            }, out SecurityToken securityToken);
+
+            return principal.FindFirstValue(ClaimTypes.GivenName);
+        }
     }
 }

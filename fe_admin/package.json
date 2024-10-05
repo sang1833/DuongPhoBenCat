@@ -12,10 +12,12 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
+    "@types/js-cookie": "^3.0.6",
     "@types/leaflet-routing-machine": "^3.2.8",
     "axios": "^1.7.7",
     "date-fns": "^4.1.0",
     "i18next": "^23.15.1",
+    "js-cookie": "^3.0.5",
     "leaflet": "^1.9.4",
     "leaflet-routing-machine": "^3.2.12",
     "lucide-react": "^0.441.0",

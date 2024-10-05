@@ -16,6 +16,7 @@ export { default as DefaultForm } from "./Forms/DefaultForm";
 export { default as ModalReducer } from "./Features/ModalSlice";
 // icons
 export { default as MapWithPointIcon } from "./Icons/MapWithPointIcon";
+export { default as GoogleIcon } from "./Icons/GoogleIcon";
 // tables
 export { default as TableThree } from "./Tables/TableThree";
 export { default as TableThreeSType } from "./Tables/TableThreeSType";
