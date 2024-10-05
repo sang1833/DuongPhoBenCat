@@ -9,7 +9,7 @@ const ProtectedRoute: React.FC<{ children: ReactNode }> = ({ children }) => {
     return <Navigate to="/login" />;
   }
 
-  return children;
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;

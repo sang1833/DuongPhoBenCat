@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@types/index";
+import { RootState } from "@types";
 import { closeModal } from "../Features/ModalSlice";
 
 const DefaultModal = () => {

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useMap } from "react-leaflet";
-import { ProtomapsLayerProps } from "@types/index";
+import { ProtomapsLayerProps } from "@types";
 
 const ProtomapsLayer: React.FC<ProtomapsLayerProps> = ({ theme }) => {
   const map = useMap();
