@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { ImageIcon, Upload } from "lucide-react";
 import { useDropzone } from "react-dropzone";
-import { IStreetImage } from "@types/index";
+import { IStreetImage } from "@types";
 
 const UploadImageUrl = `https://api.cloudinary.com/v1_1/${
   import.meta.env.VITE_CLOUDINARY_NAME

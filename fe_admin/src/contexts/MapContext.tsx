@@ -1,4 +1,4 @@
-import { IMapContext } from "@types/index";
+import { IMapContext } from "@types";
 import { createContext, ReactNode, useState } from "react";
 
 export const MapContext = createContext<IMapContext>({
