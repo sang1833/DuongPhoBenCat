@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import AdminLayout from "./layout/AdminLayout";
 import DefaultLayout from "./layout/DefaultLayout";
 import { MapProvider } from "@contexts";
 import {
@@ -9,7 +10,9 @@ import {
   Street,
   StreetType,
   StreetTypeCreate,
-  StreetTypeDetail
+  StreetTypeDetail,
+  SignInPage,
+  ProtectedRoute
 } from "@pages";
 
 const App = () => {
@@ -19,44 +22,58 @@ const App = () => {
       element: <DefaultLayout />,
       children: [
         {
-          path: "map/street-type",
-          element: <StreetType />
-        },
-        {
-          path: "map/street-type-detail/:streetTypeId",
-          element: <StreetTypeDetail />
-        },
-        {
-          path: "map/street-type-create",
-          element: <StreetTypeCreate />
-        },
-        {
-          path: "map/street",
-          element: <Street />
-        },
-        {
-          path: "map/street-detail/:streetId",
+          path: "/",
           element: (
-            <MapProvider>
-              <StreetDetail />
-            </MapProvider>
-          )
+            <ProtectedRoute>
+              <AdminLayout />
+            </ProtectedRoute>
+          ),
+          children: [
+            {
+              path: "map/street-type",
+              element: <StreetType />
+            },
+            {
+              path: "map/street-type-detail/:streetTypeId",
+              element: <StreetTypeDetail />
+            },
+            {
+              path: "map/street-type-create",
+              element: <StreetTypeCreate />
+            },
+            {
+              path: "map/street",
+              element: <Street />
+            },
+            {
+              path: "map/street-detail/:streetId",
+              element: (
+                <MapProvider>
+                  <StreetDetail />
+                </MapProvider>
+              )
+            },
+            {
+              path: "map/street-create",
+              element: (
+                <MapProvider>
+                  <StreetCreate />
+                </MapProvider>
+              )
+            },
+            {
+              path: "intercept",
+              element: <InterceptPage />
+            },
+            {
+              path: "*",
+              element: <NotFoundPage />
+            }
+          ]
         },
         {
-          path: "map/street-create",
-          element: (
-            <MapProvider>
-              <StreetCreate />
-            </MapProvider>
-          )
-        },
-        {
-          path: "intercept",
-          element: <InterceptPage />
-        },
-        {
-          path: "*",
-          element: <NotFoundPage />
+          path: "login",
+          element: <SignInPage />
         }
       ]
     }

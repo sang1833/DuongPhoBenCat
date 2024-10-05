@@ -26,6 +26,158 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface ChangePasswordDto
+ */
+export interface ChangePasswordDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ChangePasswordDto
+     */
+    'currentPassword': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ChangePasswordDto
+     */
+    'newPassword': string;
+}
+/**
+ * 
+ * @export
+ * @interface Coordinate
+ */
+export interface Coordinate {
+    /**
+     * 
+     * @type {number}
+     * @memberof Coordinate
+     */
+    'x'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Coordinate
+     */
+    'y'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Coordinate
+     */
+    'z'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Coordinate
+     */
+    'm'?: number;
+    /**
+     * 
+     * @type {Coordinate}
+     * @memberof Coordinate
+     */
+    'coordinateValue'?: Coordinate;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Coordinate
+     */
+    'isValid'?: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface CoordinateSequence
+ */
+export interface CoordinateSequence {
+    /**
+     * 
+     * @type {number}
+     * @memberof CoordinateSequence
+     */
+    'dimension'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CoordinateSequence
+     */
+    'measures'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CoordinateSequence
+     */
+    'spatial'?: number;
+    /**
+     * 
+     * @type {Ordinates}
+     * @memberof CoordinateSequence
+     */
+    'ordinates'?: Ordinates;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CoordinateSequence
+     */
+    'hasZ'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CoordinateSequence
+     */
+    'hasM'?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof CoordinateSequence
+     */
+    'zOrdinateIndex'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CoordinateSequence
+     */
+    'mOrdinateIndex'?: number;
+    /**
+     * 
+     * @type {Coordinate}
+     * @memberof CoordinateSequence
+     */
+    'first'?: Coordinate;
+    /**
+     * 
+     * @type {Coordinate}
+     * @memberof CoordinateSequence
+     */
+    'last'?: Coordinate;
+    /**
+     * 
+     * @type {number}
+     * @memberof CoordinateSequence
+     */
+    'count'?: number;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface CoordinateSequenceFactory
+ */
+export interface CoordinateSequenceFactory {
+    /**
+     * 
+     * @type {Ordinates}
+     * @memberof CoordinateSequenceFactory
+     */
+    'ordinates'?: Ordinates;
+}
+
+
+/**
+ * 
+ * @export
  * @interface CreateStreetHistoryRequestDto
  */
 export interface CreateStreetHistoryRequestDto {
@@ -138,6 +290,104 @@ export interface CreateStreetTypeRequestDto {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+
+export const Dimension = {
+    NUMBER_0: 0,
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_3: 3,
+    NUMBER_MINUS_3: -3,
+    NUMBER_MINUS_2: -2,
+    NUMBER_MINUS_1: -1
+} as const;
+
+export type Dimension = typeof Dimension[keyof typeof Dimension];
+
+
+/**
+ * 
+ * @export
+ * @interface Envelope
+ */
+export interface Envelope {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Envelope
+     */
+    'isNull'?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Envelope
+     */
+    'width'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Envelope
+     */
+    'height'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Envelope
+     */
+    'diameter'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Envelope
+     */
+    'minX'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Envelope
+     */
+    'maxX'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Envelope
+     */
+    'minY'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Envelope
+     */
+    'maxY'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Envelope
+     */
+    'area'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Envelope
+     */
+    'minExtent'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Envelope
+     */
+    'maxExtent'?: number;
+    /**
+     * 
+     * @type {Coordinate}
+     * @memberof Envelope
+     */
+    'centre'?: Coordinate;
+}
+/**
+ * 
+ * @export
  * @interface GeoJsonLineStringDto
  */
 export interface GeoJsonLineStringDto {
@@ -147,6 +397,961 @@ export interface GeoJsonLineStringDto {
      * @memberof GeoJsonLineStringDto
      */
     'coordinates'?: Array<Array<number>> | null;
+}
+/**
+ * 
+ * @export
+ * @interface Geometry
+ */
+export interface Geometry {
+    /**
+     * 
+     * @type {GeometryFactory}
+     * @memberof Geometry
+     */
+    'factory'?: GeometryFactory;
+    /**
+     * 
+     * @type {any}
+     * @memberof Geometry
+     */
+    'userData'?: any | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Geometry
+     */
+    'srid'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Geometry
+     */
+    'geometryType'?: string | null;
+    /**
+     * 
+     * @type {OgcGeometryType}
+     * @memberof Geometry
+     */
+    'ogcGeometryType'?: OgcGeometryType;
+    /**
+     * 
+     * @type {PrecisionModel}
+     * @memberof Geometry
+     */
+    'precisionModel'?: PrecisionModel;
+    /**
+     * 
+     * @type {Coordinate}
+     * @memberof Geometry
+     */
+    'coordinate'?: Coordinate;
+    /**
+     * 
+     * @type {Array<Coordinate>}
+     * @memberof Geometry
+     */
+    'coordinates'?: Array<Coordinate> | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Geometry
+     */
+    'numPoints'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Geometry
+     */
+    'numGeometries'?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Geometry
+     */
+    'isSimple'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Geometry
+     */
+    'isValid'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Geometry
+     */
+    'isEmpty'?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Geometry
+     */
+    'area'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Geometry
+     */
+    'length'?: number;
+    /**
+     * 
+     * @type {Point}
+     * @memberof Geometry
+     */
+    'centroid'?: Point;
+    /**
+     * 
+     * @type {Point}
+     * @memberof Geometry
+     */
+    'interiorPoint'?: Point;
+    /**
+     * 
+     * @type {Point}
+     * @memberof Geometry
+     */
+    'pointOnSurface'?: Point;
+    /**
+     * 
+     * @type {Dimension}
+     * @memberof Geometry
+     */
+    'dimension'?: Dimension;
+    /**
+     * 
+     * @type {Geometry}
+     * @memberof Geometry
+     */
+    'boundary'?: Geometry;
+    /**
+     * 
+     * @type {Dimension}
+     * @memberof Geometry
+     */
+    'boundaryDimension'?: Dimension;
+    /**
+     * 
+     * @type {Geometry}
+     * @memberof Geometry
+     */
+    'envelope'?: Geometry;
+    /**
+     * 
+     * @type {Envelope}
+     * @memberof Geometry
+     */
+    'envelopeInternal'?: Envelope;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Geometry
+     */
+    'isRectangle'?: boolean;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface GeometryFactory
+ */
+export interface GeometryFactory {
+    /**
+     * 
+     * @type {PrecisionModel}
+     * @memberof GeometryFactory
+     */
+    'precisionModel'?: PrecisionModel;
+    /**
+     * 
+     * @type {CoordinateSequenceFactory}
+     * @memberof GeometryFactory
+     */
+    'coordinateSequenceFactory'?: CoordinateSequenceFactory;
+    /**
+     * 
+     * @type {number}
+     * @memberof GeometryFactory
+     */
+    'srid'?: number;
+    /**
+     * 
+     * @type {NtsGeometryServices}
+     * @memberof GeometryFactory
+     */
+    'geometryServices'?: NtsGeometryServices;
+}
+/**
+ * 
+ * @export
+ * @interface ImageInStreetDto
+ */
+export interface ImageInStreetDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof ImageInStreetDto
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ImageInStreetDto
+     */
+    'imageUrl'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ImageInStreetDto
+     */
+    'publicId'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ImageInStreetDto
+     */
+    'description'?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface LineString
+ */
+export interface LineString {
+    /**
+     * 
+     * @type {GeometryFactory}
+     * @memberof LineString
+     */
+    'factory'?: GeometryFactory;
+    /**
+     * 
+     * @type {any}
+     * @memberof LineString
+     */
+    'userData'?: any | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof LineString
+     */
+    'srid'?: number;
+    /**
+     * 
+     * @type {PrecisionModel}
+     * @memberof LineString
+     */
+    'precisionModel'?: PrecisionModel;
+    /**
+     * 
+     * @type {number}
+     * @memberof LineString
+     */
+    'numGeometries'?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof LineString
+     */
+    'isSimple'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof LineString
+     */
+    'isValid'?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof LineString
+     */
+    'area'?: number;
+    /**
+     * 
+     * @type {Point}
+     * @memberof LineString
+     */
+    'centroid'?: Point;
+    /**
+     * 
+     * @type {Point}
+     * @memberof LineString
+     */
+    'interiorPoint'?: Point;
+    /**
+     * 
+     * @type {Point}
+     * @memberof LineString
+     */
+    'pointOnSurface'?: Point;
+    /**
+     * 
+     * @type {Geometry}
+     * @memberof LineString
+     */
+    'envelope'?: Geometry;
+    /**
+     * 
+     * @type {Envelope}
+     * @memberof LineString
+     */
+    'envelopeInternal'?: Envelope;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof LineString
+     */
+    'isRectangle'?: boolean;
+    /**
+     * 
+     * @type {Array<Coordinate>}
+     * @memberof LineString
+     */
+    'coordinates'?: Array<Coordinate> | null;
+    /**
+     * 
+     * @type {CoordinateSequence}
+     * @memberof LineString
+     */
+    'coordinateSequence'?: CoordinateSequence;
+    /**
+     * 
+     * @type {Coordinate}
+     * @memberof LineString
+     */
+    'coordinate'?: Coordinate;
+    /**
+     * 
+     * @type {Dimension}
+     * @memberof LineString
+     */
+    'dimension'?: Dimension;
+    /**
+     * 
+     * @type {Dimension}
+     * @memberof LineString
+     */
+    'boundaryDimension'?: Dimension;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof LineString
+     */
+    'isEmpty'?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof LineString
+     */
+    'numPoints'?: number;
+    /**
+     * 
+     * @type {Point}
+     * @memberof LineString
+     */
+    'startPoint'?: Point;
+    /**
+     * 
+     * @type {Point}
+     * @memberof LineString
+     */
+    'endPoint'?: Point;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof LineString
+     */
+    'isClosed'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof LineString
+     */
+    'isRing'?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof LineString
+     */
+    'geometryType'?: string | null;
+    /**
+     * 
+     * @type {OgcGeometryType}
+     * @memberof LineString
+     */
+    'ogcGeometryType'?: OgcGeometryType;
+    /**
+     * 
+     * @type {number}
+     * @memberof LineString
+     */
+    'length'?: number;
+    /**
+     * 
+     * @type {Geometry}
+     * @memberof LineString
+     */
+    'boundary'?: Geometry;
+    /**
+     * 
+     * @type {number}
+     * @memberof LineString
+     */
+    'count'?: number;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface LoginDto
+ */
+export interface LoginDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof LoginDto
+     */
+    'username': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LoginDto
+     */
+    'password': string;
+}
+/**
+ * 
+ * @export
+ * @interface NtsGeometryServices
+ */
+export interface NtsGeometryServices {
+    /**
+     * 
+     * @type {object}
+     * @memberof NtsGeometryServices
+     */
+    'geometryOverlay'?: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof NtsGeometryServices
+     */
+    'coordinateEqualityComparer'?: object;
+    /**
+     * 
+     * @type {number}
+     * @memberof NtsGeometryServices
+     */
+    'defaultSRID'?: number;
+    /**
+     * 
+     * @type {CoordinateSequenceFactory}
+     * @memberof NtsGeometryServices
+     */
+    'defaultCoordinateSequenceFactory'?: CoordinateSequenceFactory;
+    /**
+     * 
+     * @type {PrecisionModel}
+     * @memberof NtsGeometryServices
+     */
+    'defaultPrecisionModel'?: PrecisionModel;
+}
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const OgcGeometryType = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_3: 3,
+    NUMBER_4: 4,
+    NUMBER_5: 5,
+    NUMBER_6: 6,
+    NUMBER_7: 7,
+    NUMBER_8: 8,
+    NUMBER_9: 9,
+    NUMBER_10: 10,
+    NUMBER_11: 11,
+    NUMBER_12: 12,
+    NUMBER_13: 13,
+    NUMBER_14: 14,
+    NUMBER_15: 15,
+    NUMBER_16: 16
+} as const;
+
+export type OgcGeometryType = typeof OgcGeometryType[keyof typeof OgcGeometryType];
+
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const Ordinates = {
+    NUMBER_0: 0,
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_3: 3,
+    NUMBER_4: 4,
+    NUMBER_7: 7,
+    NUMBER_8: 8,
+    NUMBER_16: 16,
+    NUMBER_32: 32,
+    NUMBER_64: 64,
+    NUMBER_128: 128,
+    NUMBER_256: 256,
+    NUMBER_512: 512,
+    NUMBER_1024: 1024,
+    NUMBER_2048: 2048,
+    NUMBER_4096: 4096,
+    NUMBER_8192: 8192,
+    NUMBER_16384: 16384,
+    NUMBER_32768: 32768,
+    NUMBER_65535: 65535,
+    NUMBER_65536: 65536,
+    NUMBER_65539: 65539,
+    NUMBER_65543: 65543,
+    NUMBER_131072: 131072,
+    NUMBER_262144: 262144,
+    NUMBER_524288: 524288,
+    NUMBER_1048576: 1048576,
+    NUMBER_2097152: 2097152,
+    NUMBER_4194304: 4194304,
+    NUMBER_8388608: 8388608,
+    NUMBER_16777216: 16777216,
+    NUMBER_33554432: 33554432,
+    NUMBER_67108864: 67108864,
+    NUMBER_134217728: 134217728,
+    NUMBER_268435456: 268435456,
+    NUMBER_536870912: 536870912,
+    NUMBER_1073741824: 1073741824,
+    NUMBER_MINUS_2147483648: -2147483648,
+    NUMBER_MINUS_65536: -65536,
+    NUMBER_MINUS_1: -1
+} as const;
+
+export type Ordinates = typeof Ordinates[keyof typeof Ordinates];
+
+
+/**
+ * 
+ * @export
+ * @interface Point
+ */
+export interface Point {
+    /**
+     * 
+     * @type {GeometryFactory}
+     * @memberof Point
+     */
+    'factory'?: GeometryFactory;
+    /**
+     * 
+     * @type {any}
+     * @memberof Point
+     */
+    'userData'?: any | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Point
+     */
+    'srid'?: number;
+    /**
+     * 
+     * @type {PrecisionModel}
+     * @memberof Point
+     */
+    'precisionModel'?: PrecisionModel;
+    /**
+     * 
+     * @type {number}
+     * @memberof Point
+     */
+    'numGeometries'?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Point
+     */
+    'isSimple'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Point
+     */
+    'isValid'?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Point
+     */
+    'area'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Point
+     */
+    'length'?: number;
+    /**
+     * 
+     * @type {Point}
+     * @memberof Point
+     */
+    'centroid'?: Point;
+    /**
+     * 
+     * @type {Point}
+     * @memberof Point
+     */
+    'interiorPoint'?: Point;
+    /**
+     * 
+     * @type {Point}
+     * @memberof Point
+     */
+    'pointOnSurface'?: Point;
+    /**
+     * 
+     * @type {Geometry}
+     * @memberof Point
+     */
+    'envelope'?: Geometry;
+    /**
+     * 
+     * @type {Envelope}
+     * @memberof Point
+     */
+    'envelopeInternal'?: Envelope;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Point
+     */
+    'isRectangle'?: boolean;
+    /**
+     * 
+     * @type {CoordinateSequence}
+     * @memberof Point
+     */
+    'coordinateSequence'?: CoordinateSequence;
+    /**
+     * 
+     * @type {Array<Coordinate>}
+     * @memberof Point
+     */
+    'coordinates'?: Array<Coordinate> | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Point
+     */
+    'numPoints'?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Point
+     */
+    'isEmpty'?: boolean;
+    /**
+     * 
+     * @type {Dimension}
+     * @memberof Point
+     */
+    'dimension'?: Dimension;
+    /**
+     * 
+     * @type {Dimension}
+     * @memberof Point
+     */
+    'boundaryDimension'?: Dimension;
+    /**
+     * 
+     * @type {number}
+     * @memberof Point
+     */
+    'x'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Point
+     */
+    'y'?: number;
+    /**
+     * 
+     * @type {Coordinate}
+     * @memberof Point
+     */
+    'coordinate'?: Coordinate;
+    /**
+     * 
+     * @type {string}
+     * @memberof Point
+     */
+    'geometryType'?: string | null;
+    /**
+     * 
+     * @type {OgcGeometryType}
+     * @memberof Point
+     */
+    'ogcGeometryType'?: OgcGeometryType;
+    /**
+     * 
+     * @type {Geometry}
+     * @memberof Point
+     */
+    'boundary'?: Geometry;
+    /**
+     * 
+     * @type {number}
+     * @memberof Point
+     */
+    'z'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Point
+     */
+    'm'?: number;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface PrecisionModel
+ */
+export interface PrecisionModel {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PrecisionModel
+     */
+    'isFloating'?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof PrecisionModel
+     */
+    'maximumSignificantDigits'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PrecisionModel
+     */
+    'scale'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PrecisionModel
+     */
+    'gridSize'?: number;
+    /**
+     * 
+     * @type {PrecisionModels}
+     * @memberof PrecisionModel
+     */
+    'precisionModelType'?: PrecisionModels;
+}
+
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const PrecisionModels = {
+    NUMBER_0: 0,
+    NUMBER_1: 1,
+    NUMBER_2: 2
+} as const;
+
+export type PrecisionModels = typeof PrecisionModels[keyof typeof PrecisionModels];
+
+
+/**
+ * 
+ * @export
+ * @interface RegisterDto
+ */
+export interface RegisterDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterDto
+     */
+    'username': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterDto
+     */
+    'email': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterDto
+     */
+    'password': string;
+}
+/**
+ * 
+ * @export
+ * @interface StreetDto
+ */
+export interface StreetDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof StreetDto
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StreetDto
+     */
+    'streetName': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof StreetDto
+     */
+    'streetTypeId'?: number;
+    /**
+     * 
+     * @type {StreetTypeDto}
+     * @memberof StreetDto
+     */
+    'streetType'?: StreetTypeDto;
+    /**
+     * 
+     * @type {string}
+     * @memberof StreetDto
+     */
+    'address'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof StreetDto
+     */
+    'description'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof StreetDto
+     */
+    'imageUrl'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof StreetDto
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StreetDto
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StreetDto
+     */
+    'isApproved'?: boolean;
+    /**
+     * 
+     * @type {LineString}
+     * @memberof StreetDto
+     */
+    'route'?: LineString;
+    /**
+     * 
+     * @type {LineString}
+     * @memberof StreetDto
+     */
+    'wayPoints'?: LineString;
+    /**
+     * 
+     * @type {Array<StreetHistoryDto>}
+     * @memberof StreetDto
+     */
+    'histories'?: Array<StreetHistoryDto> | null;
+    /**
+     * 
+     * @type {Array<ImageInStreetDto>}
+     * @memberof StreetDto
+     */
+    'images'?: Array<ImageInStreetDto> | null;
+}
+/**
+ * 
+ * @export
+ * @interface StreetHistoryDto
+ */
+export interface StreetHistoryDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof StreetHistoryDto
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StreetHistoryDto
+     */
+    'historyName'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof StreetHistoryDto
+     */
+    'content'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof StreetHistoryDto
+     */
+    'updatedDate'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StreetHistoryDto
+     */
+    'createdDate'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof StreetHistoryDto
+     */
+    'streetId'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface StreetTypeDto
+ */
+export interface StreetTypeDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof StreetTypeDto
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StreetTypeDto
+     */
+    'streetTypeName'?: string | null;
 }
 /**
  * 
@@ -260,6 +1465,435 @@ export interface UpdateStreetTypeRequestDto {
      */
     'streetTypeName'?: string | null;
 }
+
+/**
+ * AuthApi - axios parameter creator
+ * @export
+ */
+export const AuthApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} userName 
+         * @param {RegisterDto} [registerDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthAdminChangeUserUserNamePut: async (userName: string, registerDto?: RegisterDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userName' is not null or undefined
+            assertParamExists('apiAuthAdminChangeUserUserNamePut', 'userName', userName)
+            const localVarPath = `/api/auth/adminChangeUser/{userName}`
+                .replace(`{${"userName"}}`, encodeURIComponent(String(userName)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(registerDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} userType 
+         * @param {RegisterDto} [registerDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthAdminRegisterUserTypePost: async (userType: string, registerDto?: RegisterDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userType' is not null or undefined
+            assertParamExists('apiAuthAdminRegisterUserTypePost', 'userType', userType)
+            const localVarPath = `/api/auth/adminRegister/{userType}`
+                .replace(`{${"userType"}}`, encodeURIComponent(String(userType)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(registerDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {ChangePasswordDto} [changePasswordDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthChangePasswordPost: async (changePasswordDto?: ChangePasswordDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/auth/changePassword`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(changePasswordDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {LoginDto} [loginDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthLoginPost: async (loginDto?: LoginDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/auth/login`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(loginDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthLogoutPost: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/auth/logout`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthRefreshTokenPost: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/auth/refreshToken`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AuthApi - functional programming interface
+ * @export
+ */
+export const AuthApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AuthApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} userName 
+         * @param {RegisterDto} [registerDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAuthAdminChangeUserUserNamePut(userName: string, registerDto?: RegisterDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAuthAdminChangeUserUserNamePut(userName, registerDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.apiAuthAdminChangeUserUserNamePut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} userType 
+         * @param {RegisterDto} [registerDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAuthAdminRegisterUserTypePost(userType: string, registerDto?: RegisterDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAuthAdminRegisterUserTypePost(userType, registerDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.apiAuthAdminRegisterUserTypePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {ChangePasswordDto} [changePasswordDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAuthChangePasswordPost(changePasswordDto?: ChangePasswordDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAuthChangePasswordPost(changePasswordDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.apiAuthChangePasswordPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {LoginDto} [loginDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAuthLoginPost(loginDto?: LoginDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAuthLoginPost(loginDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.apiAuthLoginPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAuthLogoutPost(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAuthLogoutPost(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.apiAuthLogoutPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAuthRefreshTokenPost(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAuthRefreshTokenPost(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.apiAuthRefreshTokenPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * AuthApi - factory interface
+ * @export
+ */
+export const AuthApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AuthApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} userName 
+         * @param {RegisterDto} [registerDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthAdminChangeUserUserNamePut(userName: string, registerDto?: RegisterDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAuthAdminChangeUserUserNamePut(userName, registerDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} userType 
+         * @param {RegisterDto} [registerDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthAdminRegisterUserTypePost(userType: string, registerDto?: RegisterDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAuthAdminRegisterUserTypePost(userType, registerDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {ChangePasswordDto} [changePasswordDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthChangePasswordPost(changePasswordDto?: ChangePasswordDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAuthChangePasswordPost(changePasswordDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {LoginDto} [loginDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthLoginPost(loginDto?: LoginDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAuthLoginPost(loginDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthLogoutPost(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAuthLogoutPost(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthRefreshTokenPost(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAuthRefreshTokenPost(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AuthApi - object-oriented interface
+ * @export
+ * @class AuthApi
+ * @extends {BaseAPI}
+ */
+export class AuthApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} userName 
+     * @param {RegisterDto} [registerDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public apiAuthAdminChangeUserUserNamePut(userName: string, registerDto?: RegisterDto, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).apiAuthAdminChangeUserUserNamePut(userName, registerDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} userType 
+     * @param {RegisterDto} [registerDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public apiAuthAdminRegisterUserTypePost(userType: string, registerDto?: RegisterDto, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).apiAuthAdminRegisterUserTypePost(userType, registerDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {ChangePasswordDto} [changePasswordDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public apiAuthChangePasswordPost(changePasswordDto?: ChangePasswordDto, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).apiAuthChangePasswordPost(changePasswordDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {LoginDto} [loginDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public apiAuthLoginPost(loginDto?: LoginDto, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).apiAuthLoginPost(loginDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public apiAuthLogoutPost(options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).apiAuthLogoutPost(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public apiAuthRefreshTokenPost(options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).apiAuthRefreshTokenPost(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
 
 /**
  * ImageApi - axios parameter creator
@@ -443,40 +2077,6 @@ export const StreetApiAxiosParamCreator = function (configuration?: Configuratio
     return {
         /**
          * 
-         * @summary Carefully with Route and WayPoints coordinates
-         * @param {CreateStreetRequestDto} [createStreetRequestDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiStreetAdminCreatePost: async (createStreetRequestDto?: CreateStreetRequestDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/street/adminCreate`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createStreetRequestDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @param {string} [streetName] 
          * @param {string} [streetType] 
          * @param {string} [sortBy] 
@@ -536,6 +2136,40 @@ export const StreetApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
+         * @summary Carefully with Route and WayPoints coordinates
+         * @param {CreateStreetRequestDto} [createStreetRequestDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetCreatePost: async (createStreetRequestDto?: CreateStreetRequestDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/street/create`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createStreetRequestDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} [streetName] 
          * @param {string} [streetType] 
          * @param {string} [sortBy] 
@@ -581,6 +2215,39 @@ export const StreetApiAxiosParamCreator = function (configuration?: Configuratio
             if (pageSize !== undefined) {
                 localVarQueryParameter['PageSize'] = pageSize;
             }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetIdApproveStreetPost: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('apiStreetIdApproveStreetPost', 'id', id)
+            const localVarPath = `/api/street/{id}/approveStreet`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
 
     
@@ -699,6 +2366,72 @@ export const StreetApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetIdRejectStreetPost: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('apiStreetIdRejectStreetPost', 'id', id)
+            const localVarPath = `/api/street/{id}/rejectStreet`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} streetId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetUserGetDetailStreetIdGet: async (streetId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'streetId' is not null or undefined
+            assertParamExists('apiStreetUserGetDetailStreetIdGet', 'streetId', streetId)
+            const localVarPath = `/api/street/userGetDetail/{streetId}`
+                .replace(`{${"streetId"}}`, encodeURIComponent(String(streetId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} [searchParam] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -743,19 +2476,6 @@ export const StreetApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Carefully with Route and WayPoints coordinates
-         * @param {CreateStreetRequestDto} [createStreetRequestDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async apiStreetAdminCreatePost(createStreetRequestDto?: CreateStreetRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetAdminCreatePost(createStreetRequestDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['StreetApi.apiStreetAdminCreatePost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
          * @param {string} [streetName] 
          * @param {string} [streetType] 
          * @param {string} [sortBy] 
@@ -765,7 +2485,7 @@ export const StreetApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStreetAdminSearchGet(streetName?: string, streetType?: string, sortBy?: string, isDecsending?: boolean, pageNumber?: number, pageSize?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiStreetAdminSearchGet(streetName?: string, streetType?: string, sortBy?: string, isDecsending?: boolean, pageNumber?: number, pageSize?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetAdminSearchGet(streetName, streetType, sortBy, isDecsending, pageNumber, pageSize, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StreetApi.apiStreetAdminSearchGet']?.[localVarOperationServerIndex]?.url;
@@ -773,6 +2493,19 @@ export const StreetApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Carefully with Route and WayPoints coordinates
+         * @param {CreateStreetRequestDto} [createStreetRequestDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiStreetCreatePost(createStreetRequestDto?: CreateStreetRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetCreatePost(createStreetRequestDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StreetApi.apiStreetCreatePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {string} [streetName] 
          * @param {string} [streetType] 
          * @param {string} [sortBy] 
@@ -782,7 +2515,7 @@ export const StreetApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStreetGet(streetName?: string, streetType?: string, sortBy?: string, isDecsending?: boolean, pageNumber?: number, pageSize?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiStreetGet(streetName?: string, streetType?: string, sortBy?: string, isDecsending?: boolean, pageNumber?: number, pageSize?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetGet(streetName, streetType, sortBy, isDecsending, pageNumber, pageSize, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StreetApi.apiStreetGet']?.[localVarOperationServerIndex]?.url;
@@ -794,7 +2527,19 @@ export const StreetApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStreetIdDelete(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiStreetIdApproveStreetPost(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetIdApproveStreetPost(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StreetApi.apiStreetIdApproveStreetPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiStreetIdDelete(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetIdDelete(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StreetApi.apiStreetIdDelete']?.[localVarOperationServerIndex]?.url;
@@ -806,7 +2551,7 @@ export const StreetApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStreetIdGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiStreetIdGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StreetDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetIdGet(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StreetApi.apiStreetIdGet']?.[localVarOperationServerIndex]?.url;
@@ -820,10 +2565,34 @@ export const StreetApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStreetIdPut(id: number, updateStreetRequestDto?: UpdateStreetRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiStreetIdPut(id: number, updateStreetRequestDto?: UpdateStreetRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StreetDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetIdPut(id, updateStreetRequestDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StreetApi.apiStreetIdPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiStreetIdRejectStreetPost(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetIdRejectStreetPost(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StreetApi.apiStreetIdRejectStreetPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} streetId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiStreetUserGetDetailStreetIdGet(streetId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StreetDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetUserGetDetailStreetIdGet(streetId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StreetApi.apiStreetUserGetDetailStreetIdGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -832,7 +2601,7 @@ export const StreetApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStreetUserSearchGet(searchParam?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiStreetUserSearchGet(searchParam?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StreetDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetUserSearchGet(searchParam, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StreetApi.apiStreetUserSearchGet']?.[localVarOperationServerIndex]?.url;
@@ -850,13 +2619,27 @@ export const StreetApiFactory = function (configuration?: Configuration, basePat
     return {
         /**
          * 
+         * @param {string} [streetName] 
+         * @param {string} [streetType] 
+         * @param {string} [sortBy] 
+         * @param {boolean} [isDecsending] 
+         * @param {number} [pageNumber] 
+         * @param {number} [pageSize] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetAdminSearchGet(streetName?: string, streetType?: string, sortBy?: string, isDecsending?: boolean, pageNumber?: number, pageSize?: number, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.apiStreetAdminSearchGet(streetName, streetType, sortBy, isDecsending, pageNumber, pageSize, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Carefully with Route and WayPoints coordinates
          * @param {CreateStreetRequestDto} [createStreetRequestDto] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStreetAdminCreatePost(createStreetRequestDto?: CreateStreetRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.apiStreetAdminCreatePost(createStreetRequestDto, options).then((request) => request(axios, basePath));
+        apiStreetCreatePost(createStreetRequestDto?: CreateStreetRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.apiStreetCreatePost(createStreetRequestDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -869,21 +2652,7 @@ export const StreetApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStreetAdminSearchGet(streetName?: string, streetType?: string, sortBy?: string, isDecsending?: boolean, pageNumber?: number, pageSize?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.apiStreetAdminSearchGet(streetName, streetType, sortBy, isDecsending, pageNumber, pageSize, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} [streetName] 
-         * @param {string} [streetType] 
-         * @param {string} [sortBy] 
-         * @param {boolean} [isDecsending] 
-         * @param {number} [pageNumber] 
-         * @param {number} [pageSize] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiStreetGet(streetName?: string, streetType?: string, sortBy?: string, isDecsending?: boolean, pageNumber?: number, pageSize?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiStreetGet(streetName?: string, streetType?: string, sortBy?: string, isDecsending?: boolean, pageNumber?: number, pageSize?: number, options?: RawAxiosRequestConfig): AxiosPromise<object> {
             return localVarFp.apiStreetGet(streetName, streetType, sortBy, isDecsending, pageNumber, pageSize, options).then((request) => request(axios, basePath));
         },
         /**
@@ -892,7 +2661,16 @@ export const StreetApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStreetIdDelete(id: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiStreetIdApproveStreetPost(id: number, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.apiStreetIdApproveStreetPost(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetIdDelete(id: number, options?: RawAxiosRequestConfig): AxiosPromise<object> {
             return localVarFp.apiStreetIdDelete(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -901,7 +2679,7 @@ export const StreetApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStreetIdGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiStreetIdGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<StreetDto> {
             return localVarFp.apiStreetIdGet(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -912,8 +2690,26 @@ export const StreetApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStreetIdPut(id: number, updateStreetRequestDto?: UpdateStreetRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiStreetIdPut(id: number, updateStreetRequestDto?: UpdateStreetRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<StreetDto> {
             return localVarFp.apiStreetIdPut(id, updateStreetRequestDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetIdRejectStreetPost(id: number, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.apiStreetIdRejectStreetPost(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} streetId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetUserGetDetailStreetIdGet(streetId: number, options?: RawAxiosRequestConfig): AxiosPromise<StreetDto> {
+            return localVarFp.apiStreetUserGetDetailStreetIdGet(streetId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -921,7 +2717,7 @@ export const StreetApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStreetUserSearchGet(searchParam?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiStreetUserSearchGet(searchParam?: string, options?: RawAxiosRequestConfig): AxiosPromise<StreetDto> {
             return localVarFp.apiStreetUserSearchGet(searchParam, options).then((request) => request(axios, basePath));
         },
     };
@@ -934,18 +2730,6 @@ export const StreetApiFactory = function (configuration?: Configuration, basePat
  * @extends {BaseAPI}
  */
 export class StreetApi extends BaseAPI {
-    /**
-     * 
-     * @summary Carefully with Route and WayPoints coordinates
-     * @param {CreateStreetRequestDto} [createStreetRequestDto] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof StreetApi
-     */
-    public apiStreetAdminCreatePost(createStreetRequestDto?: CreateStreetRequestDto, options?: RawAxiosRequestConfig) {
-        return StreetApiFp(this.configuration).apiStreetAdminCreatePost(createStreetRequestDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
     /**
      * 
      * @param {string} [streetName] 
@@ -964,6 +2748,18 @@ export class StreetApi extends BaseAPI {
 
     /**
      * 
+     * @summary Carefully with Route and WayPoints coordinates
+     * @param {CreateStreetRequestDto} [createStreetRequestDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StreetApi
+     */
+    public apiStreetCreatePost(createStreetRequestDto?: CreateStreetRequestDto, options?: RawAxiosRequestConfig) {
+        return StreetApiFp(this.configuration).apiStreetCreatePost(createStreetRequestDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {string} [streetName] 
      * @param {string} [streetType] 
      * @param {string} [sortBy] 
@@ -976,6 +2772,17 @@ export class StreetApi extends BaseAPI {
      */
     public apiStreetGet(streetName?: string, streetType?: string, sortBy?: string, isDecsending?: boolean, pageNumber?: number, pageSize?: number, options?: RawAxiosRequestConfig) {
         return StreetApiFp(this.configuration).apiStreetGet(streetName, streetType, sortBy, isDecsending, pageNumber, pageSize, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StreetApi
+     */
+    public apiStreetIdApproveStreetPost(id: number, options?: RawAxiosRequestConfig) {
+        return StreetApiFp(this.configuration).apiStreetIdApproveStreetPost(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1011,6 +2818,28 @@ export class StreetApi extends BaseAPI {
      */
     public apiStreetIdPut(id: number, updateStreetRequestDto?: UpdateStreetRequestDto, options?: RawAxiosRequestConfig) {
         return StreetApiFp(this.configuration).apiStreetIdPut(id, updateStreetRequestDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StreetApi
+     */
+    public apiStreetIdRejectStreetPost(id: number, options?: RawAxiosRequestConfig) {
+        return StreetApiFp(this.configuration).apiStreetIdRejectStreetPost(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} streetId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StreetApi
+     */
+    public apiStreetUserGetDetailStreetIdGet(streetId: number, options?: RawAxiosRequestConfig) {
+        return StreetApiFp(this.configuration).apiStreetUserGetDetailStreetIdGet(streetId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1217,7 +3046,7 @@ export const StreetHistoryApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStreetHistoryGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiStreetHistoryGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StreetHistoryDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetHistoryGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StreetHistoryApi.apiStreetHistoryGet']?.[localVarOperationServerIndex]?.url;
@@ -1229,7 +3058,7 @@ export const StreetHistoryApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStreetHistoryIdDelete(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiStreetHistoryIdDelete(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetHistoryIdDelete(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StreetHistoryApi.apiStreetHistoryIdDelete']?.[localVarOperationServerIndex]?.url;
@@ -1241,7 +3070,7 @@ export const StreetHistoryApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStreetHistoryIdGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiStreetHistoryIdGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StreetHistoryDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetHistoryIdGet(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StreetHistoryApi.apiStreetHistoryIdGet']?.[localVarOperationServerIndex]?.url;
@@ -1254,7 +3083,7 @@ export const StreetHistoryApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStreetHistoryIdPut(id: number, updateStreetHistoryRequestDto?: UpdateStreetHistoryRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiStreetHistoryIdPut(id: number, updateStreetHistoryRequestDto?: UpdateStreetHistoryRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StreetHistoryDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetHistoryIdPut(id, updateStreetHistoryRequestDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StreetHistoryApi.apiStreetHistoryIdPut']?.[localVarOperationServerIndex]?.url;
@@ -1267,7 +3096,7 @@ export const StreetHistoryApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStreetHistoryStreetIdPost(streetId: number, createStreetHistoryRequestDto?: CreateStreetHistoryRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiStreetHistoryStreetIdPost(streetId: number, createStreetHistoryRequestDto?: CreateStreetHistoryRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetHistoryStreetIdPost(streetId, createStreetHistoryRequestDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StreetHistoryApi.apiStreetHistoryStreetIdPost']?.[localVarOperationServerIndex]?.url;
@@ -1288,7 +3117,7 @@ export const StreetHistoryApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStreetHistoryGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiStreetHistoryGet(options?: RawAxiosRequestConfig): AxiosPromise<StreetHistoryDto> {
             return localVarFp.apiStreetHistoryGet(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1297,7 +3126,7 @@ export const StreetHistoryApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStreetHistoryIdDelete(id: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiStreetHistoryIdDelete(id: number, options?: RawAxiosRequestConfig): AxiosPromise<object> {
             return localVarFp.apiStreetHistoryIdDelete(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1306,7 +3135,7 @@ export const StreetHistoryApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStreetHistoryIdGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiStreetHistoryIdGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<StreetHistoryDto> {
             return localVarFp.apiStreetHistoryIdGet(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1316,7 +3145,7 @@ export const StreetHistoryApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStreetHistoryIdPut(id: number, updateStreetHistoryRequestDto?: UpdateStreetHistoryRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiStreetHistoryIdPut(id: number, updateStreetHistoryRequestDto?: UpdateStreetHistoryRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<StreetHistoryDto> {
             return localVarFp.apiStreetHistoryIdPut(id, updateStreetHistoryRequestDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1326,7 +3155,7 @@ export const StreetHistoryApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStreetHistoryStreetIdPost(streetId: number, createStreetHistoryRequestDto?: CreateStreetHistoryRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiStreetHistoryStreetIdPost(streetId: number, createStreetHistoryRequestDto?: CreateStreetHistoryRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<object> {
             return localVarFp.apiStreetHistoryStreetIdPost(streetId, createStreetHistoryRequestDto, options).then((request) => request(axios, basePath));
         },
     };
@@ -1538,6 +3367,39 @@ export const StreetImageApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {CreateStreetImageRequestDto} [createStreetImageRequestDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetImageNoStreetIdPost: async (createStreetImageRequestDto?: CreateStreetImageRequestDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/streetImage/noStreetId`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createStreetImageRequestDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} streetId 
          * @param {CreateStreetImageRequestDto} [createStreetImageRequestDto] 
          * @param {*} [options] Override http request option.
@@ -1633,6 +3495,18 @@ export const StreetImageApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {CreateStreetImageRequestDto} [createStreetImageRequestDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiStreetImageNoStreetIdPost(createStreetImageRequestDto?: CreateStreetImageRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStreetImageNoStreetIdPost(createStreetImageRequestDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StreetImageApi.apiStreetImageNoStreetIdPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {number} streetId 
          * @param {CreateStreetImageRequestDto} [createStreetImageRequestDto] 
          * @param {*} [options] Override http request option.
@@ -1689,6 +3563,15 @@ export const StreetImageApiFactory = function (configuration?: Configuration, ba
          */
         apiStreetImageIdPut(id: number, updateStreetImageRequestDto?: UpdateStreetImageRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.apiStreetImageIdPut(id, updateStreetImageRequestDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {CreateStreetImageRequestDto} [createStreetImageRequestDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiStreetImageNoStreetIdPost(createStreetImageRequestDto?: CreateStreetImageRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiStreetImageNoStreetIdPost(createStreetImageRequestDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1752,6 +3635,17 @@ export class StreetImageApi extends BaseAPI {
      */
     public apiStreetImageIdPut(id: number, updateStreetImageRequestDto?: UpdateStreetImageRequestDto, options?: RawAxiosRequestConfig) {
         return StreetImageApiFp(this.configuration).apiStreetImageIdPut(id, updateStreetImageRequestDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {CreateStreetImageRequestDto} [createStreetImageRequestDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StreetImageApi
+     */
+    public apiStreetImageNoStreetIdPost(createStreetImageRequestDto?: CreateStreetImageRequestDto, options?: RawAxiosRequestConfig) {
+        return StreetImageApiFp(this.configuration).apiStreetImageNoStreetIdPost(createStreetImageRequestDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

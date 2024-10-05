@@ -6,3 +6,6 @@ export { default as StreetTypeCreate } from "./streetType/StreetTypeCreate";
 export { default as StreetTypeDetail } from "./streetType/StreetTypeDetail";
 export { default as InterceptPage } from "./InterceptPage";
 export { default as NotFoundPage } from "./NotFoundPage";
+export { default as SignInPage } from "./auth/SignIn";
+export { default as SignUpPage } from "./auth/SignUp";
+export { default as ProtectedRoute } from "./ProtectedRoute";
