@@ -153,19 +153,19 @@ namespace be.Controllers
             string? username;
             if (token == null)
             {
-                return Unauthorized(new { message = "No token found" });
+                return BadRequest(new { message = "No token found" });
             } else {
                 username = _tokenService.GetUsernameFromToken(token);
                 if (username == null)
                 {
-                    return Unauthorized(new { message = "No username found" });
+                    return BadRequest(new { message = "No username found" });
                 }
             }
 
             AppUser? appUser = await _userManager.FindByNameAsync(username);
 
             if(appUser == null)
-                return Unauthorized("Dont have account");
+                return BadRequest("Dont have account");
 
             IList<string> roles = await _userManager.GetRolesAsync(appUser);
 
