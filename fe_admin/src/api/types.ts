@@ -43,3 +43,9 @@ export interface CreateStreetTypeRequestDto {
 export interface UpdateStreetTypeRequestDto {
   streetTypeName: string;
 }
+
+// auth
+export interface LoginRequestDto {
+  username: string;
+  password: string;
+}
