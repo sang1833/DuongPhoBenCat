@@ -14,16 +14,23 @@ export const reApi: AxiosInstance = axios.create({
 reApi.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response.status === 403) {
+    const originalRequest = error.config;
+
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
       try {
-        await reApi.post("/api/auth/refreshToken");
-        // If refresh successful, retry the original request
-        return reApi(error.config);
+        const response = await reApi.post("/api/auth/refreshToken");
+        if (response.status === 200) {
+          return reApi(originalRequest);
+        }
       } catch (refreshError) {
-        // If refresh fails, redirect to login page
-        window.location.href = "/login";
-        return Promise.reject(refreshError);
+        console.log(refreshError);
       }
+
+      // If we reach here, either the refresh token request failed or returned non-200 status
+      window.location.href = "/login";
+      return Promise.reject(error);
     }
     return Promise.reject(error);
   }

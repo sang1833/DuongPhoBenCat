@@ -5,7 +5,7 @@ import { parseISO, format } from "date-fns";
 import { FileX2, SquarePen } from "lucide-react";
 import { ContainedNormalButton, OutlinedNormalButton } from "@components";
 import { IStreetSearch, IStreetSearchList } from "@types";
-import { StreetApi } from "@api";
+import { adminDeleteStreet, adminSearchAllStreet } from "@api";
 import { StreetListContext } from "@contexts";
 import { closeModal, openModal } from "../Features/ModalSlice";
 import SearchBar from "./SearchBar";
@@ -30,8 +30,7 @@ const TableThree = () => {
   useEffect(() => {
     async function fetchStreetList() {
       try {
-        const streetApi = new StreetApi();
-        const response = await streetApi.apiStreetAdminSearchGet(
+        const response = await adminSearchAllStreet(
           search,
           filter,
           sortBy,
@@ -63,8 +62,7 @@ const TableThree = () => {
 
   const handleDeleteStreet = async (id: number) => {
     try {
-      const streetApi = new StreetApi();
-      const respone = await streetApi.apiStreetIdDelete(id);
+      const respone = await adminDeleteStreet(id);
       if (respone.status === 200 || respone.status === 204) {
         setStreetList((prev) => prev?.filter((street) => street.id !== id));
         toast.success("Xoá thành công");

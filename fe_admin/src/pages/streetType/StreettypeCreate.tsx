@@ -8,7 +8,7 @@ import {
   OutlinedNormalButton
 } from "@components";
 import { MapContext } from "@contexts";
-import { CreateStreetTypeRequestDto, StreetTypeApi } from "@api";
+import { adminCreateStreetType, CreateStreetTypeRequestDto } from "@api";
 import { toast } from "react-toastify";
 
 interface ErrorMessages {
@@ -39,15 +39,12 @@ const PostStreetTypePage: React.FC = () => {
       return;
     }
 
-    const streettypeApi = new StreetTypeApi();
     const createStreetTypeRequestDto: CreateStreetTypeRequestDto = {
       streetTypeName: streetTypeName
     };
 
     try {
-      const response = await streettypeApi.apiStreetTypePost(
-        createStreetTypeRequestDto
-      );
+      const response = await adminCreateStreetType(createStreetTypeRequestDto);
       if (response.status === 200) {
         toast.success("Tạo thành công");
         navigate("/map/street-type");

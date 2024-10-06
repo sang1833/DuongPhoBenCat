@@ -20,7 +20,12 @@ import {
   IStreetTypeoption
 } from "@types";
 import { MapContext } from "@contexts";
-import { StreetApi, StreetTypeApi, UpdateStreetRequestDto } from "@api";
+import {
+  adminGetStreetById,
+  adminGetStreetTypes,
+  adminUpdateStreet,
+  UpdateStreetRequestDto
+} from "@api";
 import { toast } from "react-toastify";
 
 interface ErrorMessages {
@@ -62,10 +67,9 @@ const ChangeStreetPage: React.FC = () => {
 
   useEffect(() => {
     const fetchStreets = async () => {
-      const streetApi = new StreetApi();
       try {
         const _streetId = parseInt(streetId?.toString() || "");
-        const response = await streetApi.apiStreetIdGet(_streetId);
+        const response = await adminGetStreetById(_streetId);
 
         const streetData = response.data as unknown as IStreet;
         setWaypoints(
@@ -94,9 +98,8 @@ const ChangeStreetPage: React.FC = () => {
 
   useEffect(() => {
     const fetchStreetTypes = async () => {
-      const streetTypeApi = new StreetTypeApi();
       try {
-        const response = await streetTypeApi.apiStreetTypeGet();
+        const response = await adminGetStreetTypes();
         const data: IStreetType[] =
           (response.data as unknown as IStreetTypeList)?.streetTypes || [];
 
@@ -141,7 +144,6 @@ const ChangeStreetPage: React.FC = () => {
         return;
       }
 
-      const streetApi = new StreetApi();
       const updateStreetRequestDto: UpdateStreetRequestDto = {
         streetName: streetName,
         streetTypeId: streetTypeId,
@@ -161,7 +163,7 @@ const ChangeStreetPage: React.FC = () => {
         }))
       };
 
-      const response = await streetApi.apiStreetIdPut(
+      const response = await adminUpdateStreet(
         parseInt(streetId || ""),
         updateStreetRequestDto
       );

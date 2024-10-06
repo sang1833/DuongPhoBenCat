@@ -1,5 +1,10 @@
 import { reApi } from "./config";
-import { CreateStreetRequestDto } from "./types";
+import {
+  CreateStreetRequestDto,
+  CreateStreetTypeRequestDto,
+  UpdateStreetRequestDto,
+  UpdateStreetTypeRequestDto
+} from "./types";
 
 // auth
 export const login = async (username: string, password: string) => {
@@ -91,12 +96,12 @@ export const adminChangeUser = async (
 
 // street
 export const adminSearchAllStreet = async (
-  StreetName: string,
-  StreetType: string,
-  SortBy: string,
-  IsDescending: boolean,
-  PageNumber: number,
-  PageSize: number
+  StreetName?: string,
+  StreetType?: string,
+  SortBy?: string,
+  IsDescending?: boolean,
+  PageNumber?: number,
+  PageSize?: number
 ) => {
   try {
     const response = await reApi.get(`/api/street/adminSearch`, {
@@ -116,7 +121,7 @@ export const adminSearchAllStreet = async (
   }
 };
 
-export const adminGetStreet = async (streetId: string) => {
+export const adminGetStreetById = async (streetId: number) => {
   try {
     const response = await reApi.get(`/api/street/${streetId}`);
     return response.data;
@@ -137,8 +142,8 @@ export const adminCreateStreet = async (street: CreateStreetRequestDto) => {
 };
 
 export const adminUpdateStreet = async (
-  streetId: string,
-  street: CreateStreetRequestDto
+  streetId: number,
+  street: UpdateStreetRequestDto
 ) => {
   try {
     const response = await reApi.put(`/api/street/${streetId}`, street);
@@ -149,7 +154,7 @@ export const adminUpdateStreet = async (
   }
 };
 
-export const adminDeleteStreet = async (streetId: string) => {
+export const adminDeleteStreet = async (streetId: number) => {
   try {
     const response = await reApi.delete(`/api/street/${streetId}`);
     return response.data;
@@ -180,12 +185,74 @@ export const rejectStreet = async (streetId: string) => {
 };
 
 // street type
-export const adminGetStreetTypes = async () => {
+export const adminGetStreetTypes = async (
+  StreetTypeName?: string,
+  SortBy?: string,
+  IsDescending?: boolean,
+  PageNumber?: number,
+  PageSize?: number
+) => {
   try {
-    const response = await reApi.get("/api/streetType");
+    const response = await reApi.get("/api/streetType", {
+      params: {
+        StreetTypeName,
+        SortBy,
+        IsDescending,
+        PageNumber,
+        PageSize
+      }
+    });
     return response.data;
   } catch (error) {
     console.error("Admin get street types error:", error);
+    throw error;
+  }
+};
+
+export const adminGetStreetTypeById = async (streetTypeId: number) => {
+  try {
+    const response = await reApi.get(`/api/streetType/${streetTypeId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Admin get street type error:", error);
+    throw error;
+  }
+};
+
+export const adminCreateStreetType = async (
+  streetType: CreateStreetTypeRequestDto
+) => {
+  try {
+    const response = await reApi.post("/api/streetType", streetType);
+    return response.data;
+  } catch (error) {
+    console.error("Admin create street type error:", error);
+    throw error;
+  }
+};
+
+export const adminUpdateStreetType = async (
+  streetTypeId: number,
+  streetType: UpdateStreetTypeRequestDto
+) => {
+  try {
+    const response = await reApi.put(
+      `/api/streetType/${streetTypeId}`,
+      streetType
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Admin update street type error:", error);
+    throw error;
+  }
+};
+
+export const adminDeleteStreetType = async (streetTypeId: number) => {
+  try {
+    const response = await reApi.delete(`/api/streetType/${streetTypeId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Admin delete street type error:", error);
     throw error;
   }
 };

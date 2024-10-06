@@ -25,7 +25,6 @@ import {
   adminCreateStreet,
   adminGetStreetTypes
 } from "@api";
-import { RefreshToken } from "@utils";
 
 interface ErrorMessages {
   streetName?: string;
@@ -137,8 +136,6 @@ const PostStreetPage: React.FC = () => {
       if (response.status === 200 || response.status === 201) {
         toast.success("Tạo thành công");
         navigate("/map/street");
-      } else if (response.status === 403) {
-        RefreshToken();
       }
     } catch (error) {
       toast.error("Tạo tuyến đường thất bại");

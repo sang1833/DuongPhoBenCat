@@ -8,7 +8,11 @@ import {
   OutlinedNormalButton
 } from "@components";
 import { MapContext } from "@contexts";
-import { StreetTypeApi, UpdateStreetTypeRequestDto } from "@api";
+import {
+  adminGetStreetTypeById,
+  adminUpdateStreetType,
+  UpdateStreetTypeRequestDto
+} from "@api";
 import { IStreetType } from "@types";
 import { toast } from "react-toastify";
 
@@ -29,9 +33,8 @@ const ChangeStreetTypePage: React.FC = () => {
   useEffect(() => {
     async function fetchStreetType() {
       try {
-        const streetTypeApi = new StreetTypeApi();
         const _streetTypeId = parseInt(streetTypeId as string);
-        const response = await streetTypeApi.apiStreetTypeIdGet(_streetTypeId);
+        const response = await adminGetStreetTypeById(_streetTypeId);
         setStreetTypeName(
           (response.data as unknown as IStreetType).streetTypeName
         );
@@ -59,13 +62,12 @@ const ChangeStreetTypePage: React.FC = () => {
       return;
     }
 
-    const streettypeApi = new StreetTypeApi();
     const updateStreetTypeRequestDto: UpdateStreetTypeRequestDto = {
       streetTypeName: streetTypeName
     };
 
     try {
-      const response = await streettypeApi.apiStreetTypeIdPut(
+      const response = await adminUpdateStreetType(
         parseInt(streetTypeId as string),
         updateStreetTypeRequestDto
       );
