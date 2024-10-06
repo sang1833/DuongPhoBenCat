@@ -20,7 +20,11 @@ import {
   IStreetTypeoption
 } from "@types";
 import { MapContext } from "@contexts";
-import { CreateStreetRequestDto, StreetApi, StreetTypeApi } from "@api";
+import {
+  CreateStreetRequestDto,
+  adminCreateStreet,
+  adminGetStreetTypes
+} from "@api";
 import { RefreshToken } from "@utils";
 
 interface ErrorMessages {
@@ -61,9 +65,9 @@ const PostStreetPage: React.FC = () => {
 
   useEffect(() => {
     const fetchStreetTypes = async () => {
-      const streetTypeApi = new StreetTypeApi();
       try {
-        const response = await streetTypeApi.apiStreetTypeGet();
+        const response = await adminGetStreetTypes();
+
         const data: IStreetType[] =
           (response.data as unknown as IStreetTypeList)?.streetTypes || [];
 
@@ -110,7 +114,6 @@ const PostStreetPage: React.FC = () => {
         return;
       }
 
-      const streetApi = new StreetApi();
       const createStreetRequestDto: CreateStreetRequestDto = {
         streetName: streetName,
         streetTypeId: streetTypeId,
@@ -130,9 +133,7 @@ const PostStreetPage: React.FC = () => {
         }))
       };
 
-      const response = await streetApi.apiStreetCreatePost(
-        createStreetRequestDto
-      );
+      const response = await adminCreateStreet(createStreetRequestDto);
       if (response.status === 200 || response.status === 201) {
         toast.success("Tạo thành công");
         navigate("/map/street");

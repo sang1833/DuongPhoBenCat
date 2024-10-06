@@ -1,0 +1,191 @@
+import { reApi } from "./config";
+import { CreateStreetRequestDto } from "./types";
+
+// auth
+export const login = async (username: string, password: string) => {
+  try {
+    const response = await reApi.post("/api/auth/login", {
+      username,
+      password
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Login error:", error);
+    throw error;
+  }
+};
+
+export const adminRegister = async (
+  username: string,
+  email: string,
+  password: string,
+  userType: string
+) => {
+  try {
+    const response = await reApi.post(`/api/auth/adminRegister/${userType}`, {
+      username,
+      email,
+      password
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Admin register error:", error);
+    throw error;
+  }
+};
+
+export const logout = async () => {
+  try {
+    const response = await reApi.post("/api/auth/logout");
+    return response.data;
+  } catch (error) {
+    console.error("Logout error:", error);
+    throw error;
+  }
+};
+
+export const refreshToken = async () => {
+  try {
+    const response = await reApi.post("/api/auth/refreshToken");
+    return response.data;
+  } catch (error) {
+    console.error("Refresh token error:", error);
+    throw error;
+  }
+};
+
+export const changePassword = async (
+  currentPassword: string,
+  newPassword: string
+) => {
+  try {
+    const response = await reApi.post("/api/auth/changePassword", {
+      currentPassword,
+      newPassword
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Change password error:", error);
+    throw error;
+  }
+};
+
+export const adminChangeUser = async (
+  username: string,
+  email: string,
+  userType: string,
+  userName: string
+) => {
+  try {
+    const response = await reApi.put(`/api/auth/adminChangeUser/${userName}`, {
+      username,
+      email,
+      userType
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Admin change user error:", error);
+    throw error;
+  }
+};
+
+// street
+export const adminSearchAllStreet = async (
+  StreetName: string,
+  StreetType: string,
+  SortBy: string,
+  IsDescending: boolean,
+  PageNumber: number,
+  PageSize: number
+) => {
+  try {
+    const response = await reApi.get(`/api/street/adminSearch`, {
+      params: {
+        StreetName,
+        StreetType,
+        SortBy,
+        IsDescending,
+        PageNumber,
+        PageSize
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Admin search street error:", error);
+    throw error;
+  }
+};
+
+export const adminGetStreet = async (streetId: string) => {
+  try {
+    const response = await reApi.get(`/api/street/${streetId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Admin get street error:", error);
+    throw error;
+  }
+};
+
+export const adminCreateStreet = async (street: CreateStreetRequestDto) => {
+  try {
+    const response = await reApi.post("/api/street/create", street);
+    return response.data;
+  } catch (error) {
+    console.error("Admin create street error:", error);
+    throw error;
+  }
+};
+
+export const adminUpdateStreet = async (
+  streetId: string,
+  street: CreateStreetRequestDto
+) => {
+  try {
+    const response = await reApi.put(`/api/street/${streetId}`, street);
+    return response.data;
+  } catch (error) {
+    console.error("Admin update street error:", error);
+    throw error;
+  }
+};
+
+export const adminDeleteStreet = async (streetId: string) => {
+  try {
+    const response = await reApi.delete(`/api/street/${streetId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Admin delete street error:", error);
+    throw error;
+  }
+};
+
+export const approveStreet = async (streetId: string) => {
+  try {
+    const response = await reApi.put(`/api/street/approve/${streetId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Approve street error:", error);
+    throw error;
+  }
+};
+
+export const rejectStreet = async (streetId: string) => {
+  try {
+    const response = await reApi.put(`/api/street/reject/${streetId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Reject street error:", error);
+    throw error;
+  }
+};
+
+// street type
+export const adminGetStreetTypes = async () => {
+  try {
+    const response = await reApi.get("/api/streetType");
+    return response.data;
+  } catch (error) {
+    console.error("Admin get street types error:", error);
+    throw error;
+  }
+};

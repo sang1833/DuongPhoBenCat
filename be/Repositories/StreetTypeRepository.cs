@@ -70,7 +70,7 @@ namespace be.Repositories
 
                 if (columnSelectors.TryGetValue(queryObject.SortBy, out var selectedColumn))
                 {
-                    streetTypes = queryObject.IsDecsending
+                    streetTypes = queryObject.IsDescending
                         ? streetTypes.OrderByDescending(selectedColumn)
                         : streetTypes.OrderBy(selectedColumn);
                 }

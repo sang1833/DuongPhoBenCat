@@ -19,7 +19,7 @@ export default defineConfig({
         new URL("src/contexts/index.ts", import.meta.url)
       ),
       "@api": fileURLToPath(
-        new URL("src/generated-api/index.ts", import.meta.url)
+        new URL("src/api/index.ts", import.meta.url)
       )
     }
   }
