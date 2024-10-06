@@ -6,7 +6,7 @@ import { FileX2, SquarePen } from "lucide-react";
 import { toast } from "react-toastify";
 import { ContainedNormalButton, OutlinedNormalButton } from "@components";
 import { IStreetType, IStreetTypeList } from "@types";
-import { StreetTypeApi } from "@api";
+import { adminDeleteStreetType, adminGetStreetTypes } from "@api";
 import { StreetListContext } from "@contexts";
 import { closeModal, openModal } from "../Features/ModalSlice";
 import SearchBar from "./SearchBar";
@@ -30,8 +30,7 @@ const TableThree = () => {
   useEffect(() => {
     async function fetchStreetList() {
       try {
-        const streetTypeApi = new StreetTypeApi();
-        const response = await streetTypeApi.apiStreetTypeGet(
+        const response = await adminGetStreetTypes(
           search,
           sortBy,
           isDesc,
@@ -64,8 +63,7 @@ const TableThree = () => {
 
   const handleDeleteSType = async (id: number) => {
     try {
-      const streetTypeApi = new StreetTypeApi();
-      const respone = await streetTypeApi.apiStreetTypeIdDelete(id);
+      const respone = await adminDeleteStreetType(id);
       if (respone.status === 200 || respone.status === 204) {
         setStreetTypeList((prev) =>
           prev?.filter((streetType) => streetType.id !== id)
