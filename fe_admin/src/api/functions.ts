@@ -2,7 +2,6 @@ import { reApi } from "./config";
 import {
   CreateStreetRequestDto,
   CreateStreetTypeRequestDto,
-  LoginRequestDto,
   UpdateStreetRequestDto,
   UpdateStreetTypeRequestDto
 } from "./types";
@@ -254,17 +253,6 @@ export const adminDeleteStreetType = async (streetTypeId: number) => {
     return response;
   } catch (error) {
     console.error("Admin delete street type error:", error);
-    throw error;
-  }
-};
-
-// login
-export const apiLogin = async (loginRequest: LoginRequestDto) => {
-  try {
-    const response = await reApi.post("/api/auth/login", loginRequest);
-    return response;
-  } catch (error) {
-    console.error("Login error:", error);
     throw error;
   }
 };

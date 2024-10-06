@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { Contact, LockKeyhole } from "lucide-react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { apiLogin } from "@api";
+import { login } from "@api";
+
+interface UserData {
+  username: string;
+  email: string;
+  role: string;
+}
 
 const SignIn: React.FC = () => {
   const navigate = useNavigate();
@@ -13,19 +19,21 @@ const SignIn: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    let response;
     try {
-      const response = await apiLogin({ username, password });
-      console.log(response.status);
-      if (response.status === 200) {
+      response = await login(username, password);
+      const userData: UserData = response.data;
+      localStorage.setItem("user", JSON.stringify(userData));
+    } catch (error) {
+      console.error("Unexpected error during login:", error);
+      toast.error("Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.");
+    } finally {
+      setLoading(false);
+      if (response?.status === 200) {
         navigate("/");
       } else {
         toast.error("Đăng nhập thất bại");
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      toast.error("Đăng nhập thất bại");
-    } finally {
-      setLoading(false);
     }
   };
 

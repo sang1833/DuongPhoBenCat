@@ -196,7 +196,7 @@ namespace be.Controllers
             string? username;
             if (token == null)
             {
-                return Unauthorized(new { message = "No token found" });
+                return Unauthorized(new { message = "Thông tin khách hàng không hợp lệ" });
             } else {
                 username = _tokenService.GetUsernameFromToken(token);
                 if (username == null)
@@ -214,10 +214,10 @@ namespace be.Controllers
             var result = await _userManager.ChangePasswordAsync(appUser, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);
             if (!result.Succeeded)
             {
-                return BadRequest(result.Errors);
+                return BadRequest(new { message = "Mật khẩu cũ không đúng" });
             }
 
-            return Ok("Password changed successfully");
+            return Ok(new { message = "Đổi mật khẩu thành công" });
         }
         
         [HttpPut("adminChangeUser/{userName}")]

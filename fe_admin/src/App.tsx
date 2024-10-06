@@ -12,7 +12,8 @@ import {
   StreetTypeCreate,
   StreetTypeDetail,
   SignInPage,
-  ProtectedRoute
+  ProtectedRoute,
+  ChangePasswordPage
 } from "@pages";
 
 const App = () => {
@@ -60,6 +61,10 @@ const App = () => {
                   <StreetCreate />
                 </MapProvider>
               )
+            },
+            {
+              path: "change-password",
+              element: <ChangePasswordPage />
             },
             {
               path: "intercept",

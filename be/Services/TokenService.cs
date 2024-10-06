@@ -65,18 +65,26 @@ namespace be.Services
         public string? GetUsernameFromToken(string token)
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            ClaimsPrincipal principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+            try
             {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = _key,
-                ValidateIssuer = true,
-                ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER"),
-                ValidateAudience = true,
-                ValidAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
-                ValidateLifetime = true
-            }, out SecurityToken securityToken);
+                ClaimsPrincipal principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = _key,
+                    ValidateIssuer = true,
+                    ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER"),
+                    ValidateAudience = true,
+                    ValidAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
+                    ValidateLifetime = false, // This allows reading expired tokens
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken securityToken);
 
-            return principal.FindFirstValue(ClaimTypes.GivenName);
+                return principal.FindFirstValue(ClaimTypes.GivenName);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }
