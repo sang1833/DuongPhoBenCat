@@ -169,6 +169,8 @@ namespace be.Controllers
 
             IList<string> roles = await _userManager.GetRolesAsync(appUser);
 
+            Response.Cookies.Delete("auth");
+
             var newAccessToken = _tokenService.CreateToken(appUser, roles);
 
             // Set new Access Token in cookie

@@ -6,11 +6,8 @@ import App from "./App.tsx";
 import "react-toastify/dist/ReactToastify.css";
 import "./css/style.css";
 import "./css/leafletConfig.css";
-import initializeApp from "./app/init";
 import i18n from "./locales/i18n";
 import store from "./app/store";
-
-initializeApp();
 
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
