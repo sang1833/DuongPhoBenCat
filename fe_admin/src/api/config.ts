@@ -23,14 +23,15 @@ reApi.interceptors.response.use(
         const response = await reApi.post("/api/auth/refreshToken");
         if (response.status === 200) {
           return reApi(originalRequest);
+        } else {
+          window.location.href = "/login";
+          return Promise.reject(error);
         }
       } catch (refreshError) {
         console.log(refreshError);
+        // window.location.href = "/login";
+        return Promise.reject(error);
       }
-
-      // If we reach here, either the refresh token request failed or returned non-200 status
-      window.location.href = "/login";
-      return Promise.reject(error);
     }
     return Promise.reject(error);
   }
