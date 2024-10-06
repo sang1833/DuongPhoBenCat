@@ -2,6 +2,7 @@ import { reApi } from "./config";
 import {
   CreateStreetRequestDto,
   CreateStreetTypeRequestDto,
+  LoginRequestDto,
   UpdateStreetRequestDto,
   UpdateStreetTypeRequestDto
 } from "./types";
@@ -13,7 +14,7 @@ export const login = async (username: string, password: string) => {
       username,
       password
     });
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Login error:", error);
     throw error;
@@ -32,7 +33,7 @@ export const adminRegister = async (
       email,
       password
     });
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Admin register error:", error);
     throw error;
@@ -42,7 +43,7 @@ export const adminRegister = async (
 export const logout = async () => {
   try {
     const response = await reApi.post("/api/auth/logout");
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Logout error:", error);
     throw error;
@@ -52,7 +53,7 @@ export const logout = async () => {
 export const refreshToken = async () => {
   try {
     const response = await reApi.post("/api/auth/refreshToken");
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Refresh token error:", error);
     throw error;
@@ -68,7 +69,7 @@ export const changePassword = async (
       currentPassword,
       newPassword
     });
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Change password error:", error);
     throw error;
@@ -87,7 +88,7 @@ export const adminChangeUser = async (
       email,
       userType
     });
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Admin change user error:", error);
     throw error;
@@ -114,7 +115,7 @@ export const adminSearchAllStreet = async (
         PageSize
       }
     });
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Admin search street error:", error);
     throw error;
@@ -124,7 +125,7 @@ export const adminSearchAllStreet = async (
 export const adminGetStreetById = async (streetId: number) => {
   try {
     const response = await reApi.get(`/api/street/${streetId}`);
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Admin get street error:", error);
     throw error;
@@ -134,7 +135,7 @@ export const adminGetStreetById = async (streetId: number) => {
 export const adminCreateStreet = async (street: CreateStreetRequestDto) => {
   try {
     const response = await reApi.post("/api/street/create", street);
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Admin create street error:", error);
     throw error;
@@ -147,7 +148,7 @@ export const adminUpdateStreet = async (
 ) => {
   try {
     const response = await reApi.put(`/api/street/${streetId}`, street);
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Admin update street error:", error);
     throw error;
@@ -157,7 +158,7 @@ export const adminUpdateStreet = async (
 export const adminDeleteStreet = async (streetId: number) => {
   try {
     const response = await reApi.delete(`/api/street/${streetId}`);
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Admin delete street error:", error);
     throw error;
@@ -167,7 +168,7 @@ export const adminDeleteStreet = async (streetId: number) => {
 export const approveStreet = async (streetId: string) => {
   try {
     const response = await reApi.put(`/api/street/approve/${streetId}`);
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Approve street error:", error);
     throw error;
@@ -177,7 +178,7 @@ export const approveStreet = async (streetId: string) => {
 export const rejectStreet = async (streetId: string) => {
   try {
     const response = await reApi.put(`/api/street/reject/${streetId}`);
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Reject street error:", error);
     throw error;
@@ -202,7 +203,7 @@ export const adminGetStreetTypes = async (
         PageSize
       }
     });
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Admin get street types error:", error);
     throw error;
@@ -212,7 +213,7 @@ export const adminGetStreetTypes = async (
 export const adminGetStreetTypeById = async (streetTypeId: number) => {
   try {
     const response = await reApi.get(`/api/streetType/${streetTypeId}`);
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Admin get street type error:", error);
     throw error;
@@ -224,7 +225,7 @@ export const adminCreateStreetType = async (
 ) => {
   try {
     const response = await reApi.post("/api/streetType", streetType);
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Admin create street type error:", error);
     throw error;
@@ -240,7 +241,7 @@ export const adminUpdateStreetType = async (
       `/api/streetType/${streetTypeId}`,
       streetType
     );
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Admin update street type error:", error);
     throw error;
@@ -250,9 +251,20 @@ export const adminUpdateStreetType = async (
 export const adminDeleteStreetType = async (streetTypeId: number) => {
   try {
     const response = await reApi.delete(`/api/streetType/${streetTypeId}`);
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Admin delete street type error:", error);
+    throw error;
+  }
+};
+
+// login
+export const apiLogin = async (loginRequest: LoginRequestDto) => {
+  try {
+    const response = await reApi.post("/api/auth/login", loginRequest);
+    return response;
+  } catch (error) {
+    console.error("Login error:", error);
     throw error;
   }
 };

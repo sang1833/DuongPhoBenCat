@@ -1,7 +1,34 @@
+import React, { useState } from "react";
 import { Contact, LockKeyhole } from "lucide-react";
-import React from "react";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { apiLogin } from "@api";
 
 const SignIn: React.FC = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await apiLogin({ username, password });
+      console.log(response.status);
+      if (response.status === 200) {
+        navigate("/");
+      } else {
+        toast.error("Đăng nhập thất bại");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Đăng nhập thất bại");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="lg:p-4 w-full h-screen flex justify-center items-center">
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -12,61 +39,61 @@ const SignIn: React.FC = () => {
                 Đăng nhập
               </h2>
 
-              <form className="w-full lg:min-w-90">
-                <div className="mb-4">
-                  <label className="mb-2.5 block font-medium text-black dark:text-white">
-                    Tên người dùng
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="email"
-                      placeholder="Nhập tên người dùng"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                    />
+              <form className="w-full lg:min-w-90" onSubmit={handleSubmit}>
+                <fieldset
+                  disabled={loading}
+                  className="flex flex-col gap-5.5 p-6.5"
+                >
+                  <div className="mb-4">
+                    <label className="mb-2.5 block font-medium text-black dark:text-white">
+                      Tên người dùng
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        autoComplete="username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                        placeholder="Nhập tên người dùng"
+                        className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      />
 
-                    <span className="absolute right-4 top-4 text-body text-opacity-80">
-                      <Contact />
-                    </span>
+                      <span className="absolute right-4 top-4 text-body text-opacity-80">
+                        <Contact />
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                <div className="mb-6">
-                  <label className="mb-2.5 block font-medium text-black dark:text-white">
-                    Nhập mật khẩu
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="password"
-                      placeholder="Ít nhất 6 ký tự, có chữ hoa và số"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                    />
+                  <div className="mb-6">
+                    <label className="mb-2.5 block font-medium text-black dark:text-white">
+                      Nhập mật khẩu
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="password"
+                        autoComplete="current-password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        placeholder="Ít nhất 6 ký tự, có chữ hoa và số"
+                        className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      />
 
-                    <span className="absolute right-4 top-4 text-body text-opacity-80">
-                      <LockKeyhole />
-                    </span>
+                      <span className="absolute right-4 top-4 text-body text-opacity-80">
+                        <LockKeyhole />
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                <div className="mb-5">
-                  <input
-                    type="submit"
-                    value="Đăng nhập"
-                    className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
-                  />
-                </div>
-
-                {/* <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
-                  Sign in with Google
-                </button> */}
-
-                {/* <div className="mt-6 text-center">
-                  <p>
-                    Không có tài khoản?{" "}
-                    <Link to="/auth/signup" className="text-primary">
-                      Sign Up
-                    </Link>
-                  </p>
-                </div> */}
+                  <div className="mb-5">
+                    <input
+                      type="submit"
+                      value="Đăng nhập"
+                      className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
+                    />
+                  </div>
+                </fieldset>
               </form>
             </div>
           </div>
