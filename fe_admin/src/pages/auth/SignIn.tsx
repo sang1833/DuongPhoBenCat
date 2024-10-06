@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Contact, LockKeyhole } from "lucide-react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { apiLogin } from "@api";
+import { login } from "@api";
 
 interface UserData {
   username: string;
@@ -21,7 +21,7 @@ const SignIn: React.FC = () => {
     setLoading(true);
     let response;
     try {
-      response = await apiLogin({ username, password });
+      response = await login(username, password);
       const userData: UserData = response.data;
       localStorage.setItem("user", JSON.stringify(userData));
     } catch (error) {

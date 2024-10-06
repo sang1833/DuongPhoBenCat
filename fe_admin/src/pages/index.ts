@@ -8,4 +8,5 @@ export { default as InterceptPage } from "./InterceptPage";
 export { default as NotFoundPage } from "./NotFoundPage";
 export { default as SignInPage } from "./auth/SignIn";
 export { default as SignUpPage } from "./auth/SignUp";
+export { default as ChangePasswordPage } from "./auth/ChangePassword";
 export { default as ProtectedRoute } from "./ProtectedRoute";

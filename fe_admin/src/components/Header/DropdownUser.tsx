@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { KeyRound, LogOut } from "lucide-react";
 import ClickOutside from "../ClickOutside";
 import UserOne from "/images/avatar/adminAvatar.png";
-import { apiLogout } from "@api";
+import { logout } from "@api";
 
 const DropdownUser = () => {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const DropdownUser = () => {
 
   async function handleLogout(): Promise<void> {
     localStorage.removeItem("user");
-    await apiLogout();
+    await logout();
     navigate("/login");
   }
 
