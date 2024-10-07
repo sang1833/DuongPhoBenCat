@@ -191,7 +191,7 @@ namespace be.Controllers
             return Ok(new { message = "Token refreshed successfully", token = newAccessToken });
         }
 
-        [HttpPost("changePassword")]
+        [HttpPut("changePassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
         {
             if(!ModelState.IsValid)
@@ -249,44 +249,72 @@ namespace be.Controllers
             return Ok(userDto);
         }
         
-        [HttpPut("adminChangeUser/{userName}")]
+        [HttpPut("adminChangeUser/{userId}")]
         [Authorize(Roles = "SupAdmin")]
-        public async Task<IActionResult> AdminChangeUser([FromRoute] string userName, [FromBody] RegisterDto registerDto)
+        public async Task<IActionResult> AdminChangeUser([FromRoute] string userId, [FromBody] AdminChangeUserDto adminChangeUserDto)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            AppUser? appUser = await _userManager.FindByNameAsync(userName);
+            if(adminChangeUserDto.Username == null && adminChangeUserDto.Email == null && adminChangeUserDto.Password == null && adminChangeUserDto.Role == null)
+                return BadRequest("No data to change");
+
+            AppUser? appUser = await _userManager.FindByIdAsync(userId);
             if (appUser == null)
             {
-                return Unauthorized("User not found");
+                return NotFound("User not found");
             }
 
-            var setEmailResult = await _userManager.SetEmailAsync(appUser, registerDto.Email);
-            if (!setEmailResult.Succeeded)
+            if (adminChangeUserDto.Email != null)
             {
-                return BadRequest(setEmailResult.Errors);
+                var setEmailResult = await _userManager.SetEmailAsync(appUser, adminChangeUserDto.Email);
+                if (!setEmailResult.Succeeded)
+                {
+                    return BadRequest(setEmailResult.Errors);
+                }
             }
 
-            var setUserNameResult = await _userManager.SetUserNameAsync(appUser, registerDto.Username);
-            if (!setUserNameResult.Succeeded)
+            if (adminChangeUserDto.Username != null)
             {
-                return BadRequest(setUserNameResult.Errors);
+                var setUserNameResult = await _userManager.SetUserNameAsync(appUser, adminChangeUserDto.Username);
+                if (!setUserNameResult.Succeeded)
+                {
+                    return BadRequest(setUserNameResult.Errors);
+                }
             }
 
-            var removePasswordResult = await _userManager.RemovePasswordAsync(appUser);
-            if (!removePasswordResult.Succeeded)
+            if (adminChangeUserDto.Password != null)
             {
-                return BadRequest(removePasswordResult.Errors);
+                var removePasswordResult = await _userManager.RemovePasswordAsync(appUser);
+                if (!removePasswordResult.Succeeded)
+                {
+                    return BadRequest(removePasswordResult.Errors);
+                }
+
+                var addPasswordResult = await _userManager.AddPasswordAsync(appUser, adminChangeUserDto.Password);
+                if (!addPasswordResult.Succeeded)
+                {
+                    return BadRequest(addPasswordResult.Errors);
+                }
             }
 
-            var addPasswordResult = await _userManager.AddPasswordAsync(appUser, registerDto.Password);
-            if (!addPasswordResult.Succeeded)
+            if (adminChangeUserDto.Role != null)
             {
-                return BadRequest(addPasswordResult.Errors);
+                var currentRoles = await _userManager.GetRolesAsync(appUser);
+                var removeRolesResult = await _userManager.RemoveFromRolesAsync(appUser, currentRoles);
+                if (!removeRolesResult.Succeeded)
+                {
+                    return BadRequest(removeRolesResult.Errors);
+                }
+
+                var addRoleResult = await _userManager.AddToRoleAsync(appUser, adminChangeUserDto.Role);
+                if (!addRoleResult.Succeeded)
+                {
+                    return BadRequest(addRoleResult.Errors);
+                }
             }
 
-            return Ok("Password changed successfully");
+            return Ok("User updated successfully");
         }
     }
 }
