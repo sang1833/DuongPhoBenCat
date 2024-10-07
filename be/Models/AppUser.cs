@@ -8,6 +8,7 @@ namespace be.Models
 {
     public class AppUser : IdentityUser
     {
-        
+        public DateTime UpdatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }
