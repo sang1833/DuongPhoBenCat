@@ -28,7 +28,7 @@ namespace be.Repositories
 
             if (!string.IsNullOrWhiteSpace(userQueryObject.UserName))
             {
-                users = users.Where(u => (u.UserName ?? "").Contains(userQueryObject.UserName));
+                users = users.Where(u => (u.UserName ?? "").ToLower().Contains(userQueryObject.UserName.ToLower()));
             }
 
             if (!string.IsNullOrWhiteSpace(userQueryObject.Role))
