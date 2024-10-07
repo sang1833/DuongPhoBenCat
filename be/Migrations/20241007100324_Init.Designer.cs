@@ -13,7 +13,7 @@ using be.Data;
 namespace be.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241003162303_Init")]
+    [Migration("20241007100324_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -55,25 +55,25 @@ namespace be.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "527c755c-9563-417a-aa48-79ef14ec20cd",
+                            Id = "115917f1-b7d9-4821-9d54-0a7563e5e4aa",
                             Name = "SupAdmin",
                             NormalizedName = "SUPADMIN"
                         },
                         new
                         {
-                            Id = "7b1cf6d4-8c84-4d97-89f7-c58f63749937",
+                            Id = "23369e29-1cc3-4de1-bee8-4815d99ed692",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "7fe6f864-03b4-485e-befb-d2adf0642155",
+                            Id = "e01c9e67-7619-42c1-be5c-4c78b3fdeb45",
                             Name = "Collab",
                             NormalizedName = "COLLAB"
                         },
                         new
                         {
-                            Id = "1e7be8ab-0997-4d22-b662-6450f915c2cc",
+                            Id = "10c5a115-b8aa-4135-b95e-53f0f5ca0f89",
                             Name = "Director",
                             NormalizedName = "DIRECTOR"
                         });
@@ -197,6 +197,11 @@ namespace be.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("now()");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -232,6 +237,11 @@ namespace be.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("now()");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)

@@ -4,11 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.Account;
 using be.Dtos.Account;
+using be.Helpers;
 using be.Interfaces;
+using be.Mappers;
 using be.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace be.Controllers
@@ -20,6 +23,7 @@ namespace be.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IUserRepository _userRepository;
         private readonly DateTimeOffset rtExpireTime = DateTime.UtcNow.AddDays(
             int.Parse(
                 Environment.GetEnvironmentVariable("REFRESH_TOKEN_EXPIRES_IN") 
@@ -27,11 +31,12 @@ namespace be.Controllers
             )
         );
 
-        public AuthController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager)
+        public AuthController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager, IUserRepository userRepository)
         {
             _userManager = userManager;
             _tokenService = tokenService;
             _signInManager = signInManager;
+            _userRepository = userRepository;
         }
 
         [HttpPost("login")]
@@ -218,6 +223,30 @@ namespace be.Controllers
             }
 
             return Ok(new { message = "Đổi mật khẩu thành công" });
+        }
+
+        [HttpGet("getAllUser")]
+        [Authorize(Roles = "SupAdmin")]
+        public async Task<IActionResult> GetAllUser([FromQuery] UserQueryObject userQueryObject)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            (List<AdminGetUserDto> userDtos, int TotalPages) = await _userRepository.GetAllUser(userQueryObject);
+
+            return Ok(new { Users = userDtos, TotalPages = TotalPages });
+        }
+
+        [HttpGet("getUserById/{id}")]
+        [Authorize(Roles = "SupAdmin")]
+        public async Task<IActionResult> GetUserById([FromRoute] string id)
+        {
+            AdminGetUserDto? userDto = await _userRepository.GetUserById(id);
+            if (userDto == null)
+            {
+                return NotFound("User not found");
+            }
+            return Ok(userDto);
         }
         
         [HttpPut("adminChangeUser/{userName}")]
