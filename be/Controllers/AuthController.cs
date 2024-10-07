@@ -191,7 +191,7 @@ namespace be.Controllers
             return Ok(new { message = "Token refreshed successfully", token = newAccessToken });
         }
 
-        [HttpPost("changePassword")]
+        [HttpPut("changePassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
         {
             if(!ModelState.IsValid)
