@@ -52,25 +52,25 @@ namespace be.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "96373894-7442-4e3d-8dc1-f0121a7ca602",
+                            Id = "115917f1-b7d9-4821-9d54-0a7563e5e4aa",
                             Name = "SupAdmin",
                             NormalizedName = "SUPADMIN"
                         },
                         new
                         {
-                            Id = "59354e49-7157-4c94-96b6-27a7e2c0dc6d",
+                            Id = "23369e29-1cc3-4de1-bee8-4815d99ed692",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "4604fcda-4854-4de2-ad70-475a76e0e48b",
+                            Id = "e01c9e67-7619-42c1-be5c-4c78b3fdeb45",
                             Name = "Collab",
                             NormalizedName = "COLLAB"
                         },
                         new
                         {
-                            Id = "1db4a71c-adaf-4ba9-b666-f1605dc10e4b",
+                            Id = "10c5a115-b8aa-4135-b95e-53f0f5ca0f89",
                             Name = "Director",
                             NormalizedName = "DIRECTOR"
                         });

@@ -37,6 +37,8 @@ namespace be.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "now()"),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -258,10 +260,10 @@ namespace be.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "1e7be8ab-0997-4d22-b662-6450f915c2cc", null, "Director", "DIRECTOR" },
-                    { "527c755c-9563-417a-aa48-79ef14ec20cd", null, "SupAdmin", "SUPADMIN" },
-                    { "7b1cf6d4-8c84-4d97-89f7-c58f63749937", null, "Admin", "ADMIN" },
-                    { "7fe6f864-03b4-485e-befb-d2adf0642155", null, "Collab", "COLLAB" }
+                    { "10c5a115-b8aa-4135-b95e-53f0f5ca0f89", null, "Director", "DIRECTOR" },
+                    { "115917f1-b7d9-4821-9d54-0a7563e5e4aa", null, "SupAdmin", "SUPADMIN" },
+                    { "23369e29-1cc3-4de1-bee8-4815d99ed692", null, "Admin", "ADMIN" },
+                    { "e01c9e67-7619-42c1-be5c-4c78b3fdeb45", null, "Collab", "COLLAB" }
                 });
 
             migrationBuilder.InsertData(

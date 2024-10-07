@@ -154,6 +154,7 @@ builder.Services.AddScoped<IStreetRepository, StreetRepository>();
 builder.Services.AddScoped<IStreetHistoryRepository, StreetHistoryRepository>();
 builder.Services.AddScoped<IStreetImageRepository, StreetImageRepository>();
 builder.Services.AddScoped<IStreetTypeRepository, StreetTypeRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IImageUploadService, ImageUploadService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
