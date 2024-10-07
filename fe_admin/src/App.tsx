@@ -13,7 +13,8 @@ import {
   StreetTypeDetail,
   SignInPage,
   ProtectedRoute,
-  ChangePasswordPage
+  ChangePasswordPage,
+  ManageUser
 } from "@pages";
 
 const App = () => {
@@ -61,6 +62,10 @@ const App = () => {
                   <StreetCreate />
                 </MapProvider>
               )
+            },
+            {
+              path: "user",
+              element: <ManageUser />
             },
             {
               path: "change-password",

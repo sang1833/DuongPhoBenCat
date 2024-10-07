@@ -74,6 +74,16 @@ namespace be.Data
                 new StreetType {Id = 2, StreetTypeName = "Đường nhỏ"},
                 new StreetType {Id = 3, StreetTypeName = "Hẻm"}
             );
+
+            builder.Entity<AppUser>()
+                .Property(s => s.CreatedDate)
+                .ValueGeneratedOnAdd()
+                .HasDefaultValueSql("now()");
+            
+            builder.Entity<AppUser>()
+                .Property(s => s.UpdatedDate)
+                .ValueGeneratedOnAddOrUpdate()
+                .HasDefaultValueSql("now()");
         }
 
         public DbSet<Street> Streets { get; set; }

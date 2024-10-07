@@ -20,5 +20,6 @@ export { default as GoogleIcon } from "./Icons/GoogleIcon";
 // tables
 export { default as TableThree } from "./Tables/TableThree";
 export { default as TableThreeSType } from "./Tables/TableThreeSType";
+export { default as TableThreeUser } from "./Tables/TableThreeUser";
 // street
 export { default as StreetImage } from "./Street/StreetImage";
