@@ -15,7 +15,8 @@ import {
   ProtectedRoute,
   ChangePasswordPage,
   ManageUser,
-  UserCreate
+  UserCreate,
+  UserDetail
 } from "@pages";
 
 const App = () => {
@@ -71,6 +72,10 @@ const App = () => {
             {
               path: "user/create",
               element: <UserCreate />
+            },
+            {
+              path: "user/detail/:userId",
+              element: <UserDetail />
             },
             {
               path: "change-password",

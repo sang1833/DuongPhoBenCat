@@ -173,9 +173,7 @@ const TableThree = () => {
                 {userList?.map((user, key) => (
                   <tr
                     key={key}
-                    onClick={() =>
-                      navigate(`/map/street-type-detail/${user.id}`)
-                    }
+                    onClick={() => navigate(`/user/detail/${user.id}`)}
                     className="hover:bg-gray dark:hover:bg-black"
                   >
                     <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
