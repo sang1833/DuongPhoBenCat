@@ -78,18 +78,56 @@ export const changePassword = async (
 export const adminChangeUser = async (
   username: string,
   email: string,
+  password: string,
   userType: string,
-  userName: string
+  userId: string
 ) => {
   try {
-    const response = await reApi.put(`/api/auth/adminChangeUser/${userName}`, {
+    const response = await reApi.put(`/api/auth/adminChangeUser/${userId}`, {
       username,
       email,
+      password,
       userType
     });
     return response;
   } catch (error) {
     console.error("Admin change user error:", error);
+    throw error;
+  }
+};
+
+export const getAllUser = async (
+  UserName?: string,
+  Role?: string,
+  SortBy?: string,
+  IsDescending?: boolean,
+  PageNumber?: number,
+  PageSize?: number
+) => {
+  try {
+    const response = await reApi.get("/api/auth/getAllUser", {
+      params: {
+        UserName,
+        Role,
+        SortBy,
+        IsDescending,
+        PageNumber,
+        PageSize
+      }
+    });
+    return response;
+  } catch (error) {
+    console.error("Admin get all user error:", error);
+    throw error;
+  }
+};
+
+export const getUserById = async (userId: string) => {
+  try {
+    const response = await reApi.get(`/api/auth/getUserById/${userId}`);
+    return response;
+  } catch (error) {
+    console.error("Admin get user by id error:", error);
     throw error;
   }
 };
