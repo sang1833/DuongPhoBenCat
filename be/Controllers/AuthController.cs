@@ -108,10 +108,10 @@ namespace be.Controllers
                 };
 
                 if(await _userManager.FindByNameAsync(registerDto.Username) != null)
-                    return BadRequest("Username already exists");
+                    return BadRequest(new { message = "Tên đăng nhập đã tồn tại" });
 
                 if(await _userManager.FindByEmailAsync(registerDto.Email) != null)
-                    return BadRequest("Email already exists");
+                    return BadRequest(new { message = "Email đã tồn tại" });
 
                 IdentityResult createdUser = await _userManager.CreateAsync(appUser, registerDto.Password);
 
@@ -263,18 +263,18 @@ namespace be.Controllers
                 return BadRequest(ModelState);
 
             if(adminChangeUserDto.Username == null && adminChangeUserDto.Email == null && adminChangeUserDto.Password == null && adminChangeUserDto.Role == null)
-                return BadRequest("No data to change");
+                return BadRequest(new { message = "Dữ liệu đầu vào trống" });
 
             AppUser? appUser = await _userManager.FindByIdAsync(userId);
             if (appUser == null)
             {
-                return NotFound("User not found");
+                return NotFound(new { message = "Không tìm thấy người dùng" });
             }
 
             if (adminChangeUserDto.Email != null)
             {
                 if(await _userManager.FindByEmailAsync(adminChangeUserDto.Email) != null && adminChangeUserDto.Email != appUser.Email)
-                    return BadRequest("Email already exists");
+                    return BadRequest(new { message = "Email đã tồn tại" });
 
                 var setEmailResult = await _userManager.SetEmailAsync(appUser, adminChangeUserDto.Email);
                 if (!setEmailResult.Succeeded)
@@ -286,7 +286,7 @@ namespace be.Controllers
             if (adminChangeUserDto.Username != null)
             {
                 if(await _userManager.FindByNameAsync(adminChangeUserDto.Username) != null && adminChangeUserDto.Username != appUser.UserName)
-                    return BadRequest("Username already exists");
+                    return BadRequest(new { message = "Tên đăng nhập đã tồn tại" });
 
                 var setUserNameResult = await _userManager.SetUserNameAsync(appUser, adminChangeUserDto.Username);
                 if (!setUserNameResult.Succeeded)
@@ -326,7 +326,7 @@ namespace be.Controllers
                 }
             }
 
-            return Ok("User updated successfully");
+            return Ok(new { message = "Cập nhật người dùng thành công" });
         }
 
         [HttpDelete("deleteUser/{userId}")]
