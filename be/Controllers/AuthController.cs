@@ -94,9 +94,8 @@ namespace be.Controllers
             }
         }
 
-        // [HttpPost("adminRegister/{userType}"), Authorize(Roles = "SupAdmin")]
-        [HttpPost("adminRegister/{userType}")]
-        public async Task<IActionResult> Register([FromRoute] string userType, [FromBody]RegisterDto registerDto)
+        [HttpPost("adminRegister/{role}"), Authorize(Roles = "SupAdmin")]
+        public async Task<IActionResult> Register([FromRoute] string role, [FromBody]RegisterDto registerDto)
         {
             try {
                 if(!ModelState.IsValid)
@@ -107,7 +106,13 @@ namespace be.Controllers
                     UserName = registerDto.Username,
                     Email = registerDto.Email
                 };
-                
+
+                if(await _userManager.FindByNameAsync(registerDto.Username) != null)
+                    return BadRequest("Username already exists");
+
+                if(await _userManager.FindByEmailAsync(registerDto.Email) != null)
+                    return BadRequest("Email already exists");
+
                 IdentityResult createdUser = await _userManager.CreateAsync(appUser, registerDto.Password);
 
                 if (!createdUser.Succeeded)
@@ -115,7 +120,7 @@ namespace be.Controllers
                     return BadRequest(createdUser.Errors);
                 }
 
-                IdentityResult roleResult = await _userManager.AddToRoleAsync(appUser, userType);
+                IdentityResult roleResult = await _userManager.AddToRoleAsync(appUser, role);
                 if(roleResult.Succeeded){
                     return Ok(
                         new NewUserDto {
@@ -192,6 +197,7 @@ namespace be.Controllers
         }
 
         [HttpPut("changePassword")]
+        [Authorize]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
         {
             if(!ModelState.IsValid)
@@ -267,6 +273,9 @@ namespace be.Controllers
 
             if (adminChangeUserDto.Email != null)
             {
+                if(await _userManager.FindByEmailAsync(adminChangeUserDto.Email) != null && adminChangeUserDto.Email != appUser.Email)
+                    return BadRequest("Email already exists");
+
                 var setEmailResult = await _userManager.SetEmailAsync(appUser, adminChangeUserDto.Email);
                 if (!setEmailResult.Succeeded)
                 {
@@ -276,6 +285,9 @@ namespace be.Controllers
 
             if (adminChangeUserDto.Username != null)
             {
+                if(await _userManager.FindByNameAsync(adminChangeUserDto.Username) != null && adminChangeUserDto.Username != appUser.UserName)
+                    return BadRequest("Username already exists");
+
                 var setUserNameResult = await _userManager.SetUserNameAsync(appUser, adminChangeUserDto.Username);
                 if (!setUserNameResult.Succeeded)
                 {
@@ -315,6 +327,25 @@ namespace be.Controllers
             }
 
             return Ok("User updated successfully");
+        }
+
+        [HttpDelete("deleteUser/{userId}")]
+        [Authorize(Roles = "SupAdmin")]
+        public async Task<IActionResult> DeleteUser([FromRoute] string userId)
+        {
+            AppUser? appUser = await _userManager.FindByIdAsync(userId);
+            if (appUser == null)
+            {
+                return NotFound("User not found");
+            }
+
+            IdentityResult deleteResult = await _userManager.DeleteAsync(appUser);
+            if (!deleteResult.Succeeded)
+            {
+                return BadRequest(deleteResult.Errors);
+            }
+
+            return Ok("User deleted successfully");
         }
     }
 }
