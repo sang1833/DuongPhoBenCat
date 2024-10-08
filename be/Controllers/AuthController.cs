@@ -191,6 +191,7 @@ namespace be.Controllers
         }
 
         [HttpPut("changePassword")]
+        [Authorize]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
         {
             if(!ModelState.IsValid)
