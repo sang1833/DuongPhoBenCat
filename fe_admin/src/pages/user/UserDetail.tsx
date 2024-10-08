@@ -1,5 +1,5 @@
-import React, { useReducer } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useReducer } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   BackButton,
@@ -7,7 +7,7 @@ import {
   Input,
   OutlinedNormalButton
 } from "@components";
-import { adminRegister } from "@api";
+import { getUserById, adminChangeUser } from "@api";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 
@@ -63,9 +63,10 @@ const initialState: State = {
   loading: false
 };
 
-const PostUserPage: React.FC = () => {
+const ChangeUserPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { userId } = useParams();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const validateForm = () => {
@@ -73,37 +74,61 @@ const PostUserPage: React.FC = () => {
     if (!state.userName.trim())
       newErrors.userName = "Tên người dùng không được để trống";
     if (!state.email.trim()) newErrors.email = "Email không được để trống";
-    if (!state.password.trim())
-      newErrors.password = "Mật khẩu không được để trống";
-    if (!state.confirmPassword.trim())
-      newErrors.confirmPassword = "Mật khẩu xác nhận không được để trống";
     if (!state.role.trim()) newErrors.role = "Vai trò không được để trống";
     dispatch({ type: "SET_ERRORS", errors: newErrors });
     return Object.keys(newErrors).length === 0;
   };
 
+  useEffect(() => {
+    const handleGetUser = async () => {
+      const response = await getUserById(userId as string);
+      if (response.status === 200) {
+        dispatch({
+          type: "SET_FIELD",
+          field: "userName",
+          value: response.data.userName
+        });
+        dispatch({
+          type: "SET_FIELD",
+          field: "email",
+          value: response.data.email
+        });
+        dispatch({
+          type: "SET_FIELD",
+          field: "role",
+          value: response.data.roles[0]
+        });
+      }
+    };
+
+    handleGetUser();
+  }, [userId]);
+
   const handlePostUser = async () => {
     dispatch({ type: "SET_LOADING", loading: true });
-    if (state.password !== state.confirmPassword) {
+    if (state.password !== state.confirmPassword && state.password) {
       toast.error("Mật khẩu xác nhận không khớp");
       dispatch({ type: "SET_LOADING", loading: false });
       return;
     }
 
     try {
-      const response = await adminRegister(
-        state.userName,
-        state.email,
-        state.password,
-        state.role
-      );
+      const response = await adminChangeUser(userId as string, {
+        username: state.userName,
+        email: state.email,
+        role: state.role,
+        ...(state.password && { password: state.password })
+      });
       if (response.status === 200 || response.status === 201) {
-        toast.success("Tạo người dùng thành công");
+        toast.success("Chỉnh sửa người dùng thành công");
         navigate("/user");
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        toast.error("Tạo người dùng thất bại", error.response?.data.message);
+        toast.error(
+          "Chỉnh sửa người dùng thất bại",
+          error.response?.data.message
+        );
       }
     }
     dispatch({ type: "SET_LOADING", loading: false });
@@ -119,7 +144,7 @@ const PostUserPage: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <BackButton onClick={() => navigate(-1)} />
-      <Breadcrumb pageName="Tạo người dùng mới" />
+      <Breadcrumb pageName="Chỉnh sửa người dùng" />
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <form onSubmit={handleSubmit}>
           <fieldset
@@ -140,8 +165,9 @@ const PostUserPage: React.FC = () => {
                       value: e.target.value
                     })
                   }
-                  required
                   error={state.errors.userName}
+                  isAutoFill={false}
+                  required
                 />
               </div>
             </div>
@@ -159,8 +185,9 @@ const PostUserPage: React.FC = () => {
                       value: e.target.value
                     })
                   }
-                  required
                   error={state.errors.email}
+                  isAutoFill={false}
+                  required
                 />
               </div>
             </div>
@@ -179,7 +206,7 @@ const PostUserPage: React.FC = () => {
                       value: e.target.value
                     })
                   }
-                  required
+                  isAutoFill={false}
                   error={state.errors.password}
                 />
               </div>
@@ -199,7 +226,7 @@ const PostUserPage: React.FC = () => {
                       value: e.target.value
                     })
                   }
-                  required
+                  isAutoFill={false}
                   error={state.errors.confirmPassword}
                 />
               </div>
@@ -242,6 +269,7 @@ const PostUserPage: React.FC = () => {
                       <option
                         key={index}
                         value={option.value}
+                        selected={option.value === state.role}
                         className="text-black dark:text-white"
                       >
                         {option.label}
@@ -297,4 +325,4 @@ const PostUserPage: React.FC = () => {
   );
 };
 
-export default PostUserPage;
+export default ChangeUserPage;

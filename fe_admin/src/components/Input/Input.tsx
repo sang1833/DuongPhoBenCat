@@ -9,6 +9,7 @@ const Input: React.FC<{
   disabled?: boolean;
   error?: string;
   className?: string;
+  isAutoFill?: boolean;
 }> = ({
   title,
   placeholder,
@@ -19,7 +20,8 @@ const Input: React.FC<{
   required,
   disabled,
   error,
-  className
+  className,
+  isAutoFill
 }) => {
   return (
     <div>
@@ -31,6 +33,7 @@ const Input: React.FC<{
         type={type}
         placeholder={placeholder}
         disabled={disabled}
+        autoComplete={isAutoFill ? "on" : "off"}
         value={value}
         onChange={onChange}
         className={

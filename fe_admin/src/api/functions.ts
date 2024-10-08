@@ -75,20 +75,35 @@ export const changePassword = async (
   }
 };
 
+interface ChangeUserRequestBody {
+  username: string;
+  email: string;
+  role: string;
+  password?: string;
+}
+
 export const adminChangeUser = async (
-  username: string,
-  email: string,
-  password: string,
-  userType: string,
-  userId: string
+  userId: string,
+  userData: {
+    username: string;
+    email: string;
+    role: string;
+    password?: string;
+  }
 ) => {
   try {
-    const response = await reApi.put(`/api/auth/adminChangeUser/${userId}`, {
-      username,
-      email,
-      password,
-      userType
-    });
+    const requestBody: ChangeUserRequestBody = {
+      username: userData.username,
+      email: userData.email,
+      role: userData.role
+    };
+    if (userData.password) {
+      requestBody.password = userData.password;
+    }
+    const response = await reApi.put(
+      `/api/auth/adminChangeUser/${userId}`,
+      requestBody
+    );
     return response;
   } catch (error) {
     console.error("Admin change user error:", error);

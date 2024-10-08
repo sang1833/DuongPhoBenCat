@@ -12,3 +12,4 @@ export { default as ChangePasswordPage } from "./auth/ChangePassword";
 export { default as ProtectedRoute } from "./ProtectedRoute";
 export { default as ManageUser } from "./user/ManageUser";
 export { default as UserCreate } from "./user/UserCreate";
+export { default as UserDetail } from "./user/UserDetail";
