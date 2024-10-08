@@ -94,9 +94,8 @@ namespace be.Controllers
             }
         }
 
-        // [HttpPost("adminRegister/{userType}"), Authorize(Roles = "SupAdmin")]
-        [HttpPost("adminRegister/{userType}")]
-        public async Task<IActionResult> Register([FromRoute] string userType, [FromBody]RegisterDto registerDto)
+        [HttpPost("adminRegister/{role}"), Authorize(Roles = "SupAdmin")]
+        public async Task<IActionResult> Register([FromRoute] string role, [FromBody]RegisterDto registerDto)
         {
             try {
                 if(!ModelState.IsValid)
@@ -115,7 +114,7 @@ namespace be.Controllers
                     return BadRequest(createdUser.Errors);
                 }
 
-                IdentityResult roleResult = await _userManager.AddToRoleAsync(appUser, userType);
+                IdentityResult roleResult = await _userManager.AddToRoleAsync(appUser, role);
                 if(roleResult.Succeeded){
                     return Ok(
                         new NewUserDto {
