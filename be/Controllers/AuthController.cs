@@ -315,5 +315,24 @@ namespace be.Controllers
 
             return Ok("User updated successfully");
         }
+
+        [HttpDelete("deleteUser/{userId}")]
+        [Authorize(Roles = "SupAdmin")]
+        public async Task<IActionResult> DeleteUser([FromRoute] string userId)
+        {
+            AppUser? appUser = await _userManager.FindByIdAsync(userId);
+            if (appUser == null)
+            {
+                return NotFound("User not found");
+            }
+
+            IdentityResult deleteResult = await _userManager.DeleteAsync(appUser);
+            if (!deleteResult.Succeeded)
+            {
+                return BadRequest(deleteResult.Errors);
+            }
+
+            return Ok("User deleted successfully");
+        }
     }
 }
