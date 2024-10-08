@@ -5,8 +5,8 @@ import { parseISO, format } from "date-fns";
 import { FileX2, SquarePen } from "lucide-react";
 import { toast } from "react-toastify";
 import { ContainedNormalButton, OutlinedNormalButton } from "@components";
-import { IStreetType, IStreetTypeList } from "@types";
-import { adminDeleteStreetType, adminGetStreetTypes } from "@api";
+import { IUser, IUserList } from "@types";
+import { adminDeleteUser, getAllUser } from "@api";
 import { StreetListContext } from "@contexts";
 import { closeModal, openModal } from "../Features/ModalSlice";
 import SearchBar from "./SearchBar";
@@ -17,7 +17,7 @@ const TableThree = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { filter } = useContext(StreetListContext);
-  const [streetTypeList, setStreetTypeList] = useState<IStreetType[]>();
+  const [userList, setUserList] = useState<IUser[]>();
   const [search, setSearch] = useState<string>("");
   const [isDesc, setIsDesc] = useState<boolean>(true);
   const [sortBy, setSortBy] = useState<"createdDate" | "updatedDate">(
@@ -30,21 +30,18 @@ const TableThree = () => {
   useEffect(() => {
     async function fetchStreetList() {
       try {
-        const response = await adminGetStreetTypes(
+        const response = await getAllUser(
           search,
+          "",
           sortBy,
           isDesc,
           currentPage,
           itemsPerPage
         );
-        setStreetTypeList(
-          (response.data as unknown as IStreetTypeList)?.streetTypes
-        );
-        setTotalPages(
-          (response.data as unknown as IStreetTypeList)?.totalPages || 0
-        );
+        setUserList((response.data as unknown as IUserList)?.users);
+        setTotalPages((response.data as unknown as IUserList)?.totalPages || 0);
       } catch (error) {
-        console.error("Error fetching streetType list:", error);
+        console.error("Error fetching user list:", error);
       }
     }
 
@@ -61,33 +58,31 @@ const TableThree = () => {
     }
   };
 
-  const handleDeleteSType = async (id: number) => {
+  const handleDeleteUser = async (id: string) => {
     try {
-      const respone = await adminDeleteStreetType(id);
+      const respone = await adminDeleteUser(id);
       if (respone.status === 200 || respone.status === 204) {
-        setStreetTypeList((prev) =>
-          prev?.filter((streetType) => streetType.id !== id)
-        );
-        toast.success("Xoá loại đường thành công");
+        setUserList((prev) => prev?.filter((user) => user.id !== id));
+        toast.success("Xoá người dùng thành công");
       }
     } catch (error) {
       console.error("Error deleting streetType:", error);
-      toast.error("Xoá loại đường thất bại");
+      toast.error("Xoá người dùng thất bại");
     }
   };
 
-  const handleOpenModal = (deleteId: number) => {
+  const handleOpenModal = (deleteId: string) => {
     dispatch(
       openModal({
-        title: "Xoá loại đường",
+        title: "Xoá người dùng",
         content: (
           <div>
-            <h3>Bạn có chắc muốn xoá loại đường này?</h3>
+            <h3>Bạn có chắc muốn xoá người dùng này?</h3>
             <div className="flex justify-center items-center gap-3 mt-5">
               <ContainedNormalButton
                 color="primary"
                 onClick={() => {
-                  handleDeleteSType(deleteId);
+                  handleDeleteUser(deleteId);
                   dispatch(closeModal());
                 }}
               >
@@ -116,18 +111,18 @@ const TableThree = () => {
           <ContainedNormalButton
             color="primary"
             className=" max-h-12"
-            onClick={() => navigate("/map/street-type-create")}
+            onClick={() => navigate("/user/create")}
           >
-            {"Thêm tuyến đường"}
+            {"Thêm người dùng"}
           </ContainedNormalButton>
         </div>
         <table className="w-full table-auto">
-          {!streetTypeList && (
+          {!userList && (
             <thead className="flex justify-center items-center h-20">
               <p className="text-black dark:text-white">Đang tải dữ liệu...</p>
             </thead>
           )}
-          {streetTypeList?.length === 0 ? (
+          {userList?.length === 0 ? (
             <thead className="flex justify-center items-center h-20">
               <p className="text-black dark:text-white">Không có dữ liệu</p>
             </thead>
@@ -139,7 +134,13 @@ const TableThree = () => {
                     STT
                   </th>
                   <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
-                    Tên loại đường
+                    Tên người dùng
+                  </th>
+                  <th className="min-w-[140px] py-4 px-4 font-medium text-black dark:text-white">
+                    Email
+                  </th>
+                  <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
+                    Loại người dùng
                   </th>
                   <th
                     onClick={() => handleSort("createdDate")}
@@ -169,11 +170,11 @@ const TableThree = () => {
                 </tr>
               </thead>
               <tbody>
-                {streetTypeList?.map((packageItem, key) => (
+                {userList?.map((user, key) => (
                   <tr
                     key={key}
                     onClick={() =>
-                      navigate(`/map/street-type-detail/${packageItem.id}`)
+                      navigate(`/map/street-type-detail/${user.id}`)
                     }
                     className="hover:bg-gray dark:hover:bg-black"
                   >
@@ -184,25 +185,29 @@ const TableThree = () => {
                     </td>
                     <td className="max-w-[220px] border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <p className="text-black dark:text-white truncate">
-                        {packageItem.streetTypeName}
+                        {user.userName}
+                      </p>
+                    </td>
+                    <td className="max-w-[220px] border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                      <p className="text-black dark:text-white truncate">
+                        {user.email}
+                      </p>
+                    </td>
+                    <td className="max-w-[220px] border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                      <p className="text-black dark:text-white truncate">
+                        {user.roles[0]}
                       </p>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <p className="text-black dark:text-white">
-                        {packageItem.createdDate &&
-                          format(
-                            parseISO(packageItem.createdDate),
-                            "dd-MM-yyyy"
-                          )}
+                        {user.createdDate &&
+                          format(parseISO(user.createdDate), "dd-MM-yyyy")}
                       </p>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <p className="text-black dark:text-white">
-                        {packageItem.updatedDate &&
-                          format(
-                            parseISO(packageItem.updatedDate),
-                            "dd-MM-yyyy"
-                          )}
+                        {user.updatedDate &&
+                          format(parseISO(user.updatedDate), "dd-MM-yyyy")}
                       </p>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
@@ -214,7 +219,7 @@ const TableThree = () => {
                           className="z-9999 text-red-700 hover:text-red-500"
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleOpenModal(packageItem.id);
+                            handleOpenModal(user.id);
                           }}
                         >
                           <FileX2 />

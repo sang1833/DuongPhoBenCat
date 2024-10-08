@@ -24,10 +24,10 @@ export const adminRegister = async (
   username: string,
   email: string,
   password: string,
-  userType: string
+  role: string
 ) => {
   try {
-    const response = await reApi.post(`/api/auth/adminRegister/${userType}`, {
+    const response = await reApi.post(`/api/auth/adminRegister/${role}`, {
       username,
       email,
       password
@@ -128,6 +128,16 @@ export const getUserById = async (userId: string) => {
     return response;
   } catch (error) {
     console.error("Admin get user by id error:", error);
+    throw error;
+  }
+};
+
+export const adminDeleteUser = async (userId: string) => {
+  try {
+    const response = await reApi.delete(`/api/auth/deleteUser/${userId}`);
+    return response;
+  } catch (error) {
+    console.error("Admin delete user error:", error);
     throw error;
   }
 };
@@ -285,7 +295,7 @@ export const adminUpdateStreetType = async (
   }
 };
 
-export const adminDeleteStreetType = async (streetTypeId: number) => {
+export const adminDeleteStreetType = async (streetTypeId: string) => {
   try {
     const response = await reApi.delete(`/api/streetType/${streetTypeId}`);
     return response;
