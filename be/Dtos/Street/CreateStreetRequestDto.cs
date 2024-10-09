@@ -1,3 +1,4 @@
+using be.Dtos.StreetHistory;
 using be.Dtos.StreetImage;
 using System.ComponentModel.DataAnnotations;
 
@@ -15,5 +16,6 @@ namespace be.Dtos
         public GeoJsonLineStringDto? Route { get; set; } = new GeoJsonLineStringDto([]);
         public GeoJsonLineStringDto? WayPoints { get; set; } = new GeoJsonLineStringDto([]);
         public List<CreateStreetImageRequestDto>? StreetImages { get; set; }
+        public List<CreateStreetHistoryRequestDto>? StreetHistories { get; set; }
     }
 }

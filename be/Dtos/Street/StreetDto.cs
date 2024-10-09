@@ -26,7 +26,7 @@ namespace be.Dtos
         public bool IsApproved { get; set; }
         public LineString? Route { get; set; }
         public LineString? WayPoints { get; set; }
-        public List<StreetHistoryDto>? Histories { get; set; }
+        public List<HistoryInStreetDto>? Histories { get; set; }
         public List<ImageInStreetDto>? Images { get; set; }
     }
 }

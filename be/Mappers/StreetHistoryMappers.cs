@@ -19,7 +19,16 @@ namespace be.Mappers
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
                 StreetId = StreetId,
+            };
+        }
 
+        public static HistoryInStreetDto ToHistoryInStreetDto(this StreetHistory streetHistoryModel)
+        {
+            return new HistoryInStreetDto
+            {
+                Id = streetHistoryModel.Id,
+                Period = streetHistoryModel.Period,
+                Description = streetHistoryModel.Description,
             };
         }
 
