@@ -11,9 +11,9 @@ namespace be.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        public string HistoryName { get; set; } = "";
-        [DataType(DataType.MultilineText)]
-        public string? Content { get; set; } = "";
+        public string Period { get; set; } = "";
+        [DataType(DataType.Html)]
+        public string Description { get; set; } = "";
         public DateTime UpdatedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         [Required]
