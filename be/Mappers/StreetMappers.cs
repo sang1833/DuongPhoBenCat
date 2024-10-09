@@ -40,7 +40,7 @@ namespace be.Mappers
                 IsApproved = street.IsApproved,
                 Route = street.Route,
                 WayPoints = street.WayPoints,
-                Histories = street.Histories.Select(c => c.ToStreetHistoryDto()).ToList(),
+                Histories = street.Histories.Select(c => c.ToHistoryInStreetDto()).ToList(),
                 Images = street.Images.Select(c => c.ToImageInStreetDto()).ToList()
             };
         }

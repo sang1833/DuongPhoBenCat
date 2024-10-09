@@ -1,5 +1,6 @@
 using be.Dtos;
 using be.Dtos.Street;
+using be.Dtos.StreetHistory;
 using be.Dtos.StreetImage;
 using be.Helpers;
 using be.Interfaces;
@@ -129,6 +130,21 @@ namespace be.Controllers
                     }
                 }
             }
+            
+            if (streetDto != null && streetDto.StreetHistories != null)
+            {
+                foreach (CreateStreetHistoryRequestDto streetHistory in streetDto.StreetHistories)
+                {
+                    try
+                    {
+                        await _streetHistoryRepo.CreateAsync(streetHistory.ToStreetHistoryFromCreateDto(createdStreet.Id));
+                    }
+                    catch (Exception e)
+                    {
+                        return BadRequest(new { message = $"Error when create history: {streetHistory.Period}, Decription: ", e.Message });
+                    }
+                }
+            }
 
             return CreatedAtAction(nameof(GetById), new { id = createdStreet.Id }, createdStreet.ToStreetDto());
         }
@@ -192,6 +208,26 @@ namespace be.Controllers
             updatedStreet.IsApproved = User.IsInRole("Admin") || User.IsInRole("SupAdmin");
 
             updatedStreet = await _streetRepo.UpdateAsync(updatedStreet, id);
+
+            if (updatedStreet == null)
+            {
+                return NotFound();
+            }
+
+            if (streetDto != null && streetDto.StreetHistories != null)
+            {
+                foreach (CreateStreetHistoryRequestDto streetHistory in streetDto.StreetHistories)
+                {
+                    try
+                    {
+                        await _streetHistoryRepo.CreateAsync(streetHistory.ToStreetHistoryFromCreateDto(updatedStreet.Id));
+                    }
+                    catch (Exception e)
+                    {
+                        return BadRequest(new { message = $"Error when create history: {streetHistory.Period}, Decription: ", e.Message });
+                    }
+                }
+            }
 
             List<StreetImage> existingImages = await _streetImageRepo.GetImagesByStreetIdAsync(id);
             List<CreateStreetImageRequestDto> newStreetImages = streetDto?.StreetImages ?? new List<CreateStreetImageRequestDto>();
