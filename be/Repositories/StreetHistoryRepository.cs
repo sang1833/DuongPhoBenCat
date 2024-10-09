@@ -21,8 +21,8 @@ namespace be.Repositories
         {
             StreetHistory newStreetHistory = new StreetHistory
             {
-                HistoryName = streetHistory.HistoryName,
-                Content = streetHistory.Content,
+                Period = streetHistory.Period,
+                Description = streetHistory.Description,
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
                 StreetId = streetHistory.StreetId
@@ -70,8 +70,8 @@ namespace be.Repositories
                 return null;
             }
 
-            existingStreetHistory.HistoryName = streetHistoryModel.HistoryName;
-            existingStreetHistory.Content = streetHistoryModel.Content;
+            existingStreetHistory.Period = streetHistoryModel.Period;
+            existingStreetHistory.Description = streetHistoryModel.Description;
             existingStreetHistory.UpdatedDate = DateTime.Now;
 
             await _context.SaveChangesAsync();

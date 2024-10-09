@@ -14,8 +14,8 @@ namespace be.Mappers
         {
             return new StreetHistory
             {
-                HistoryName = dto.HistoryName,
-                Content = dto.Content,
+                Period = dto.Period,
+                Description = dto.Description,
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
                 StreetId = StreetId,
@@ -28,8 +28,8 @@ namespace be.Mappers
             return new StreetHistoryDto
             {
                 Id = streetHistoryModel.Id,
-                HistoryName = streetHistoryModel.HistoryName,
-                Content = streetHistoryModel.Content,
+                Period = streetHistoryModel.Period,
+                Description = streetHistoryModel.Description,
                 UpdatedDate = streetHistoryModel.UpdatedDate,
                 CreatedDate = streetHistoryModel.CreatedDate,
                 StreetId = streetHistoryModel.StreetId
@@ -40,8 +40,8 @@ namespace be.Mappers
         {
             return new StreetHistory
             {
-                HistoryName = dto.HistoryName,
-                Content = dto.Content,
+                Period = dto.Period,
+                Description = dto.Description,
                 UpdatedDate = DateTime.Now
             };
         }

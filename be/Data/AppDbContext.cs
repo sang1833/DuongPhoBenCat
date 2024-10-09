@@ -49,6 +49,16 @@ namespace be.Data
                 .HasForeignKey(si => si.StreetId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<StreetHistory>()
+                .Property(sh => sh.CreatedDate)
+                .ValueGeneratedOnAdd()
+                .HasDefaultValueSql("now()");
+        
+            builder.Entity<StreetHistory>()
+                .Property(sh => sh.UpdatedDate)
+                .ValueGeneratedOnAddOrUpdate()
+                .HasDefaultValueSql("now()");
+        
             List<IdentityRole> roles = new List<IdentityRole>
             {
                 new IdentityRole {Name = "SupAdmin", NormalizedName = "SUPADMIN"},

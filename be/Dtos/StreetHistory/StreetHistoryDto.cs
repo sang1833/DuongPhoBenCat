@@ -9,8 +9,8 @@ namespace be.Dtos.StreetHistory
     public class StreetHistoryDto
     {
         public int Id { get; set; }
-        public required string HistoryName { get; set; }
-        public string? Content { get; set; }
+        public required string Period { get; set; }
+        public string? Description { get; set; }
         public DateTime UpdatedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public int StreetId { get; set; }
