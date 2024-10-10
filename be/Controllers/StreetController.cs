@@ -53,7 +53,7 @@ namespace be.Controllers
 
         [HttpGet]
         [Route("userSearch")]
-        public async Task<ActionResult<StreetDto>> SearchUser([FromQuery] string searchParam)
+        public async Task<ActionResult<(StreetDto, string)>> SearchUser([FromQuery] string searchParam)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -64,7 +64,7 @@ namespace be.Controllers
         }
 
         [HttpGet("{id:int}"), Authorize]
-        public async Task<ActionResult<StreetDto>> GetById([FromRoute] int id)
+        public async Task<ActionResult<(StreetDto, string)>> GetById([FromRoute] int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -80,7 +80,7 @@ namespace be.Controllers
         }
 
         [HttpGet("userGetDetail/{streetId:int}")]
-        public async Task<ActionResult<StreetDto>> GetByIdUser([FromRoute] int streetId)
+        public async Task<ActionResult<(StreetDto, string)>> GetByIdUser([FromRoute] int streetId)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -95,10 +95,8 @@ namespace be.Controllers
             return Ok(streetDto);
         }
 
-        /// <summary>
-        /// Carefully with Route and WayPoints coordinates
-        /// </summary>
         [HttpPost("create"), Authorize]
+        
         public async Task<ActionResult<(string, StreetDto)>> Create([FromBody] CreateStreetRequestDto streetDto)
         {
             if (!ModelState.IsValid)
@@ -188,7 +186,7 @@ namespace be.Controllers
         ///   }
         ///   </remarks>
         [HttpPut("{id:int}"), Authorize]
-        public async Task<ActionResult<StreetDto>> Update(int id, [FromBody] UpdateStreetRequestDto streetDto)
+        public async Task<ActionResult<(StreetDto, string)>> Update(int id, [FromBody] UpdateStreetRequestDto streetDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Data don't meet requirement", ModelState });
