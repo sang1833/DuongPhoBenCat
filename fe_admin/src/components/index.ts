@@ -23,3 +23,4 @@ export { default as TableThreeSType } from "./Tables/TableThreeSType";
 export { default as TableThreeUser } from "./Tables/TableThreeUser";
 // street
 export { default as StreetImage } from "./Street/StreetImage";
+export { default as StreetHistory } from "./Street/StreetHistory";

@@ -11,9 +11,11 @@ import {
   OutlinedNormalButton,
   SelectGroupOne,
   StreetImage,
-  TextArea
+  TextArea,
+  StreetHistory
 } from "@components";
 import {
+  IStreetHistory,
   IStreetImage,
   IStreetType,
   IStreetTypeList,
@@ -59,6 +61,7 @@ const PostStreetPage: React.FC = () => {
   const [streetAddress, setStreetAddress] = useState<string>("");
   const [streetDescription, setStreetDescription] = useState<string>("");
   const [streetImages, setStreetImages] = useState<IStreetImage[]>([]);
+  const [histories, setHistories] = useState<IStreetHistory[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<ErrorMessages>({});
 
@@ -129,6 +132,10 @@ const PostStreetPage: React.FC = () => {
           imageUrl: image.imageUrl || "",
           publicId: image.publicId || "",
           description: image.description || ""
+        })),
+        streetHistories: histories.map((history) => ({
+          period: history.period,
+          description: history.description
         }))
       };
 
@@ -144,7 +151,7 @@ const PostStreetPage: React.FC = () => {
     setLoading(false);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (validateForm()) {
       // Submit form data
@@ -157,7 +164,7 @@ const PostStreetPage: React.FC = () => {
       <BackButton onClick={() => navigate(-1)} />
       <Breadcrumb pageName="Tạo tuyến đường" />
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <form onSubmit={handleSubmit}>
+        <form>
           <fieldset disabled={loading} className="flex flex-col gap-5.5 p-6.5">
             <div className="flex flex-col gap-6 xl:flex-row">
               <div className="w-full xl:w-1/2">
@@ -225,9 +232,19 @@ const PostStreetPage: React.FC = () => {
               setStreetImages={setStreetImages}
             />
 
+            <>
+              <label className="block text-sm font-medium text-gray-700">
+                Lịch sử
+              </label>
+              <StreetHistory
+                histories={histories}
+                setHistories={setHistories}
+              />
+            </>
+
             <div className="flex justify-center items-center gap-4">
               <button
-                type="submit"
+                onClick={handleSubmit}
                 className={`flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-theme-color-primary 
                 ${
                   errors.streetAddress || errors.streetName ? "bg-red-700" : ""

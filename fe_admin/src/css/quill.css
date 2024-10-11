@@ -1,0 +1,31 @@
+.ql-toolbar.ql-snow {
+  @apply bg-gray-2 dark:bg-graydark border-gray-3 dark:border-gray-400 rounded-t-lg !important;
+}
+
+.ql-container.ql-snow {
+  @apply bg-white dark:bg-gray-700 border-gray-3 dark:border-gray-400 rounded-b-lg !important;
+}
+
+.ql-editor {
+  @apply text-gray-800 dark:text-white min-h-[12rem] !important;
+}
+
+.ql-picker {
+  @apply text-gray-800 dark:text-white !important;
+}
+
+.ql-stroke {
+  @apply stroke-gray-800 dark:stroke-white !important;
+}
+
+.ql-fill {
+  @apply fill-gray-800 dark:fill-white !important;
+}
+
+.ql-picker-options {
+  @apply bg-white dark:bg-gray-700 border-gray-3 dark:border-gray-400 !important;
+}
+
+.ql-picker-item {
+  @apply text-gray-800 dark:text-white !important;
+}

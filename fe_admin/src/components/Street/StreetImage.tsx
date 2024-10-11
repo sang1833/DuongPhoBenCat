@@ -114,18 +114,16 @@ const StreetImage: React.FC<{
           } border-dashed rounded-lg cursor-pointer `}
         >
           <div className="flex flex-col items-center justify-center pt-5 pb-6">
-            <Upload className="w-10 h-10 mb-3 text-gray-400" />
+            <Upload className="w-10 h-10 mb-3 text-gray-600" />
             {loading ? (
-              <p className="mb-2 text-sm text-gray-500">Đang đăng ảnh...</p>
+              <p className="mb-2 text-sm ">Đang đăng ảnh...</p>
             ) : (
               <>
-                <p className="mb-2 text-sm text-gray-500">
+                <p className="mb-2 text-sm ">
                   <span className="font-semibold">Nhấn hoặc kéo thả</span> để
                   đăng ảnh
                 </p>
-                <p className="text-xs text-gray-500">
-                  PNG, JPG, GIF lên tới 50MB
-                </p>
+                <p className="text-xs ">PNG, JPG, GIF lên tới 50MB</p>
               </>
             )}
           </div>
