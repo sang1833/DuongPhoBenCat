@@ -30,6 +30,11 @@ namespace be.Repositories
                 throw new Exception("StreetType is null");
             }
 
+            if (await _context.StreetTypes.AnyAsync(s => s.StreetTypeName == streetHistory.StreetTypeName))
+            {
+                throw new Exception("Street type name is already exists");
+            }
+
             await _context.StreetTypes.AddAsync(streetHistory);
             await _context.SaveChangesAsync();
 
