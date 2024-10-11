@@ -16,6 +16,10 @@ export interface CreateStreetRequestDto {
     publicId: string;
     description: string;
   }[];
+  streetHistories: {
+    period: string;
+    description: string;
+  }[];
 }
 export interface UpdateStreetRequestDto {
   streetName: string;
