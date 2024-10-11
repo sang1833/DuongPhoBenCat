@@ -62,6 +62,11 @@ namespace be.Repositories
             return streetHistoryModel;
         }
 
+        public Task<List<StreetHistory>> GetHistoriesByStreetIdAsync(int streetId)
+        {
+            return _context.StreetHistories.Where(h => h.StreetId == streetId).ToListAsync();
+        }
+
         public async Task<StreetHistory?> UpdateAsync(StreetHistory streetHistoryModel, int id)
         {
             StreetHistory? existingStreetHistory = await _context.StreetHistories.FirstOrDefaultAsync(s => s.Id == id);
