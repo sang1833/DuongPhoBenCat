@@ -7,8 +7,8 @@ const SelectGroupOne: React.FC<{
   disabled?: boolean;
   error?: string;
   options: IStreetTypeoption[];
-  selectedOption: number | string;
-  setSelectedOption: (arg0: number | string) => void;
+  selectedOption: number;
+  setSelectedOption: (arg0: number) => void;
   isOptionSelected: boolean;
   setIsOptionSelected: (arg0: boolean) => void;
 }> = ({

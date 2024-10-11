@@ -67,3 +67,9 @@ export interface IStreetImage {
   publicId?: string;
   description?: string;
 }
+
+export interface IStreetHistory {
+  id: string;
+  period: string;
+  description: string;
+}

@@ -6,6 +6,7 @@ import App from "./App.tsx";
 import "react-toastify/dist/ReactToastify.css";
 import "./css/style.css";
 import "./css/leafletConfig.css";
+import "./css/quill.css";
 import i18n from "./locales/i18n";
 import store from "./app/store";
 
