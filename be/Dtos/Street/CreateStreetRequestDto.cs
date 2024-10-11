@@ -15,7 +15,7 @@ namespace be.Dtos
         public string? ImageUrl { get; set; }
         public GeoJsonLineStringDto? Route { get; set; } = new GeoJsonLineStringDto([]);
         public GeoJsonLineStringDto? WayPoints { get; set; } = new GeoJsonLineStringDto([]);
-        public List<CreateStreetImageRequestDto>? StreetImages { get; set; }
-        public List<CreateStreetHistoryRequestDto>? StreetHistories { get; set; }
+        public List<CreateStreetHistoryRequestDto>? Histories { get; set; }
+        public List<CreateStreetImageRequestDto>? Images { get; set; }
     }
 }

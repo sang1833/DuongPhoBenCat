@@ -9,6 +9,7 @@ namespace be.Interfaces
     public interface IStreetHistoryRepository
     {
         Task<List<StreetHistory>> GetAllAsync();
+        Task<List<StreetHistory>> GetHistoriesByStreetIdAsync(int streetId);
         Task<StreetHistory?> GetByIdAsync(int id);
         Task<StreetHistory> CreateAsync(StreetHistory streetHistory);
         Task<StreetHistory?> UpdateAsync(StreetHistory streetHistory, int id);

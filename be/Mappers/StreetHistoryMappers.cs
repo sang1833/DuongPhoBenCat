@@ -32,6 +32,15 @@ namespace be.Mappers
             };
         }
 
+        public static CreateStreetHistoryRequestDto ToCreateFromHistoryInStreet(this HistoryInStreetDto streetHistories) 
+        {
+            return new CreateStreetHistoryRequestDto 
+            { 
+                Period = streetHistories.Period, 
+                Description = streetHistories.Description ?? ""
+            };
+        }
+
         public static StreetHistoryDto ToStreetHistoryDto(this StreetHistory streetHistoryModel)
         {
             return new StreetHistoryDto

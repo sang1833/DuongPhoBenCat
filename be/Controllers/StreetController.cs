@@ -114,9 +114,9 @@ namespace be.Controllers
 
             createdStreet = await _streetRepo.CreateAsync(createdStreet);
 
-            if (streetDto != null && streetDto.StreetImages != null)
+            if (streetDto != null && streetDto.Images != null)
             {
-                foreach (CreateStreetImageRequestDto streetImage in streetDto.StreetImages)
+                foreach (CreateStreetImageRequestDto streetImage in streetDto.Images)
                 {
                     try
                     {
@@ -129,9 +129,9 @@ namespace be.Controllers
                 }
             }
             
-            if (streetDto != null && streetDto.StreetHistories != null)
+            if (streetDto != null && streetDto.Histories != null)
             {
-                foreach (CreateStreetHistoryRequestDto streetHistory in streetDto.StreetHistories)
+                foreach (CreateStreetHistoryRequestDto streetHistory in streetDto.Histories)
                 {
                     try
                     {
@@ -205,41 +205,32 @@ namespace be.Controllers
             updatedStreet.Id = id;
             updatedStreet.IsApproved = User.IsInRole("Admin") || User.IsInRole("SupAdmin");
 
-            updatedStreet = await _streetRepo.UpdateAsync(updatedStreet, id);
+             // Update street histories
+            List<StreetHistory> existingHistories = await _streetHistoryRepo.GetHistoriesByStreetIdAsync(id);
+            List<HistoryInStreetDto> newStreetHistories = streetDto?.Histories ?? new List<HistoryInStreetDto>();
 
-            if (updatedStreet == null)
+            IActionResult updateHistoriesResult = await UpdateStreetHistoriesAsync(id, newStreetHistories, existingHistories);
+            if (updateHistoriesResult is BadRequestObjectResult)
             {
-                return NotFound();
+                return BadRequest(updateHistoriesResult);
             }
 
-            if (streetDto != null && streetDto.StreetHistories != null)
-            {
-                foreach (CreateStreetHistoryRequestDto streetHistory in streetDto.StreetHistories)
-                {
-                    try
-                    {
-                        await _streetHistoryRepo.CreateAsync(streetHistory.ToStreetHistoryFromCreateDto(updatedStreet.Id));
-                    }
-                    catch (Exception e)
-                    {
-                        return BadRequest(new { message = $"Error when create history: {streetHistory.Period}, Decription: ", e.Message });
-                    }
-                }
-            }
-
+            // Update street images
             List<StreetImage> existingImages = await _streetImageRepo.GetImagesByStreetIdAsync(id);
-            List<CreateStreetImageRequestDto> newStreetImages = streetDto?.StreetImages ?? new List<CreateStreetImageRequestDto>();
+            List<CreateStreetImageRequestDto> newStreetImages = streetDto?.Images ?? new List<CreateStreetImageRequestDto>();
 
             IActionResult updateImagesResult = await UpdateStreetImagesAsync(id, newStreetImages, existingImages);
             if (updateImagesResult is BadRequestObjectResult)
             {
                 return BadRequest(updateImagesResult);
             }
+            
+            updatedStreet = await _streetRepo.UpdateAsync(updatedStreet, id);
 
             if (updatedStreet == null)
             {
                 return NotFound();
-            }
+            }  
             return Ok(updatedStreet.ToStreetDto());
         }
         private async Task<IActionResult> UpdateStreetImagesAsync(int streetId, List<CreateStreetImageRequestDto> streetImages, List<StreetImage> existingImages)
@@ -300,6 +291,72 @@ namespace be.Controllers
                 catch (Exception e)
                 {
                     return BadRequest(new { message = $"Error when creating image: {streetImageToCreate.ImageUrl}, Description: {e.Message}" });
+                }
+            }
+
+            return Ok();
+        }
+
+        private async Task<IActionResult> UpdateStreetHistoriesAsync(int streetId, List<HistoryInStreetDto> newHistories, List<StreetHistory> existingHistories)
+        {
+            var existingHistoriesDict = existingHistories.ToDictionary(eh => eh.Id);
+
+            // Find histories to delete
+            List<StreetHistory> historiesToDelete = existingHistories
+                .Where(eh => !newHistories.Any(nh => nh.Id == eh.Id))
+                .ToList();
+
+            // Find histories to update
+            List<StreetHistory> historiesToUpdate = existingHistories
+                .Where(eh => newHistories.Any(nh => nh.Id == eh.Id && 
+                        (nh.Period != eh.Period || nh.Description != eh.Description)))
+                .ToList();
+
+            // Find histories to create
+            List<CreateStreetHistoryRequestDto> historiesToCreate = newHistories
+                .Where(nh => !existingHistoriesDict.ContainsKey(nh.Id))
+                .Select(nh => nh.ToCreateFromHistoryInStreet())
+                .ToList();
+
+            // Delete histories
+            foreach (StreetHistory history in historiesToDelete)
+            {
+                try
+                {
+                    await _streetHistoryRepo.DeleteAsync(history.Id);
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(new { message = $"Error when deleting history: {history.Period}, Description: {e.Message}" });
+                }
+            }
+
+            // Update histories
+            foreach (StreetHistory history in historiesToUpdate)
+            {
+                HistoryInStreetDto historyToUpdate = newHistories.First(nh => nh.Id == history.Id);
+                history.Period = historyToUpdate.Period;
+                history.Description = historyToUpdate.Description ?? "";
+                try
+                {
+                    await _streetHistoryRepo.UpdateAsync(history, history.Id);
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(new { message = $"Error when updating history: {history.Period}, Description: {e.Message}" });
+                }
+            }
+
+            // Create new histories
+            foreach (CreateStreetHistoryRequestDto historyToCreate in historiesToCreate)
+            {
+                try
+                {
+                    await _streetHistoryRepo.CreateAsync(historyToCreate.ToStreetHistoryFromCreateDto(streetId));
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(new { message = $"Error when creating history: {historyToCreate.Period}, Description: {e.Message}" });
                 }
             }
 
