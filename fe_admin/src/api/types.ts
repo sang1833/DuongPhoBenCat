@@ -11,12 +11,12 @@ export interface CreateStreetRequestDto {
   route: {
     coordinates: number[][];
   };
-  streetImages: {
+  images: {
     imageUrl: string;
     publicId: string;
     description: string;
   }[];
-  streetHistories: {
+  histories: {
     period: string;
     description: string;
   }[];
@@ -33,9 +33,14 @@ export interface UpdateStreetRequestDto {
   route: {
     coordinates: number[][];
   };
-  streetImages: {
+  images: {
     imageUrl: string;
     publicId: string;
+    description: string;
+  }[];
+  histories: {
+    id: string;
+    period: string;
     description: string;
   }[];
 }

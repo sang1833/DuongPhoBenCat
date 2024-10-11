@@ -128,12 +128,12 @@ const PostStreetPage: React.FC = () => {
         route: {
           coordinates: routePolylines?.map((wp: LatLng) => [wp.lat, wp.lng])
         },
-        streetImages: streetImages.map((image) => ({
+        images: streetImages.map((image) => ({
           imageUrl: image.imageUrl || "",
           publicId: image.publicId || "",
           description: image.description || ""
         })),
-        streetHistories: histories.map((history) => ({
+        histories: histories.map((history) => ({
           period: history.period,
           description: history.description
         }))
