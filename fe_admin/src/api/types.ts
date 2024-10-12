@@ -39,7 +39,7 @@ export interface UpdateStreetRequestDto {
     description: string;
   }[];
   histories: {
-    id: string;
+    id?: number;
     period: string;
     description: string;
   }[];
