@@ -13,7 +13,7 @@ namespace be.Dtos.Street
         [Required(ErrorMessage = "StreetName is required.")]
         public required string StreetName { get; set; }
         [Required(ErrorMessage = "StreetType is required.")]
-        [Range(1, 1, ErrorMessage = "StreetTypeId is greater than 1.")]
+        [Range(1, int.MaxValue, ErrorMessage = "StreetTypeId is greater than 1.")]
         public int StreetTypeId { get; set; }
         public string? Address { get; set; }
         public string? Description { get; set; }

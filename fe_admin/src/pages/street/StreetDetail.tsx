@@ -9,11 +9,13 @@ import {
   Map,
   OutlinedNormalButton,
   SelectGroupOne,
+  StreetHistory,
   StreetImage,
   TextArea
 } from "@components";
 import {
   IStreet,
+  IStreetHistory,
   IStreetImage,
   IStreetType,
   IStreetTypeList,
@@ -62,6 +64,7 @@ const ChangeStreetPage: React.FC = () => {
   const [streetAddress, setStreetAddress] = useState<string>("");
   const [streetDescription, setStreetDescription] = useState<string>("");
   const [streetImages, setStreetImages] = useState<IStreetImage[]>([]);
+  const [histories, setHistories] = useState<IStreetHistory[]>([]);
   const [errors, setErrors] = useState<ErrorMessages>({});
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -88,6 +91,7 @@ const ChangeStreetPage: React.FC = () => {
             description: image.description
           }))
         );
+        setHistories(streetData.histories);
       } catch (error) {
         console.error("Error fetching streets:", error);
       }
@@ -156,11 +160,24 @@ const ChangeStreetPage: React.FC = () => {
         route: {
           coordinates: routePolylines?.map((wp: LatLng) => [wp.lat, wp.lng])
         },
-        streetImages: streetImages.map((image) => ({
+        images: streetImages.map((image) => ({
           imageUrl: image.imageUrl || "",
           publicId: image.publicId || "",
           description: image.description || ""
-        }))
+        })),
+        histories: histories.map((history) => {
+          if (typeof history.id === "number") {
+            return {
+              id: history.id,
+              period: history.period,
+              description: history.description
+            };
+          } else
+            return {
+              period: history.period,
+              description: history.description
+            };
+        })
       };
 
       const response = await adminUpdateStreet(
@@ -258,6 +275,8 @@ const ChangeStreetPage: React.FC = () => {
               streetImages={streetImages}
               setStreetImages={setStreetImages}
             />
+
+            <StreetHistory histories={histories} setHistories={setHistories} />
 
             <div className="flex justify-center items-center gap-4">
               <button
