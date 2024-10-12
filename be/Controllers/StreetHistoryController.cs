@@ -35,6 +35,19 @@ namespace be.Controllers
             return Ok(streetHistoryDto);
         }
 
+        [HttpGet("street/{streetId:int}")]
+        public async Task<ActionResult<List<StreetHistoryDto>>> GetHistoriesByStreetId(int streetId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            else if (!await _streetRepo.IsStreetExistsAsync(streetId))
+                return BadRequest(new { message = "Đường không tồn tại" });
+
+            List<StreetHistory> streetHistoryModel = await _streetHistoryRepo.GetHistoriesByStreetIdAsync(streetId);
+            List<StreetHistoryDto> streetHistoryDto = streetHistoryModel.Select(s => s.ToStreetHistoryDto()).ToList();
+            return Ok(new { message = "Lấy lịch sử đường thành công", streetHistoryDto });
+        }
+
         [HttpGet("{id:int}")]
         public async Task<ActionResult<StreetHistoryDto>> GetById(int id){
             if (!ModelState.IsValid)
