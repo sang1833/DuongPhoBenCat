@@ -1,12 +1,17 @@
-export type IMapContext = {
-  type?: string;
-  position?: [number, number] | null;
-  setPosition: React.Dispatch<React.SetStateAction<[number, number] | null>>;
-  waypoints?: L.LatLng[];
-  setWaypoints: React.Dispatch<React.SetStateAction<L.LatLng[]>>;
-  routePolylines?: L.LatLng[];
-  setRoutePolylines: React.Dispatch<React.SetStateAction<L.LatLng[]>>;
-};
+export interface StreetInfo {
+  id: string;
+  name: string;
+  address: string;
+  description: string;
+  route: [number, number][]; // Array of [lat, lng] coordinates
+  images: string[];
+  history: { period: string; description: string }[]; // description is now HTML content
+}
+
+export interface MapState {
+  center: [number, number];
+  zoom: number;
+}
 
 export interface ProtomapsLayerProps {
   theme: "light" | "dark" | "white" | "grayscale" | "black";
