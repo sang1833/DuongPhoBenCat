@@ -7,7 +7,8 @@ namespace be.Interfaces
     {
         Task<(List<Street> pagedStreets, int totalPages)> GetAllAsync(StreetQueryObject queryObject);
         Task<(List<Street> pagedStreets, int totalPages)> SearchAdminAsync(StreetQueryObject queryObject);
-        Task<List<Street>> SearchAllAsync(string searchParam);
+        Task<List<Street>> SearchAllAsync(string searchParam, string? address);
+        Task<List<Street>> GetStreetListByTownAsync(string? town);
         Task<Street?> GetByIdAsync(int id);
         Task<Street?> GetByIdUserAsync(int id);
         Task<Street> CreateAsync(Street? street);

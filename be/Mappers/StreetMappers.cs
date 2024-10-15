@@ -45,6 +45,16 @@ namespace be.Mappers
             };
         }
 
+        public static StreetRouteDto ToStreetRouteDto(this Street street)
+        {
+            return new StreetRouteDto
+            {
+                Id = street.Id,
+                StreetName = street.StreetName,
+                Route = street.Route
+            };
+        }
+
         public static SearchStreetAdminDto ToSearchStreetAdminDto(this Street street)
         {
             return new SearchStreetAdminDto
