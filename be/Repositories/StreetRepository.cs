@@ -126,6 +126,18 @@ namespace be.Repositories
                  .FirstOrDefaultAsync(s => s.Id == id);
         }
 
+        public async Task<List<Street>> GetStreetListByTownAsync(string? town)
+        {
+            if (string.IsNullOrWhiteSpace(town) || town.Equals("All"))
+            {
+                return await _context.Streets.ToListAsync();
+            }
+
+            return await _context.Streets
+                .Where(s => s.Address != null && s.Address.Contains(town))
+                .ToListAsync();
+        }
+
         public Task<bool> IsStreetExistsAsync(int id)
         {
             return _context.Streets.AnyAsync(s => s.Id == id);
@@ -188,7 +200,7 @@ namespace be.Repositories
             return (pagedStreets, totalPages);
         }
 
-        public async Task<List<Street>> SearchAllAsync(string searchParam)
+        public async Task<List<Street>> SearchAllAsync(string searchParam, string? address)
         {
             IQueryable<Street> streets = _context.Streets
                 .Include(c => c.StreetType)
@@ -196,6 +208,11 @@ namespace be.Repositories
                 .AsQueryable();
 
             streets = streets.Where(s => EF.Functions.ILike(s.StreetName.ToLower(), $"%{searchParam}%"));
+
+            if (!string.IsNullOrWhiteSpace(address))
+            {
+                streets = streets.Where(s => EF.Functions.ILike(s.Address.ToLower(), $"%{address}%"));
+            }
 
             return await streets.Skip(0).Take(5).ToListAsync();
         }

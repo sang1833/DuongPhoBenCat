@@ -53,13 +53,24 @@ namespace be.Controllers
 
         [HttpGet]
         [Route("userSearch")]
-        public async Task<ActionResult<(StreetDto, string)>> SearchUser([FromQuery] string searchParam)
+        public async Task<ActionResult<(StreetDto, string)>> SearchUser([FromQuery] string searchParam, [FromQuery] string? address)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            IEnumerable<Street> streets = await _streetRepo.SearchAllAsync(searchParam);
+            IEnumerable<Street> streets = await _streetRepo.SearchAllAsync(searchParam, address);
             IEnumerable<SearchStreetUserDto> streetDtos = streets.Select(s => s.ToSearchStreetUserDto()).ToList();
+            return Ok(streetDtos);
+        }
+
+        [HttpGet("getStreetListByAddress")]
+        public async Task<ActionResult<(StreetDto, string)>> GetStreetListByAddress([FromQuery] string? address)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            List<Street> streets = await _streetRepo.GetStreetListByTownAsync(address);
+            List<StreetRouteDto> streetDtos = streets.Select(s => s.ToStreetRouteDto()).ToList();
             return Ok(streetDtos);
         }
 
