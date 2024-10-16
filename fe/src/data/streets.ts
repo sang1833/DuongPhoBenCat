@@ -4,7 +4,7 @@ export const streets: StreetInfo[] = [
   {
     id: "1",
     name: "Main Street",
-    address: "123 Main St, Cityville, State 12345",
+    address: "123 Main St, Thới Hoà, State 12345",
     description:
       "The central street of Cityville, known for its historic buildings and vibrant community.",
     route: [

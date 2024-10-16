@@ -34,6 +34,7 @@ function App() {
 
   return (
     <div className="flex flex-col h-screen">
+      {/* Header */}
       <header className="bg-blue-600 text-white p-4">
         <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0">
           <h1 className="text-2xl font-bold flex items-center">
@@ -50,6 +51,7 @@ function App() {
           />
         </div>
       </header>
+      {/* Main */}
       <main className="flex-grow flex flex-col sm:flex-row overflow-hidden relative">
         <div className="w-full sm:w-1/3 h-1/2 sm:h-full overflow-y-auto">
           {selectedStreet ? (
