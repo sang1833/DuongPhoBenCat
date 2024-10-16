@@ -43,6 +43,10 @@ const StreetSearch: React.FC<StreetSearchProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+
+  },[searchTerm, townFilter]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     setIsOpen(true);
