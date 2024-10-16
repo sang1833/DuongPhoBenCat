@@ -106,6 +106,18 @@ namespace be.Repositories
             return streetType;
         }
 
+        public async Task<StreetType?> GetByNameAsync(string name)
+        {
+            StreetType? streetType = await _context.StreetTypes.FirstOrDefaultAsync(s => s.StreetTypeName == name);
+
+            if (streetType == null)
+            {
+                return null;
+            }
+
+            return streetType;
+        }
+
         public Task<bool> IsStreetTypeExistsAsync(int id)
         {
             return _context.StreetTypes.AnyAsync(s => s.Id == id);

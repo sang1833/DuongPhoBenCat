@@ -6,6 +6,9 @@ using be.Helpers;
 using be.Interfaces;
 using be.Mappers;
 using be.Models;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -106,8 +109,161 @@ namespace be.Controllers
             return Ok(streetDto);
         }
 
+        [HttpGet("exportStreetsToExcel"), Authorize(Roles = "Admin,SupAdmin")]
+        public async Task<IActionResult> ExportStreetsToExcel([FromQuery] StreetQueryObject queryObject)
+        {
+            (List<Street> streets, int totalPages) = await _streetRepo.GetAllAsync(queryObject);
+
+            using (var stream = new MemoryStream())
+            {
+                using (var spreadsheetDocument = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook))
+                {
+                    var workbookPart = spreadsheetDocument.AddWorkbookPart();
+                    workbookPart.Workbook = new Workbook();
+
+                    var worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
+                    var sheetData = new SheetData();
+                    worksheetPart.Worksheet = new Worksheet(sheetData);
+
+                    var sheets = spreadsheetDocument?.WorkbookPart?.Workbook.AppendChild(new Sheets());
+                    var sheet = new Sheet() { Id = spreadsheetDocument?.WorkbookPart?.GetIdOfPart(worksheetPart), SheetId = 1, Name = "Streets" };
+                    sheets?.Append(sheet);
+
+                    // Add headers
+                    var headerRow = new Row();
+                    headerRow.Append(
+                        CreateCell("Street Name"),
+                        CreateCell("Address"),
+                        CreateCell("Description"),
+                        CreateCell("Street Type")
+                    );
+                    sheetData.AppendChild(headerRow);
+
+                    // Add data
+                    foreach (var street in streets)
+                    {
+                        var dataRow = new Row();
+                        dataRow.Append(
+                            CreateCell(street.StreetName),
+                            CreateCell(street.Address),
+                            CreateCell(street.Description),
+                            CreateCell(street.StreetType?.StreetTypeName ?? "")
+                        );
+                        sheetData.AppendChild(dataRow);
+                    }
+
+                    workbookPart.Workbook.Save();
+                }
+
+                stream.Seek(0, SeekOrigin.Begin);
+                return File(
+                    stream.ToArray(),
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "streets_export.xlsx"
+                );
+            }
+        }
+
+        private Cell CreateCell(string value)
+        {
+            return new Cell(new InlineString(new Text(value)));
+        }
+
+        [HttpPost("createStreetsByExcel"), Authorize(Roles = "Admin,SupAdmin")]
+        public async Task<ActionResult<(List<StreetDto>, string)>> CreateStreetByExcel(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("File is empty");
+
+            if (!Path.GetExtension(file.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                return BadRequest("File is not an Excel file");
+
+            List<StreetDto> createdStreets = new List<StreetDto>();
+
+            using (var stream = new MemoryStream())
+            {
+                await file.CopyToAsync(stream);
+                stream.Position = 0;
+
+                using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(stream, false))
+                {
+                    WorkbookPart? workbookPart = spreadsheetDocument?.WorkbookPart;
+                    WorksheetPart? worksheetPart = workbookPart?.WorksheetParts.FirstOrDefault();
+                    SheetData? sheetData = worksheetPart?.Worksheet?.Elements<SheetData>().FirstOrDefault();
+
+                    if (sheetData == null)
+                    {
+                        return BadRequest("No data found in the Excel file");
+                    }
+
+                    // Skip the header row
+                    foreach (Row row in sheetData?.Elements<Row>().Skip(1) ?? Enumerable.Empty<Row>())
+                    {
+                        var cells = row.Elements<Cell>().ToList();
+                        if (cells.Count < 5) continue;
+
+                        string streetName = GetCellValue(workbookPart!, cells[0]);
+                        string address = GetCellValue(workbookPart!, cells[1]);
+                        string description = GetCellValue(workbookPart!, cells[2]);
+                        string streetTypeName = GetCellValue(workbookPart!, cells[3]);
+
+                        if (string.IsNullOrEmpty(streetName))
+                        {
+                            Console.WriteLine("Street name is empty");
+                            continue;
+                        }
+
+                        StreetType? streetType = await _streetTypeRepo.GetByNameAsync(streetTypeName);
+                        if (streetType == null) 
+                        {
+                            Console.WriteLine($"Street type with name {streetTypeName} not found");
+                            continue;
+                        }
+
+                        Street newStreet = new Street
+                        {
+                            StreetName = streetName,
+                            Address = address ?? "",
+                            Description = description ?? "",
+                            ImageUrl = "",
+                            UpdatedDate = DateTime.UtcNow,
+                            CreatedDate = DateTime.UtcNow,
+                            Route = null,
+                            WayPoints = null,
+                            IsApproved = false,
+                            StreetTypeId = streetType.Id
+                        };
+
+                        try
+                        {
+                            Street createdStreet = await _streetRepo.CreateAsync(newStreet);
+                            createdStreets.Add(createdStreet.ToStreetDto());
+                            Console.WriteLine($"Street created: {streetName}");
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine($"Error when creating street: {streetName}, Description: {e.Message}");
+                            continue;
+                        }
+                    }
+                }
+            }
+
+            return Ok(new { message = $"{createdStreets.Count} streets created successfully" });
+        }
+
+        private string GetCellValue(WorkbookPart workbookPart, Cell cell)
+        {
+            string value = cell.InnerText;
+            if (cell.DataType != null && cell.DataType.Value == CellValues.SharedString)
+            {
+                return workbookPart?.SharedStringTablePart?.SharedStringTable
+                    .Elements<SharedStringItem>().ElementAt(int.Parse(value)).InnerText ?? "";
+            }
+            return value;
+        }
+
         [HttpPost("create"), Authorize]
-        
         public async Task<ActionResult<(string, StreetDto)>> Create([FromBody] CreateStreetRequestDto streetDto)
         {
             if (!ModelState.IsValid)

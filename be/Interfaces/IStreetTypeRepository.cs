@@ -15,5 +15,6 @@ namespace be.Interfaces
         Task<StreetType?> UpdateAsync(StreetType streetHistory, int id);
         Task<StreetType?> DeleteAsync(int id);
         Task<bool> IsStreetTypeExistsAsync(int id);
+        Task<StreetType?> GetByNameAsync(string name);
     }
 }
