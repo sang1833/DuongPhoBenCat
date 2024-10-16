@@ -130,11 +130,11 @@ namespace be.Repositories
         {
             if (string.IsNullOrWhiteSpace(town) || town.Equals("All"))
             {
-                return await _context.Streets.ToListAsync();
+                return await _context.Streets.Where(s => s.IsApproved == true).ToListAsync();
             }
 
             return await _context.Streets
-                .Where(s => s.Address != null && s.Address.Contains(town))
+                .Where(s => s.Address != null && s.Address.Contains(town) && s.IsApproved == true)
                 .ToListAsync();
         }
 
