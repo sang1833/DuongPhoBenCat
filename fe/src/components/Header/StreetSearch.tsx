@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { StreetInfo } from "../types";
+import { StreetInfo, IStreetSearch } from "../../types";
 import { Search, X, ChevronDown } from "lucide-react";
-import { towns } from "../data/towns";
+import { towns } from "../../data/towns";
+import { getStreetDetail, userSearch } from "../../apis/function";
 
 interface StreetSearchProps {
-  streets: StreetInfo[];
   onSelectStreet: (street: StreetInfo | null) => void;
   searchTerm: string;
   setSearchTerm: (term: string) => void;
@@ -13,7 +13,6 @@ interface StreetSearchProps {
 }
 
 const StreetSearch: React.FC<StreetSearchProps> = ({
-  streets,
   onSelectStreet,
   searchTerm,
   setSearchTerm,
@@ -22,16 +21,9 @@ const StreetSearch: React.FC<StreetSearchProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [filteredStreets, setFilteredStreets] = useState<IStreetSearch[]>([]);
 
-  const filteredStreets = streets.filter((street) => {
-    const matchesSearch = street.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesTownFilter =
-      townFilter === "Tất cả" || street.address.includes(townFilter);
-    return matchesSearch && matchesTownFilter;
-  });
-
+  // click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -48,16 +40,32 @@ const StreetSearch: React.FC<StreetSearchProps> = ({
     };
   }, []);
 
-  useEffect(() => {}, [searchTerm, townFilter]);
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      const response = await userSearch(searchTerm, townFilter);
+      setFilteredStreets(response);
+    };
+
+    if (searchTerm.length > 0) {
+      const debounceFetch = setTimeout(fetchSearchResults, 300);
+      return () => clearTimeout(debounceFetch);
+    }
+  }, [searchTerm, townFilter]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     setIsOpen(true);
   };
 
-  const handleSelectStreet = (street: StreetInfo) => {
+  const fetchStreetDetail = async (streetId: number) => {
+    const response = await getStreetDetail(streetId);
+    return response as StreetInfo;
+  };
+
+  const handleSelectStreet = async (streetId: number) => {
+    const street = await fetchStreetDetail(streetId);
     onSelectStreet(street);
-    setSearchTerm(street.name);
+    setSearchTerm(street.streetName);
     setTownFilter(street.address.split(", ")[1]);
     setIsOpen(false);
   };
@@ -72,6 +80,7 @@ const StreetSearch: React.FC<StreetSearchProps> = ({
     setTownFilter(e.target.value);
     setSearchTerm("");
     onSelectStreet(null);
+    setFilteredStreets([]);
   };
 
   return (
@@ -123,10 +132,13 @@ const StreetSearch: React.FC<StreetSearchProps> = ({
           {filteredStreets.map((street) => (
             <li
               key={street.id}
-              onClick={() => handleSelectStreet(street)}
-              className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800"
+              onClick={() => handleSelectStreet(street.id)}
+              className="flex flex-row gap-1 px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800"
             >
-              {street.name} - {street.address}
+              <p>
+                {street.streetName} {" -"}
+              </p>
+              <p className="text-gray-500">{street.address}</p>
             </li>
           ))}
         </ul>

@@ -1,36 +1,17 @@
 import React from "react";
-import { MapContainer, Polyline, Popup, useMap } from "react-leaflet";
-import { LatLngTuple, LatLngBounds } from "leaflet";
-import { StreetInfo, MapState } from "../../types";
+import { MapContainer, Polyline, Popup } from "react-leaflet";
+import { LatLngTuple } from "leaflet";
+import { IStreetRoute, MapState } from "../../types";
 import "leaflet/dist/leaflet.css";
 import ProtomapsLayer from "./ProtomapLayer";
+import FlyToStreet from "./FlyToStreet";
 
 interface MapProps {
-  streets: StreetInfo[];
-  selectedStreet: StreetInfo | null;
+  streets: IStreetRoute[];
+  selectedStreet: IStreetRoute | null;
   mapState: MapState;
-  onStreetClick: (street: StreetInfo) => void;
+  onStreetClick: (street: IStreetRoute) => void;
 }
-
-const FlyToStreet: React.FC<{
-  street: StreetInfo | null;
-  streets: StreetInfo[];
-}> = ({ street, streets }) => {
-  const map = useMap();
-
-  React.useEffect(() => {
-    if (street) {
-      const bounds = new LatLngBounds(street.route);
-      map.fitBounds(bounds, { padding: [50, 50] });
-    } else if (streets.length > 0) {
-      const allPoints = streets.flatMap((s) => s.route);
-      const bounds = new LatLngBounds(allPoints);
-      map.fitBounds(bounds, { padding: [50, 50] });
-    }
-  }, [street, streets, map]);
-
-  return null;
-};
 
 const Map: React.FC<MapProps> = ({
   streets,
@@ -56,13 +37,13 @@ const Map: React.FC<MapProps> = ({
       {streets.map((street) => (
         <Polyline
           key={street.id}
-          positions={street.route}
+          positions={street.route.coordinates}
           color={selectedStreet?.id === street.id ? "red" : "blue"}
           eventHandlers={{
             click: () => onStreetClick(street)
           }}
         >
-          <Popup>{street.name}</Popup>
+          <Popup>{street.streetName}</Popup>
         </Polyline>
       ))}
       <FlyToStreet street={selectedStreet} streets={streets} />
