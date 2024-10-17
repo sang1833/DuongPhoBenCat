@@ -209,7 +209,7 @@ namespace be.Repositories
 
             streets = streets.Where(s => EF.Functions.ILike(s.StreetName.ToLower(), $"%{searchParam}%"));
 
-            if (!string.IsNullOrWhiteSpace(address))
+            if (!string.IsNullOrWhiteSpace(address) && !address.Equals("Tất cả"))
             {
                 streets = streets.Where(s => EF.Functions.ILike(s.Address.ToLower(), $"%{address}%"));
             }

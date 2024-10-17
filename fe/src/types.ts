@@ -1,11 +1,17 @@
 export interface StreetInfo {
-  id: string;
-  name: string;
+  id: number;
+  streetName: string;
+  streetType: {
+    id: number;
+    streetTypeName: string;
+  };
   address: string;
   description: string;
-  route: [number, number][]; // Array of [lat, lng] coordinates
+  route: {
+    coordinates: [number, number][];
+  }; // Array of [lat, lng] coordinates
   images: string[];
-  history: { period: string; description: string }[]; // description is now HTML content
+  histories: { period: string; description: string }[]; // description is now HTML content
 }
 
 export interface MapState {
@@ -31,3 +37,22 @@ export const themeOptions: ThemeOption[] = [
   { value: "grayscale", vietnameseName: "Xám" },
   { value: "black", vietnameseName: "Đen" }
 ];
+
+// StreetSearch
+export interface IStreetSearch {
+  id: number;
+  streetName: string;
+  streetType: string;
+  address: string;
+  description: string;
+  imageUrl: string;
+}
+
+export interface IStreetRoute {
+  id: number;
+  streetName: string;
+  address: string;
+  route: {
+    coordinates: [number, number][];
+  };
+}

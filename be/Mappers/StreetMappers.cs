@@ -77,7 +77,7 @@ namespace be.Mappers
             {
                 Id = street.Id,
                 StreetName = street.StreetName,
-                StreetType = street.StreetType != null ? street.StreetType.ToStreetTypeDto() : new StreetTypeDto(),
+                StreetType = street.StreetType?.StreetTypeName ?? "",
                 Address = street.Address,
                 Description = street.Description,
                 ImageUrl = street.ImageUrl,
