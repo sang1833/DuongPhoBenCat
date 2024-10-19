@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext, useEffect } from "react";
 import L from "leaflet";
 import { useMap } from "react-leaflet";
@@ -5,9 +6,7 @@ import "leaflet-routing-machine";
 import { MapContext } from "@contexts";
 
 const Routing: React.FC = () => {
-  // const [waypoints, setWaypoints] = useState<L.LatLng[]>([]);
-  const { waypoints, setWaypoints, routePolylines, setRoutePolylines } =
-    useContext(MapContext);
+  const { waypoints, setWaypoints, setRoutePolylines } = useContext(MapContext);
   const map: L.Map = useMap();
 
   const areWaypointsClose = (waypoint1: L.LatLng, waypoint2: L.LatLng) => {
@@ -37,11 +36,15 @@ const Routing: React.FC = () => {
       }
     }).addTo(map);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     routingControl.on("routesfound", (e: any) => {
       const route = e.routes[0];
       const newRoutePolyline = route.coordinates;
       setRoutePolylines(newRoutePolyline);
+    });
+
+    routingControl.on("waypointschanged", (e: any) => {
+      const newWaypoints = e.waypoints?.map((wp: any) => wp.latLng) || [];
+      setWaypoints(newWaypoints);
     });
 
     map.on("click", (e: L.LeafletMouseEvent) => {
@@ -69,12 +72,7 @@ const Routing: React.FC = () => {
       map.off("click");
       map.off("contextmenu");
     };
-  }, [map, waypoints, setWaypoints, setRoutePolylines]);
-
-  useEffect(() => {
-    console.log("routePolylines: ", routePolylines);
-  }, [routePolylines]);
-
+  }, [map, setWaypoints, setRoutePolylines, waypoints]);
   return null;
 };
 

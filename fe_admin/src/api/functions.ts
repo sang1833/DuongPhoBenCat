@@ -310,7 +310,7 @@ export const adminUpdateStreetType = async (
   }
 };
 
-export const adminDeleteStreetType = async (streetTypeId: string) => {
+export const adminDeleteStreetType = async (streetTypeId: number) => {
   try {
     const response = await reApi.delete(`/api/streetType/${streetTypeId}`);
     return response;

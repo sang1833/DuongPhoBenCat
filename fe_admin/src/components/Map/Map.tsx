@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import L from "leaflet";
-import { MapContainer } from "react-leaflet";
+import { MapContainer, Polygon } from "react-leaflet";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import "leaflet/dist/leaflet.css";
@@ -9,6 +9,7 @@ import { MapContext } from "@contexts";
 import { OutlinedNormalButton } from "@components";
 import Routing from "./Routing";
 import ProtomapsLayer from "./ProtomapLayer";
+import boundaryData from "../../data/boundary.json";
 
 // Fix the default icon issue in Leaflet
 const DefaultIcon = L.icon({
@@ -23,11 +24,15 @@ L.Marker.prototype.options.icon = DefaultIcon;
 const MapComponent: React.FC = () => {
   const { position } = useContext(MapContext);
   const [showMap, setShowMap] = useState(true);
+
   const defaultCenter: [number, number] = [11.1616595, 106.594514];
   const bounds: L.LatLngBoundsExpression = [
     [11.018, 106.4345], // Southwest coordinates
     [11.2336, 106.8417] // Northeast coordinates
   ];
+
+  const boundaryCoordinates: [number, number][] =
+    boundaryData.coordinates[0].map(([lng, lat]) => [lat, lng]);
 
   return (
     <>
@@ -52,6 +57,14 @@ const MapComponent: React.FC = () => {
           /> */}
           <ProtomapsLayer theme="light" />
           <Routing />
+          <Polygon
+            positions={boundaryCoordinates}
+            pathOptions={{
+              color: "blue",
+              weight: 2,
+              fillOpacity: 0
+            }}
+          />
         </MapContainer>
       )}
     </>

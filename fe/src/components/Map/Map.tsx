@@ -1,10 +1,12 @@
 import React from "react";
-import { MapContainer, Polyline, Popup } from "react-leaflet";
+import { MapContainer, Polygon, Polyline, Popup } from "react-leaflet";
 import { LatLngTuple } from "leaflet";
 import { IStreetRoute, MapState } from "../../types";
 import "leaflet/dist/leaflet.css";
 import ProtomapsLayer from "./ProtomapLayer";
 import FlyToStreet from "./FlyToStreet";
+import boundaryData from "../../data/boundary.json";
+import config from "../../data/config";
 
 interface MapProps {
   streets: IStreetRoute[];
@@ -24,6 +26,9 @@ const Map: React.FC<MapProps> = ({
     [11.2336, 106.8417] // Northeast coordinates
   ];
 
+  const boundaryCoordinates: [number, number][] =
+    boundaryData.coordinates[0].map(([lng, lat]) => [lat, lng]);
+
   return (
     <MapContainer
       center={mapState.center as LatLngTuple}
@@ -38,7 +43,7 @@ const Map: React.FC<MapProps> = ({
         <Polyline
           key={street.id}
           positions={street.route.coordinates}
-          color={selectedStreet?.id === street.id ? "red" : "blue"}
+          color={config.street.color}
           eventHandlers={{
             click: () => onStreetClick(street)
           }}
@@ -47,6 +52,14 @@ const Map: React.FC<MapProps> = ({
         </Polyline>
       ))}
       <FlyToStreet street={selectedStreet} streets={streets} />
+      <Polygon
+        positions={boundaryCoordinates}
+        pathOptions={{
+          color: config.boundary.color,
+          weight: config.boundary.width,
+          fillOpacity: 0
+        }}
+      />
     </MapContainer>
   );
 };
