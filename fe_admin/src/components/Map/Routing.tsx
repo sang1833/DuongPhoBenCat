@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext, useEffect } from "react";
 import L from "leaflet";
 import { useMap } from "react-leaflet";
@@ -35,11 +36,14 @@ const Routing: React.FC = () => {
       }
     }).addTo(map);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     routingControl.on("routesfound", (e: any) => {
       const route = e.routes[0];
       const newRoutePolyline = route.coordinates;
       setRoutePolylines(newRoutePolyline);
+    });
+
+    routingControl.on("waypointschanged", (e: any) => {
+      setWaypoints(e.waypoints.map((wp: any) => wp.latLng));
     });
 
     map.on("click", (e: L.LeafletMouseEvent) => {
@@ -67,7 +71,7 @@ const Routing: React.FC = () => {
       map.off("click");
       map.off("contextmenu");
     };
-  }, [map, waypoints, setWaypoints, setRoutePolylines]);
+  }, [map, setWaypoints, setRoutePolylines, waypoints]);
   return null;
 };
 
