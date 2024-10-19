@@ -19,7 +19,7 @@ import {
   IStreetImage,
   IStreetType,
   IStreetTypeList,
-  IStreetTypeoption
+  ISelectOption
 } from "@types";
 import { MapContext } from "@contexts";
 import {
@@ -29,6 +29,7 @@ import {
   UpdateStreetRequestDto
 } from "@api";
 import { toast } from "react-toastify";
+import { towns } from "../../data/towns";
 
 interface ErrorMessages {
   streetName?: string;
@@ -36,7 +37,7 @@ interface ErrorMessages {
   streetWaypoint?: string;
 }
 
-const options: IStreetTypeoption[] = [
+const streetTypesOptions: ISelectOption[] = [
   {
     value: 1,
     label: "Đường lớn"
@@ -51,6 +52,17 @@ const options: IStreetTypeoption[] = [
   }
 ];
 
+const addressOptions: ISelectOption[] = [
+  {
+    value: " ",
+    label: "Không có địa chỉ"
+  },
+  ...towns.map((town) => ({
+    value: town,
+    label: town
+  }))
+];
+
 const ChangeStreetPage: React.FC = () => {
   const { t } = useTranslation();
   const { streetId } = useParams();
@@ -59,9 +71,11 @@ const ChangeStreetPage: React.FC = () => {
 
   const [streetName, setStreetName] = useState<string>("");
   const [streetTypeId, setStreetTypeId] = useState<number>(1);
-  const [streetTypes, setStreetTypes] = useState<IStreetTypeoption[]>(options);
+  const [streetTypes, setStreetTypes] =
+    useState<ISelectOption[]>(streetTypesOptions);
   const [isSTypeSelected, setIsSTypeSelected] = useState<boolean>(false);
-  const [streetAddress, setStreetAddress] = useState<string>("");
+  const [streetAddress, setStreetAddress] = useState<string | number>("");
+  const [isAddressSelected, setIsAddressSelected] = useState<boolean>(false);
   const [streetDescription, setStreetDescription] = useState<string>("");
   const [streetImages, setStreetImages] = useState<IStreetImage[]>([]);
   const [histories, setHistories] = useState<IStreetHistory[]>([]);
@@ -74,11 +88,11 @@ const ChangeStreetPage: React.FC = () => {
         const _streetId = parseInt(streetId?.toString() || "");
         const response = await adminGetStreetById(_streetId);
 
-        const streetData = response.data as unknown as IStreet;
+        const streetData = response.data as IStreet;
         setWaypoints(
-          streetData.wayPoints.coordinates.map(
+          streetData.wayPoints?.coordinates.map(
             (coord: [number, number]) => new LatLng(coord[0], coord[1])
-          )
+          ) || []
         );
         setStreetName(streetData.streetName);
         setStreetTypeId(streetData.streetTypeId);
@@ -128,8 +142,6 @@ const ChangeStreetPage: React.FC = () => {
   const validateForm = () => {
     const newErrors: ErrorMessages = {};
     if (!streetName.trim()) newErrors.streetName = "Phải có tên đường";
-    if (!streetAddress.trim())
-      newErrors.streetAddress = "Phải có địa chỉ đường";
     setErrors(newErrors);
     if (
       (waypoints as LatLng[]).length < 2 ||
@@ -150,8 +162,8 @@ const ChangeStreetPage: React.FC = () => {
 
       const updateStreetRequestDto: UpdateStreetRequestDto = {
         streetName: streetName,
-        streetTypeId: streetTypeId,
-        address: streetAddress,
+        streetTypeId: streetTypeId as number,
+        address: streetAddress as string,
         imageUrl: "",
         description: streetDescription,
         wayPoints: {
@@ -206,7 +218,7 @@ const ChangeStreetPage: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <BackButton onClick={() => navigate(-1)} />
-      <Breadcrumb pageName="Tạo tuyến đường" />
+      <Breadcrumb pageName="Sửa tuyến đường" />
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <form onSubmit={handleSubmit}>
           <fieldset disabled={loading} className="flex flex-col gap-5.5 p-6.5">
@@ -225,8 +237,11 @@ const ChangeStreetPage: React.FC = () => {
               <div className="w-full xl:w-1/2">
                 <SelectGroupOne
                   title="Loại đường"
+                  placeholder="Chọn loại đường"
                   selectedOption={streetTypeId}
-                  setSelectedOption={setStreetTypeId}
+                  setSelectedOption={(value: number | string) =>
+                    setStreetTypeId(value as number)
+                  }
                   isOptionSelected={isSTypeSelected}
                   setIsOptionSelected={setIsSTypeSelected}
                   options={streetTypes}
@@ -235,7 +250,7 @@ const ChangeStreetPage: React.FC = () => {
             </div>
 
             <div>
-              <Input
+              {/* <Input
                 title="Địa chỉ"
                 placeholder="Nhập địa chỉ"
                 type="text"
@@ -243,6 +258,17 @@ const ChangeStreetPage: React.FC = () => {
                 onChange={(e) => setStreetAddress(e.target.value)}
                 required
                 error={errors.streetAddress}
+              /> */}
+              <SelectGroupOne
+                title="Địa chỉ"
+                placeholder="Chọn địa chỉ"
+                selectedOption={streetAddress}
+                setSelectedOption={(value: number | string) =>
+                  setStreetAddress(value)
+                }
+                isOptionSelected={isAddressSelected}
+                setIsOptionSelected={setIsAddressSelected}
+                options={addressOptions}
               />
             </div>
 

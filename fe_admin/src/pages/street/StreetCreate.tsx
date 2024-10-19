@@ -9,17 +9,17 @@ import {
   Input,
   Map,
   OutlinedNormalButton,
-  SelectGroupOne,
   StreetImage,
   TextArea,
-  StreetHistory
+  StreetHistory,
+  SelectGroupOne
 } from "@components";
 import {
   IStreetHistory,
   IStreetImage,
   IStreetType,
   IStreetTypeList,
-  IStreetTypeoption
+  ISelectOption
 } from "@types";
 import { MapContext } from "@contexts";
 import {
@@ -27,6 +27,7 @@ import {
   adminCreateStreet,
   adminGetStreetTypes
 } from "@api";
+import { towns } from "../../data/towns";
 
 interface ErrorMessages {
   streetName?: string;
@@ -34,7 +35,7 @@ interface ErrorMessages {
   streetWaypoint?: string;
 }
 
-const options: IStreetTypeoption[] = [
+const options: ISelectOption[] = [
   {
     value: 1,
     label: "Đường lớn"
@@ -49,16 +50,28 @@ const options: IStreetTypeoption[] = [
   }
 ];
 
+const addressOptions: ISelectOption[] = [
+  {
+    value: " ",
+    label: "Không có địa chỉ"
+  },
+  ...towns.map((town) => ({
+    value: town,
+    label: town
+  }))
+];
+
 const PostStreetPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { waypoints, routePolylines } = useContext(MapContext);
 
   const [streetName, setStreetName] = useState<string>("");
-  const [streetTypeId, setStreetTypeId] = useState<number>(1);
-  const [streetTypes, setStreetTypes] = useState<IStreetTypeoption[]>(options);
+  const [streetTypeId, setStreetTypeId] = useState<number | string>(1);
+  const [streetTypes, setStreetTypes] = useState<ISelectOption[]>(options);
   const [isSTypeSelected, setIsSTypeSelected] = useState<boolean>(false);
-  const [streetAddress, setStreetAddress] = useState<string>("");
+  const [streetAddress, setStreetAddress] = useState<string | number>("");
+  const [isAddressSelected, setIsAddressSelected] = useState<boolean>(false);
   const [streetDescription, setStreetDescription] = useState<string>("");
   const [streetImages, setStreetImages] = useState<IStreetImage[]>([]);
   const [histories, setHistories] = useState<IStreetHistory[]>([]);
@@ -94,8 +107,6 @@ const PostStreetPage: React.FC = () => {
   const validateForm = () => {
     const newErrors: ErrorMessages = {};
     if (!streetName.trim()) newErrors.streetName = "Phải có tên đường";
-    if (!streetAddress.trim())
-      newErrors.streetAddress = "Phải có địa chỉ đường";
     setErrors(newErrors);
     if (
       (waypoints as LatLng[]).length < 2 ||
@@ -118,8 +129,8 @@ const PostStreetPage: React.FC = () => {
 
       const createStreetRequestDto: CreateStreetRequestDto = {
         streetName: streetName,
-        streetTypeId: streetTypeId,
-        address: streetAddress,
+        streetTypeId: streetTypeId as number,
+        address: streetAddress as string,
         imageUrl: "",
         description: streetDescription,
         wayPoints: {
@@ -181,8 +192,11 @@ const PostStreetPage: React.FC = () => {
               <div className="w-full xl:w-1/2">
                 <SelectGroupOne
                   title="Loại đường"
+                  placeholder="Chọn loại đường"
                   selectedOption={streetTypeId}
-                  setSelectedOption={setStreetTypeId}
+                  setSelectedOption={(value: number | string) =>
+                    setStreetTypeId(value)
+                  }
                   isOptionSelected={isSTypeSelected}
                   setIsOptionSelected={setIsSTypeSelected}
                   options={streetTypes}
@@ -191,14 +205,22 @@ const PostStreetPage: React.FC = () => {
             </div>
 
             <div>
-              <Input
+              {/* <Input
                 title="Địa chỉ"
                 placeholder="Nhập địa chỉ"
                 type="text"
                 value={streetAddress}
                 onChange={(e) => setStreetAddress(e.target.value)}
-                required
                 error={errors.streetAddress}
+              /> */}
+              <SelectGroupOne
+                title="Địa chỉ"
+                placeholder="Chọn địa chỉ"
+                selectedOption={streetAddress}
+                setSelectedOption={setStreetAddress}
+                isOptionSelected={isAddressSelected}
+                setIsOptionSelected={setIsAddressSelected}
+                options={addressOptions}
               />
             </div>
 

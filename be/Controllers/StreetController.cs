@@ -125,17 +125,17 @@ namespace be.Controllers
                     var sheetData = new SheetData();
                     worksheetPart.Worksheet = new Worksheet(sheetData);
 
-                    var sheets = spreadsheetDocument?.WorkbookPart?.Workbook.AppendChild(new Sheets());
-                    var sheet = new Sheet() { Id = spreadsheetDocument?.WorkbookPart?.GetIdOfPart(worksheetPart), SheetId = 1, Name = "Streets" };
-                    sheets?.Append(sheet);
+                    var sheets = workbookPart.Workbook.AppendChild(new Sheets());
+                    var sheet = new Sheet() { Id = workbookPart.GetIdOfPart(worksheetPart), SheetId = 1, Name = "Streets" };
+                    sheets.Append(sheet);
 
                     // Add headers
                     var headerRow = new Row();
                     headerRow.Append(
-                        CreateCell("Street Name"),
-                        CreateCell("Address"),
-                        CreateCell("Description"),
-                        CreateCell("Street Type")
+                        CreateCell("Tên đường"),
+                        CreateCell("Địa chỉ"),
+                        CreateCell("Mô tả"),
+                        CreateCell("Loại đường")
                     );
                     sheetData.AppendChild(headerRow);
 
@@ -159,17 +159,25 @@ namespace be.Controllers
                 return File(
                     stream.ToArray(),
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    "streets_export.xlsx"
+                    "DuLieuDuong.xlsx"
                 );
             }
         }
 
         private Cell CreateCell(string value)
         {
-            return new Cell(new InlineString(new Text(value)));
+            return new Cell(new CellValue(value)) { DataType = CellValues.String };
         }
 
-        [HttpPost("createStreetsByExcel"), Authorize(Roles = "Admin,SupAdmin")]
+        private string FormatCoordinates(List<List<double>>? coordinates)
+        {
+            if (coordinates == null || coordinates.Count == 0)
+                return "";
+
+            return string.Join("; ", coordinates.Select(c => $"({string.Join(", ", c)})"));
+        }
+
+        [HttpPost("createStreetsFromExcel"), Authorize(Roles = "Admin,SupAdmin")]
         public async Task<ActionResult<(List<StreetDto>, string)>> CreateStreetByExcel(IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -200,7 +208,7 @@ namespace be.Controllers
                     foreach (Row row in sheetData?.Elements<Row>().Skip(1) ?? Enumerable.Empty<Row>())
                     {
                         var cells = row.Elements<Cell>().ToList();
-                        if (cells.Count < 5) continue;
+                        if (cells.Count < 4) continue;
 
                         string streetName = GetCellValue(workbookPart!, cells[0]);
                         string address = GetCellValue(workbookPart!, cells[1]);

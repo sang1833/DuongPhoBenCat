@@ -58,8 +58,8 @@ export interface IStreetTypeList {
   totalPages?: number;
 }
 
-export interface IStreetTypeoption {
-  value: number;
+export interface ISelectOption {
+  value: number | string;
   label: string;
 }
 

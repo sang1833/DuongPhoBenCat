@@ -5,9 +5,7 @@ import "leaflet-routing-machine";
 import { MapContext } from "@contexts";
 
 const Routing: React.FC = () => {
-  // const [waypoints, setWaypoints] = useState<L.LatLng[]>([]);
-  const { waypoints, setWaypoints, routePolylines, setRoutePolylines } =
-    useContext(MapContext);
+  const { waypoints, setWaypoints, setRoutePolylines } = useContext(MapContext);
   const map: L.Map = useMap();
 
   const areWaypointsClose = (waypoint1: L.LatLng, waypoint2: L.LatLng) => {
@@ -70,11 +68,6 @@ const Routing: React.FC = () => {
       map.off("contextmenu");
     };
   }, [map, waypoints, setWaypoints, setRoutePolylines]);
-
-  useEffect(() => {
-    console.log("routePolylines: ", routePolylines);
-  }, [routePolylines]);
-
   return null;
 };
 

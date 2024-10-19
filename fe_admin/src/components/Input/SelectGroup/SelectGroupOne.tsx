@@ -1,4 +1,4 @@
-import { IStreetTypeoption } from "@types";
+import { ISelectOption } from "@types";
 
 const SelectGroupOne: React.FC<{
   title: string;
@@ -6,9 +6,10 @@ const SelectGroupOne: React.FC<{
   required?: boolean;
   disabled?: boolean;
   error?: string;
-  options: IStreetTypeoption[];
-  selectedOption: number;
-  setSelectedOption: (arg0: number) => void;
+  placeholder?: string;
+  options: ISelectOption[];
+  selectedOption: number | string;
+  setSelectedOption: (arg0: number | string) => void;
   isOptionSelected: boolean;
   setIsOptionSelected: (arg0: boolean) => void;
 }> = ({
@@ -18,6 +19,7 @@ const SelectGroupOne: React.FC<{
   disabled,
   error,
   options,
+  placeholder,
   selectedOption,
   setSelectedOption,
   isOptionSelected,
@@ -42,7 +44,7 @@ const SelectGroupOne: React.FC<{
           defaultValue={selectedOption}
           onChange={(e) => {
             const value = e.target.value;
-            setSelectedOption(Number(value));
+            setSelectedOption(value);
             changeTextColor();
           }}
           className={
@@ -52,7 +54,7 @@ const SelectGroupOne: React.FC<{
           }
         >
           <option value="" disabled className="text-body dark:text-bodydark">
-            Chọn 1 lựa chọn
+            {placeholder}
           </option>
           {options.map((option, index) => (
             <option
