@@ -43,7 +43,8 @@ const Routing: React.FC = () => {
     });
 
     routingControl.on("waypointschanged", (e: any) => {
-      setWaypoints(e.waypoints.map((wp: any) => wp.latLng));
+      const newWaypoints = e.waypoints?.map((wp: any) => wp.latLng) || [];
+      setWaypoints(newWaypoints);
     });
 
     map.on("click", (e: L.LeafletMouseEvent) => {
