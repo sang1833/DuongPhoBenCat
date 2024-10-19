@@ -19,7 +19,7 @@ const StreetInfoCard = () => {
   }, [streetId]);
 
   return (
-    <div className="bg-white p-6 h-full overflow-y-auto">
+    <div className="z-9999 bg-white p-6 h-full overflow-y-auto shadow-xl">
       <h2 className="text-2xl font-bold mb-4">{street?.streetName}</h2>
       <p className="text-gray-600 mb-4">{street?.address}</p>
       <p className="mb-4">{street?.description}</p>

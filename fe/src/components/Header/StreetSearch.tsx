@@ -89,11 +89,11 @@ const StreetSearch: React.FC<StreetSearchProps> = ({
         <div className="relative flex-grow">
           <input
             type="text"
-            placeholder="Search for a street..."
+            placeholder="Tìm kiếm ..."
             value={searchTerm}
             onChange={handleInputChange}
             onFocus={() => setIsOpen(true)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md sm:rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 placeholder-gray-400"
+            className="w-full px-4 py-2 border border-gray-300 rounded-xl sm:rounded-l-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 placeholder-gray-400"
           />
           {searchTerm && (
             <button
@@ -113,7 +113,7 @@ const StreetSearch: React.FC<StreetSearchProps> = ({
           <select
             value={townFilter}
             onChange={handleTownFilterChange}
-            className="w-full sm:w-48 px-4 py-2 border border-gray-300 rounded-md sm:rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 appearance-none"
+            className="w-full sm:w-48 px-4 py-2 border border-gray-300 rounded-xl sm:rounded-r-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 appearance-none"
           >
             {towns.map((town) => (
               <option key={town} value={town}>
@@ -135,10 +135,10 @@ const StreetSearch: React.FC<StreetSearchProps> = ({
               onClick={() => handleSelectStreet(street.id)}
               className="flex flex-row gap-1 px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800"
             >
-              <p>
-                {street.streetName} {" -"}
+              <p>{street.streetName}</p>
+              <p className="text-gray-500">
+                {street.address !== " " && ` - ${street.address}`}
               </p>
-              <p className="text-gray-500">{street.address}</p>
             </li>
           ))}
         </ul>

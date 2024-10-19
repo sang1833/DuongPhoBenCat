@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 import ProtomapsLayer from "./ProtomapLayer";
 import FlyToStreet from "./FlyToStreet";
 import boundaryData from "../../data/boundary.json";
+import config from "../../data/config";
 
 interface MapProps {
   streets: IStreetRoute[];
@@ -42,7 +43,7 @@ const Map: React.FC<MapProps> = ({
         <Polyline
           key={street.id}
           positions={street.route.coordinates}
-          color={selectedStreet?.id === street.id ? "red" : "blue"}
+          color={config.street.color}
           eventHandlers={{
             click: () => onStreetClick(street)
           }}
@@ -54,8 +55,8 @@ const Map: React.FC<MapProps> = ({
       <Polygon
         positions={boundaryCoordinates}
         pathOptions={{
-          color: "blue",
-          weight: 2,
+          color: config.boundary.color,
+          weight: config.boundary.width,
           fillOpacity: 0
         }}
       />

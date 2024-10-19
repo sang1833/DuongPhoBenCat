@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import Map from "./components/Map/Map";
 import StreetSearch from "./components/Header/StreetSearch";
 import { StreetInfo as StreetInfoType, MapState, IStreetRoute } from "./types";
-import { MapPin } from "lucide-react";
 import { getStreetRoutes } from "./apis/function";
-import StreetDetail from "./components/StreetDetail/StreetDetail";
 import { useNavigate } from "react-router-dom";
 import { StreetInfoToIStreetRoute } from "./utils/Mapper";
+import AppLogo from "/logo.png";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTown, setSelectedTown] = useState<string>("Tất cả");
   const [mapState, setMapState] = useState<MapState>({
-    center: [11.1616595, 106.594514],
+    center: [11.1605595, 106.584514],
     zoom: 13
   });
 
@@ -55,10 +55,10 @@ function App() {
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
-      <header className="bg-blue-600 text-white p-4">
+      <header className="bg-[#145da0] text-white p-3">
         <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0">
           <h1 className="text-2xl font-bold flex items-center">
-            <MapPin className="mr-2" />
+            <img src={AppLogo} alt="Logo" className="w-8 h-8 mr-2" />
             <span className="hidden sm:inline">Bản đồ Bến Cát</span>
           </h1>
           <StreetSearch
@@ -89,6 +89,8 @@ function App() {
           />
         </div>
       </main>
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

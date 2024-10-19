@@ -1,19 +1,39 @@
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider
+} from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/store";
-import App from "./App.tsx";
 import "./index.css";
+import App from "./App.tsx";
+import DefaultLayout from "./pages/DefaultLayout.tsx";
 import StreetInfoCard from "./components/StreetDetail/StreetInfo.tsx";
+import OnDevelopPage from "./pages/OnDevelopPage.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <DefaultLayout />,
     children: [
       {
-        path: "/street/:streetId/:streetName",
-        element: <StreetInfoCard />
+        path: "/",
+        element: <App />,
+        children: [
+          {
+            path: "/street/:streetId/:streetName",
+            element: <StreetInfoCard />
+          }
+        ]
+      },
+      {
+        path: "/on-develop",
+        element: <OnDevelopPage />
+      },
+      {
+        path: "*",
+        element: <Navigate to="/" />
       }
     ]
   }
