@@ -5,3 +5,24 @@
 .leaflet-control-attribution.leaflet-control {
   display: none !important;
 }
+
+:root {
+  --scrollbar-thumb: #4a5568;
+  --scrollbar-track: #edf2f7;
+}
+
+@layer components {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-track);
+  }
+}

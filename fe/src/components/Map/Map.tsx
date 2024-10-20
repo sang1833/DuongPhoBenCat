@@ -1,26 +1,27 @@
 import React from "react";
 import { MapContainer, Polygon, Polyline, Popup } from "react-leaflet";
 import { LatLngTuple } from "leaflet";
-import { IStreetRoute, MapState } from "../../types";
+import { useSelector } from "react-redux";
+import { IStreetRoute } from "../../types";
 import "leaflet/dist/leaflet.css";
 import ProtomapsLayer from "./ProtomapLayer";
 import FlyToStreet from "./FlyToStreet";
 import boundaryData from "../../data/boundary.json";
 import config from "../../data/config";
+import { RootState } from "../../redux/store";
 
 interface MapProps {
   streets: IStreetRoute[];
   selectedStreet: IStreetRoute | null;
-  mapState: MapState;
-  onStreetClick: (street: IStreetRoute) => void;
+  onStreetClick: (streetId: number | null) => void;
 }
 
 const Map: React.FC<MapProps> = ({
   streets,
   selectedStreet,
-  mapState,
   onStreetClick
 }) => {
+  const { center, zoom } = useSelector((state: RootState) => state.mapState);
   const bounds: L.LatLngBoundsExpression = [
     [11.018, 106.4345], // Southwest coordinates
     [11.2336, 106.8417] // Northeast coordinates
@@ -31,8 +32,8 @@ const Map: React.FC<MapProps> = ({
 
   return (
     <MapContainer
-      center={mapState.center as LatLngTuple}
-      zoom={mapState.zoom}
+      center={center as LatLngTuple}
+      zoom={zoom}
       style={{ height: "100%", width: "100%" }}
       minZoom={12}
       maxBounds={bounds}
@@ -45,7 +46,7 @@ const Map: React.FC<MapProps> = ({
           positions={street.route.coordinates}
           color={config.street.color}
           eventHandlers={{
-            click: () => onStreetClick(street)
+            click: () => onStreetClick(street.id)
           }}
         >
           <Popup>{street.streetName}</Popup>

@@ -1,5 +1,5 @@
-import React from 'react';
-import { X } from 'lucide-react';
+import React from "react";
+import { X } from "lucide-react";
 
 interface ImageModalProps {
   imageUrl: string;
@@ -12,12 +12,16 @@ const ImageModal: React.FC<ImageModalProps> = ({ imageUrl, onClose }) => {
       <div className="relative max-w-4xl max-h-full">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-white hover:text-gray-300"
+          className="absolute -top-6 -right-6 text-white hover:text-gray-300 border-black"
           aria-label="Close"
         >
           <X size={24} />
         </button>
-        <img src={imageUrl} alt="Full view" className="max-w-full max-h-[90vh] object-contain" />
+        <img
+          src={imageUrl}
+          alt="Full view"
+          className="max-w-full max-h-[90vh] object-contain"
+        />
       </div>
     </div>
   );

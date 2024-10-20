@@ -1,39 +1,31 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { StreetInfo } from "../types";
 
-interface ModalState {
-  isOpen: boolean;
-  title: string;
-  content: React.ReactNode;
+interface StreetState {
+  currentStreet: StreetInfo | null;
 }
 
-const initialState: ModalState = {
-  isOpen: false,
-  title: "",
-  content: null
+const initialState: StreetState = {
+  currentStreet: null
 };
 
 const modalSlice = createSlice({
-  name: "modal",
+  name: "street",
   initialState,
   reducers: {
-    openModal: (
+    addCurrentStreet: (
       state,
       action: PayloadAction<{
-        title: string;
-        content: React.ReactNode;
+        currentStreet: StreetInfo;
       }>
     ) => {
-      state.isOpen = true;
-      state.title = action.payload.title;
-      state.content = action.payload.content;
+      state.currentStreet = action.payload.currentStreet;
     },
-    closeModal: (state) => {
-      state.isOpen = false;
-      state.title = "";
-      state.content = null;
+    removeCurrentStreet: (state) => {
+      state.currentStreet = null;
     }
   }
 });
 
-export const { openModal, closeModal } = modalSlice.actions;
+export const { addCurrentStreet, removeCurrentStreet } = modalSlice.actions;
 export default modalSlice.reducer;
