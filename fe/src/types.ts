@@ -10,8 +10,14 @@ export interface StreetInfo {
   route: {
     coordinates: [number, number][];
   }; // Array of [lat, lng] coordinates
-  images: string[];
+  images: IImage[];
   histories: { period: string; description: string }[]; // description is now HTML content
+}
+
+export interface IImage {
+  id: string;
+  imageUrl: string;
+  description: string;
 }
 
 export interface MapState {

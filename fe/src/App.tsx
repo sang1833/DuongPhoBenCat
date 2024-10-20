@@ -3,7 +3,7 @@ import Map from "./components/Map/Map";
 import StreetSearch from "./components/Header/StreetSearch";
 import { StreetInfo as StreetInfoType, MapState, IStreetRoute } from "./types";
 import { getStreetRoutes } from "./apis/function";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { StreetInfoToIStreetRoute } from "./utils/Mapper";
 import AppLogo from "/logo.png";
 import Footer from "./components/Footer/Footer";
@@ -72,15 +72,16 @@ function App() {
       </header>
       {/* Main */}
       <main className="flex-grow flex flex-col sm:flex-row overflow-hidden relative">
-        <div className="w-full sm:w-1/4 h-1/2 sm:h-full overflow-y-auto">
-          {/* <StreetDetail
+        {/* <div className="w-full sm:w-1/4 h-1/2 sm:h-full overflow-y-auto"> */}
+        {/* <StreetDetail
             selectedStreet={selectedStreet}
             filteredStreets={filteredStreets}
             handleSelectStreet={handleSelectStreet}
             selectedTown={selectedTown}
           /> */}
-        </div>
-        <div className="w-full sm:w-3/4 h-1/2 sm:h-full">
+        <Outlet />
+        {/* </div> */}
+        <div className="w-full h-full">
           <Map
             streets={filteredStreets as unknown as IStreetRoute[]}
             selectedStreet={selectedStreet}
