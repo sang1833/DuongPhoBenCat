@@ -1,15 +1,22 @@
 import { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import Map from "./components/Map/Map";
 import StreetSearch from "./components/Header/StreetSearch";
-import { StreetInfo as StreetInfoType, MapState, IStreetRoute } from "./types";
+import { IStreetRoute } from "./types";
 import { getStreetRoutes } from "./apis/function";
-import { Outlet, useNavigate } from "react-router-dom";
-import { StreetInfoToIStreetRoute } from "./utils/Mapper";
 import AppLogo from "/logo.png";
 import Footer from "./components/Footer/Footer";
+import { RootState } from "./redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { StreetInfoToIStreetRoute } from "./utils/Mapper";
+import { addMapState } from "./redux/mapSlice";
+import { removeCurrentStreet } from "./redux/StreetSlice";
 
 function App() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  // const { currentStreetId } = useParams();
+  const { currentStreet } = useSelector((state: RootState) => state.street);
   // Current street ROUTE show on map
   const [selectedStreet, setSelectedStreet] = useState<IStreetRoute | null>(
     null
@@ -19,21 +26,38 @@ function App() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTown, setSelectedTown] = useState<string>("Tất cả");
-  const [mapState, setMapState] = useState<MapState>({
-    center: [11.1605595, 106.584514],
-    zoom: 13
-  });
 
-  const handleSelectStreet = (street: IStreetRoute | null) => {
-    const streetRoute = StreetInfoToIStreetRoute(street as StreetInfoType);
-    setSelectedStreet(streetRoute);
-    navigate(`/street/${street?.id}`);
-    if (street) {
-      setMapState({
-        center: street.route.coordinates[0],
-        zoom: 15
-      });
+  // const handleSelectStreetOnMap = (street: IStreetRoute | null) => {
+  //   const streetRoute = StreetInfoToIStreetRoute(street as StreetInfoType);
+  //   setSelectedStreet(streetRoute);
+  //   navigate(`/street/${street?.id}`);
+  //   if (street) {
+  //     setMapState({
+  //       center: street.route.coordinates[0],
+  //       zoom: 15
+  //     });
+  //   }
+  // };
+
+  useEffect(() => {
+    if (currentStreet !== null) {
+      const streetRoute = StreetInfoToIStreetRoute(currentStreet);
+      setSelectedStreet(streetRoute);
+      // setFilteredStreets([streetRoute]);
+
+      dispatch(
+        addMapState({ center: streetRoute.route.coordinates[0], zoom: 16 })
+      );
     }
+  }, [currentStreet, dispatch]);
+
+  const handleSelectStreet = (streetId: number | null) => {
+    if (streetId === null) {
+      setSelectedStreet(null);
+      dispatch(removeCurrentStreet());
+      return;
+    }
+    navigate(`/street/${streetId}`);
   };
 
   // const handleClearStreet = () => {
@@ -78,7 +102,6 @@ function App() {
           <Map
             streets={filteredStreets as unknown as IStreetRoute[]}
             selectedStreet={selectedStreet}
-            mapState={mapState}
             onStreetClick={handleSelectStreet}
           />
         </div>

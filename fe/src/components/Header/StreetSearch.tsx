@@ -1,12 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Search, X, ChevronDown } from "lucide-react";
-import { StreetInfo, IStreetSearch } from "../../types";
+import { IStreetSearch } from "../../types";
 import { towns } from "../../data/towns";
 import { userSearch } from "../../apis/function";
+import { removeCurrentStreet } from "../../redux/StreetSlice";
+import { RootState } from "../../redux/store";
 
 interface StreetSearchProps {
-  onSelectStreet: (street: StreetInfo | null) => void;
+  onSelectStreet: (streetId: number | null) => void;
   searchTerm: string;
   setSearchTerm: (term: string) => void;
   townFilter: string;
@@ -21,6 +24,8 @@ const StreetSearch: React.FC<StreetSearchProps> = ({
   setTownFilter
 }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { currentStreet } = useSelector((state: RootState) => state.street);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [filteredStreets, setFilteredStreets] = useState<IStreetSearch[]>([]);
@@ -42,6 +47,7 @@ const StreetSearch: React.FC<StreetSearchProps> = ({
     };
   }, []);
 
+  // search street
   useEffect(() => {
     const fetchSearchResults = async () => {
       const response = await userSearch(searchTerm, townFilter);
@@ -54,13 +60,20 @@ const StreetSearch: React.FC<StreetSearchProps> = ({
     }
   }, [searchTerm, townFilter]);
 
+  // set search term when user click
+  useEffect(() => {
+    if (currentStreet !== null) {
+      setSearchTerm(currentStreet.streetName);
+    }
+  }, [currentStreet, setSearchTerm]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     setIsOpen(true);
   };
 
   const handleSelectStreet = async (streetId: number, streetName: string) => {
-    navigate(`/street/${streetId}`);
+    onSelectStreet(streetId);
     setSearchTerm(streetName);
     setTownFilter(" ");
     setIsOpen(false);
@@ -74,7 +87,9 @@ const StreetSearch: React.FC<StreetSearchProps> = ({
 
   const handleTownFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTownFilter(e.target.value);
+    navigate("/");
     setSearchTerm("");
+    dispatch(removeCurrentStreet());
     onSelectStreet(null);
     setFilteredStreets([]);
   };

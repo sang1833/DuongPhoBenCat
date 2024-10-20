@@ -4,9 +4,13 @@ import ImageModal from "../ImageModal";
 import parse from "html-react-parser";
 import { useParams } from "react-router-dom";
 import { getStreetDetail } from "../../apis/function";
+import { addCurrentStreet } from "../../redux/StreetSlice";
+import { useDispatch } from "react-redux";
 
 const StreetInfoCard = () => {
+  const dispatch = useDispatch();
   const { streetId } = useParams();
+
   const [street, setStreet] = useState<StreetInfo | null>(null);
   const [selectedImage, setSelectedImage] = useState<IImage | null>(null);
 
@@ -14,10 +18,11 @@ const StreetInfoCard = () => {
     const fetchStreetInfo = async () => {
       const response = await getStreetDetail(Number(streetId));
 
+      dispatch(addCurrentStreet({ currentStreet: response as StreetInfo }));
       setStreet(response as StreetInfo);
     };
     fetchStreetInfo();
-  }, [streetId]);
+  }, [streetId, dispatch]);
 
   return (
     <div className="w-full max-w-30 sm:w-1/3 h-1/2 sm:h-full max-h-30 overflow-x-auto overflow-y-auto">
