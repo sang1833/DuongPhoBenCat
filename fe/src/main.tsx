@@ -22,7 +22,7 @@ const router = createBrowserRouter([
         element: <App />,
         children: [
           {
-            path: "/street/:streetId/:streetName",
+            path: "/street/:streetId",
             element: <StreetInfoCard />
           }
         ]
