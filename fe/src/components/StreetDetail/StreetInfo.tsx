@@ -28,6 +28,7 @@ const StreetInfoCard = () => {
 
         <h3 className="text-xl font-semibold mb-2">Hình ảnh</h3>
         <div className="flex space-x-2 mb-4 overflow-x-auto">
+          {street?.images.length === 0 && <p>Không có</p>}
           {street?.images.map((image, index) => (
             <img
               key={index}
@@ -41,6 +42,7 @@ const StreetInfoCard = () => {
 
         <h3 className="text-xl font-semibold mb-2">Lịch sử</h3>
         <ul className="list-none">
+          {street?.histories.length === 0 && <p>Không có</p>}
           {street?.histories.map((item, index) => (
             <li key={index} className="mb-4">
               <h4 className="font-semibold text-lg">{item.period}</h4>

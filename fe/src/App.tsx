@@ -27,6 +27,7 @@ function App() {
   const handleSelectStreet = (street: IStreetRoute | null) => {
     const streetRoute = StreetInfoToIStreetRoute(street as StreetInfoType);
     setSelectedStreet(streetRoute);
+    navigate(`/street/${street?.id}`);
     if (street) {
       setMapState({
         center: street.route.coordinates[0],
@@ -35,10 +36,10 @@ function App() {
     }
   };
 
-  const handleClearStreet = () => {
-    setSelectedStreet(null);
-    setFilteredStreets([]);
-  };
+  // const handleClearStreet = () => {
+  //   setSelectedStreet(null);
+  //   setFilteredStreets([]);
+  // };
 
   useEffect(() => {
     if (selectedTown) {
