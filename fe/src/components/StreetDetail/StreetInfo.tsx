@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IImage, StreetInfo } from "../../types";
 import ImageModal from "../ImageModal";
 import parse from "html-react-parser";
