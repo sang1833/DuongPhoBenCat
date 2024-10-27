@@ -2,3 +2,11 @@
 /.vscode
 /DuongPhoBenCat.generated.sln
 .fake
+# Ignore Docker-related files
+Dockerfile
+docker-compose.yml
+
+# Environment variables
+.env
+.env.local
+.env.*.local

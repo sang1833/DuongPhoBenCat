@@ -7,22 +7,8 @@ using System.Threading.Tasks;
 
 public static class SeedData
 {
-    public static async Task Initialize(IServiceProvider serviceProvider, UserManager<AppUser> userManager)
+    public static async Task Initialize(UserManager<AppUser> userManager)
     {
-        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-        string[] roleNames = { "SupAdmin", "Admin", "Collab", "Director" };
-        IdentityResult roleResult;
-
-        foreach (var roleName in roleNames)
-        {
-            var roleExist = await roleManager.RoleExistsAsync(roleName);
-            if (!roleExist)
-            {
-                roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
-            }
-        }
-
         // Create a super admin user if it doesn't exist
         var superAdmin = await userManager.FindByEmailAsync(EnvManager.GetEnv("SA_MAIL"));
         if (superAdmin == null)
