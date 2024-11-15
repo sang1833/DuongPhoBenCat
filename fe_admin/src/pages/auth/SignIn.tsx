@@ -22,8 +22,13 @@ const SignIn: React.FC = () => {
     let response;
     try {
       response = await login(username, password);
-      const userData: UserData = response.data;
-      localStorage.setItem("user", JSON.stringify(userData));
+      if (response.status === 200) {
+        const userData: UserData = response.data;
+        localStorage.setItem("user", JSON.stringify(userData));
+        navigate("/");
+      } else {
+        toast.error("Đăng nhập thất bại");
+      }
     } catch (error) {
       console.error("Unexpected error during login:", error);
       toast.error("Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.");
