@@ -64,7 +64,7 @@ namespace be.Controllers
                 CookieOptions cookieOptions = new CookieOptions
                 {
                     HttpOnly = true,
-                    SameSite = SameSiteMode.Strict,
+                    SameSite = SameSiteMode.None,
                     Secure = true,
                     Expires = rtExpireTime
                 };
@@ -76,7 +76,7 @@ namespace be.Controllers
                 Response.Cookies.Append("isLogin", rtExpireTime.ToString(), new CookieOptions
                 {
                     HttpOnly = false,
-                    SameSite = SameSiteMode.Strict,
+                    SameSite = SameSiteMode.None,
                     Secure = true,
                     Expires = rtExpireTime
                 });
@@ -188,7 +188,7 @@ namespace be.Controllers
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict,
+                SameSite = SameSiteMode.None,
                 Expires = rtExpireTime
             };
             Response.Cookies.Append("auth", newAccessToken, cookieOptions);
