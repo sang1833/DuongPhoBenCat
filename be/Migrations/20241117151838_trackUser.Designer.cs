@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,11 @@ using be.Data;
 namespace be.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241117151838_trackUser")]
+    partial class trackUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,25 +55,25 @@ namespace be.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "af2ec6c5-bf80-4812-97f1-6a6831d99431",
+                            Id = "327de058-ca0d-4334-925c-c128ccd30566",
                             Name = "SupAdmin",
                             NormalizedName = "SUPADMIN"
                         },
                         new
                         {
-                            Id = "cc198859-3cde-41a2-96b2-58d8b7bd320f",
+                            Id = "e47cb28a-1259-4c2a-aff9-e13bed7c0c9c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "6eeb43e8-95a7-47e5-bc65-110d9e47e05d",
+                            Id = "0cf2590e-d38a-4ab8-916b-6ea98b87e74d",
                             Name = "Collab",
                             NormalizedName = "COLLAB"
                         },
                         new
                         {
-                            Id = "482ed605-9e21-4e47-baf7-13237d90e333",
+                            Id = "7d041389-f0c2-4c0c-b878-31508473f5da",
                             Name = "Director",
                             NormalizedName = "DIRECTOR"
                         });
@@ -429,51 +432,6 @@ namespace be.Migrations
                             StreetTypeName = "Hẻm",
                             UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
-                });
-
-            modelBuilder.Entity("be.Models.TrackRequest", b =>
-                {
-                    b.Property<string>("Ip")
-                        .HasColumnType("text");
-
-                    b.Property<int>("AccessNumber")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Hostname")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Loc")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Org")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Postal")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Region")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Timezone")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Ip");
-
-                    b.ToTable("TrackRequests");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

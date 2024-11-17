@@ -157,6 +157,7 @@ builder.Services.AddScoped<IStreetTypeRepository, StreetTypeRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IImageUploadService, ImageUploadService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserAccessRepository, UserAccessRepository>();
 
 var app = builder.Build();
 
