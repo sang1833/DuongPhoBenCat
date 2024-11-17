@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,11 @@ using be.Data;
 namespace be.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241117152535_trackRequest")]
+    partial class trackRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,25 +55,25 @@ namespace be.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "af2ec6c5-bf80-4812-97f1-6a6831d99431",
+                            Id = "2ac50cf8-b359-4552-a093-ec4fbb11e673",
                             Name = "SupAdmin",
                             NormalizedName = "SUPADMIN"
                         },
                         new
                         {
-                            Id = "cc198859-3cde-41a2-96b2-58d8b7bd320f",
+                            Id = "edc3616b-6229-49a9-8abb-66ed867cb5d7",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "6eeb43e8-95a7-47e5-bc65-110d9e47e05d",
+                            Id = "83e17f0c-efd2-407a-a343-66f678f091af",
                             Name = "Collab",
                             NormalizedName = "COLLAB"
                         },
                         new
                         {
-                            Id = "482ed605-9e21-4e47-baf7-13237d90e333",
+                            Id = "ab78e95b-1e77-42df-827d-ec1bcaa51bfe",
                             Name = "Director",
                             NormalizedName = "DIRECTOR"
                         });
@@ -435,9 +438,6 @@ namespace be.Migrations
                 {
                     b.Property<string>("Ip")
                         .HasColumnType("text");
-
-                    b.Property<int>("AccessNumber")
-                        .HasColumnType("integer");
 
                     b.Property<string>("City")
                         .IsRequired()

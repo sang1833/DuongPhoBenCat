@@ -3,12 +3,7 @@ import { Contact, LockKeyhole } from "lucide-react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { login } from "@api";
-
-interface UserData {
-  username: string;
-  email: string;
-  role: string;
-}
+import { UserData } from "@types";
 
 const SignIn: React.FC = () => {
   const navigate = useNavigate();
@@ -44,11 +39,11 @@ const SignIn: React.FC = () => {
 
   return (
     <div className="lg:p-4 w-full h-screen flex justify-center items-center">
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div className="border border-stroke rounded-xl bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="flex flex-wrap items-center">
           <div className="w-full border-stroke dark:border-strokedark">
-            <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
-              <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
+            <div className="w-full px-4 py-2 sm:px-12 sm:py-8 xl:px-12 xl:py-12">
+              <h2 className="mb-2 md:mb-8 mt-4 text-center text-3xl font-bold text-black dark:text-white sm:text-title-xl2">
                 Đăng nhập
               </h2>
 
@@ -69,7 +64,7 @@ const SignIn: React.FC = () => {
                         onChange={(e) => setUsername(e.target.value)}
                         required
                         placeholder="Nhập tên người dùng"
-                        className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                        className="w-full min-w-90 rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                       />
 
                       <span className="absolute right-4 top-4 text-body text-opacity-80">
@@ -90,7 +85,7 @@ const SignIn: React.FC = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         placeholder="Ít nhất 6 ký tự, có chữ hoa và số"
-                        className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                        className="w-full min-w-90 rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                       />
 
                       <span className="absolute right-4 top-4 text-body text-opacity-80">
@@ -99,11 +94,12 @@ const SignIn: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="mb-5">
+                  <div className="">
                     <input
+                      disabled={loading}
                       type="submit"
-                      value="Đăng nhập"
-                      className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
+                      value={loading ? "Đang xử lý..." : "Đăng nhập"}
+                      className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90 disabled:bg-opacity-50 disabled:cursor-not-allowed dark:border-primary dark:bg-primary dark:text-white"
                     />
                   </div>
                 </fieldset>

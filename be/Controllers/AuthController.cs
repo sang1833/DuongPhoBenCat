@@ -61,30 +61,13 @@ namespace be.Controllers
                 string accessToken = _tokenService.CreateToken(appUser, roles);
                 string refreshToken = _tokenService.CreateRefreshToken();
 
-                CookieOptions cookieOptions = new CookieOptions
-                {
-                    HttpOnly = true,
-                    SameSite = SameSiteMode.None,
-                    Secure = true,
-                    Expires = rtExpireTime
-                };
-                Response.Cookies.Append("auth", accessToken, cookieOptions);
-
-                // Set Refresh Token as HttpOnly cookie
-                Response.Cookies.Append("_re", refreshToken, cookieOptions);
-
-                Response.Cookies.Append("isLogin", rtExpireTime.ToString(), new CookieOptions
-                {
-                    HttpOnly = false,
-                    SameSite = SameSiteMode.None,
-                    Secure = true,
-                    Expires = rtExpireTime
-                });
                 return Ok(
                     new NewUserDto {
                         Username = appUser.UserName,
                         Email = appUser.Email,
-                        Role = roles.Count > 0 ? roles[0] : "NoRole"
+                        Role = roles.Count > 0 ? roles[0] : "NoRole",
+                        Token = accessToken,
+                        RefreshToken = refreshToken
                     }
                 );
             }
@@ -141,8 +124,6 @@ namespace be.Controllers
         {
             try
             {
-                Response.Cookies.Delete("auth");
-                Response.Cookies.Delete("_re");
                 return Ok("Logout success");
             }
             catch (Exception)
@@ -152,20 +133,18 @@ namespace be.Controllers
         }
 
         [HttpPost("refreshToken")]
-        public async Task<IActionResult> RefreshToken()
+        public async Task<IActionResult> RefreshToken([FromBody] TokenRequestDto tokenRequest)
         {
-            string? refreshToken = Request.Cookies["_re"];
-            if (refreshToken == null)
+            if (tokenRequest.RefreshToken == null)
             {
                 return Unauthorized(new { message = "No refresh token found" });
             }
-            string? token = Request.Cookies["auth"];
             string? username;
-            if (token == null)
+            if (tokenRequest.Token == null)
             {
                 return BadRequest(new { message = "No token found" });
             } else {
-                username = _tokenService.GetUsernameFromToken(token);
+                username = _tokenService.GetUsernameFromToken(tokenRequest.Token);
                 if (username == null)
                 {
                     return BadRequest(new { message = "No username found" });
@@ -179,21 +158,15 @@ namespace be.Controllers
 
             IList<string> roles = await _userManager.GetRolesAsync(appUser);
 
-            Response.Cookies.Delete("auth");
-
             var newAccessToken = _tokenService.CreateToken(appUser, roles);
 
-            // Set new Access Token in cookie
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.None,
-                Expires = rtExpireTime
-            };
-            Response.Cookies.Append("auth", newAccessToken, cookieOptions);
-
-            return Ok(new { message = "Token refreshed successfully", token = newAccessToken });
+            return Ok(new { message = "Token refreshed successfully", user = new NewUserDto {
+                Username = appUser.UserName,
+                Email = appUser.Email,
+                Role = roles.Count > 0 ? roles[0] : "NoRole",
+                Token = newAccessToken,
+                RefreshToken = tokenRequest.RefreshToken
+            } });
         }
 
         [HttpPut("changePassword")]
@@ -203,13 +176,12 @@ namespace be.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            string? token = Request.Cookies["auth"];
             string? username;
-            if (token == null)
+            if (changePasswordDto.Token == null)
             {
                 return Unauthorized(new { message = "Thông tin khách hàng không hợp lệ" });
             } else {
-                username = _tokenService.GetUsernameFromToken(token);
+                username = _tokenService.GetUsernameFromToken(changePasswordDto.Token);
                 if (username == null)
                 {
                     return Unauthorized(new { message = "No username found" });

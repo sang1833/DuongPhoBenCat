@@ -100,5 +100,6 @@ namespace be.Data
         public DbSet<StreetType> StreetTypes { get; set; }
         public DbSet<StreetHistory> StreetHistories { get; set; }
         public DbSet<StreetImage> StreetImages { get; set; }
+        public DbSet<TrackRequest> TrackRequests { get; set; }
     }
 }

@@ -14,5 +14,7 @@ namespace be.Dtos.Account
         [Required]
         [MinLength(6, ErrorMessage = "Password must be at least 6 characters long.")]
         public required string NewPassword { get; set; }
+        [Required]
+        public required string Token { get; set; }
     }
 }

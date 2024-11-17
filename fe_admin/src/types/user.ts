@@ -11,3 +11,11 @@ export interface IUserList {
   users: IUser[];
   totalPages?: number;
 }
+
+export interface UserData {
+  username: string;
+  email: string;
+  role: string;
+  token: string;
+  refreshToken: string;
+}

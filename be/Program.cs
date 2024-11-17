@@ -44,30 +44,30 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "Bản đồ Bến Cát", Version = "v1" });
 
-    // c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    // {
-    //     In = ParameterLocation.Header,
-    //     Name = "Authorization",
-    //     Type = SecuritySchemeType.ApiKey,
-    //     Scheme = "Bearer",
-    //     BearerFormat = "JWT",
-    //     Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
-    // });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
+    });
 
-    // c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    // {
-    //     {
-    //         new OpenApiSecurityScheme
-    //         {
-    //             Reference = new OpenApiReference
-    //             {
-    //                 Id = "Bearer",
-    //                 Type = ReferenceType.SecurityScheme,
-    //             },
-    //         },
-    //         new string[] { }
-    //     }
-    // });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Id = "Bearer",
+                    Type = ReferenceType.SecurityScheme,
+                },
+            },
+            new string[] { }
+        }
+    });
     
     // Set the comments path for the Swagger JSON and UI.
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -114,14 +114,14 @@ builder.Services.AddAuthentication(options =>
     };
 
     // Read the token from the cookie
-    options.Events = new JwtBearerEvents
-    {
-        OnMessageReceived = (context) =>
-        {
-            context.Token = context.Request.Cookies["auth"];
-            return Task.CompletedTask;
-        }
-    };
+    // options.Events = new JwtBearerEvents
+    // {
+    //     OnMessageReceived = (context) =>
+    //     {
+    //         context.Token = context.Request.Cookies["auth"];
+    //         return Task.CompletedTask;
+    //     }
+    // };
 });
 
 builder.Services.AddCors(options =>
@@ -157,6 +157,7 @@ builder.Services.AddScoped<IStreetTypeRepository, StreetTypeRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IImageUploadService, ImageUploadService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserAccessRepository, UserAccessRepository>();
 
 var app = builder.Build();
 
