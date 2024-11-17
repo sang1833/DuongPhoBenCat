@@ -1,9 +1,24 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import Cookies from "js-cookie";
 
 const ProtectedRoute: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const isLogin = Cookies.get("isLogin");
+  const [isLogin, setIsLogin] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    try {
+      const userInfo = JSON.parse(localStorage.getItem("user") as string);
+      const isLogin =
+        userInfo?.token && userInfo?.refreshToken && userInfo?.role;
+      setIsLogin(isLogin);
+    } catch (error: unknown) {
+      console.error("Unexpected error during checking login:", error);
+      setIsLogin(false);
+    }
+  }, []);
+
+  if (isLogin === null) {
+    return <div>Loading...</div>;
+  }
 
   if (!isLogin) {
     return <Navigate to="/login" />;

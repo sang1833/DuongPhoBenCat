@@ -133,18 +133,18 @@ namespace be.Controllers
         }
 
         [HttpPost("refreshToken")]
-        public async Task<IActionResult> RefreshToken(string refreshToken, string token)
+        public async Task<IActionResult> RefreshToken([FromBody] TokenRequestDto tokenRequest)
         {
-            if (refreshToken == null)
+            if (tokenRequest.RefreshToken == null)
             {
                 return Unauthorized(new { message = "No refresh token found" });
             }
             string? username;
-            if (token == null)
+            if (tokenRequest.Token == null)
             {
                 return BadRequest(new { message = "No token found" });
             } else {
-                username = _tokenService.GetUsernameFromToken(token);
+                username = _tokenService.GetUsernameFromToken(tokenRequest.Token);
                 if (username == null)
                 {
                     return BadRequest(new { message = "No username found" });
@@ -160,7 +160,13 @@ namespace be.Controllers
 
             var newAccessToken = _tokenService.CreateToken(appUser, roles);
 
-            return Ok(new { message = "Token refreshed successfully", token = newAccessToken });
+            return Ok(new { message = "Token refreshed successfully", user = new NewUserDto {
+                Username = appUser.UserName,
+                Email = appUser.Email,
+                Role = roles.Count > 0 ? roles[0] : "NoRole",
+                Token = newAccessToken,
+                RefreshToken = tokenRequest.RefreshToken
+            } });
         }
 
         [HttpPut("changePassword")]
