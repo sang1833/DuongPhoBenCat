@@ -44,11 +44,11 @@ const SignIn: React.FC = () => {
 
   return (
     <div className="lg:p-4 w-full h-screen flex justify-center items-center">
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div className="border border-stroke rounded-xl bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="flex flex-wrap items-center">
           <div className="w-full border-stroke dark:border-strokedark">
-            <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
-              <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
+            <div className="w-full px-4 py-2 sm:px-12 sm:py-8 xl:px-16 xl:py-12">
+              <h2 className="mb-2 md:mb-8 mt-4 text-center text-3xl font-bold text-black dark:text-white sm:text-title-xl2">
                 Đăng nhập
               </h2>
 
@@ -99,10 +99,10 @@ const SignIn: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="mb-5">
+                  <div className="">
                     <input
                       type="submit"
-                      value="Đăng nhập"
+                      value="Xác nhận"
                       className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
                     />
                   </div>
