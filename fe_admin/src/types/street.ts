@@ -25,6 +25,7 @@ export interface IStreetSearch {
   imageUrl: string;
   updatedDate: string; // You can use Date if you plan to parse it into a Date object
   createdDate: string; // You can use Date if you plan to parse it into a Date object
+  isApproved: boolean;
 }
 
 export interface IStreet {
