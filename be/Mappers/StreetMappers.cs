@@ -93,6 +93,7 @@ namespace be.Mappers
                 Address = streetUpdateDto.Address ?? "",
                 Description = streetUpdateDto.Description ?? "",
                 ImageUrl = streetUpdateDto.ImageUrl ?? "",
+                IsApproved = streetUpdateDto.IsApproved,
                 UpdatedDate = DateTime.Now,
                 Route = new LineString(streetUpdateDto?.Route?.Coordinates.Select(coord => new Coordinate(coord[0], coord[1])).ToArray()),
                 WayPoints = new LineString(streetUpdateDto?.WayPoints?.Coordinates.Select(coord => new Coordinate(coord[0], coord[1])).ToArray())

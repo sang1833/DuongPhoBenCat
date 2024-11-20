@@ -27,6 +27,7 @@ export interface UpdateStreetRequestDto {
   address: string;
   imageUrl: string;
   description: string;
+  isApproved: boolean;
   wayPoints: {
     coordinates: number[][];
   };

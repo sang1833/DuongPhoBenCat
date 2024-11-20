@@ -361,7 +361,7 @@ namespace be.Controllers
         ///   }
         ///   </remarks>
         [HttpPut("{id:int}"), Authorize]
-        public async Task<ActionResult<(StreetDto, string)>> Update(int id, [FromBody] UpdateStreetRequestDto streetDto)
+        public async Task<ActionResult<(StreetDto, string)>> Update([FromRoute] int id, [FromBody] UpdateStreetRequestDto streetDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Data don't meet requirement", ModelState });
@@ -378,7 +378,6 @@ namespace be.Controllers
 
             Street? updatedStreet = streetDto.ToStreetFromUpdateDto();
             updatedStreet.Id = id;
-            updatedStreet.IsApproved = User.IsInRole("Admin") || User.IsInRole("SupAdmin");
 
              // Update street histories
             List<StreetHistory> existingHistories = await _streetHistoryRepo.GetHistoriesByStreetIdAsync(id);

@@ -35,6 +35,7 @@ export interface IStreet {
   address: string;
   description: string;
   imageUrl: string;
+  isApproved: boolean;
   images: IStreetImage[];
   histories: IStreetHistory[];
   updatedDate: string; // You can use Date if you plan to parse it into a Date object
