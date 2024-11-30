@@ -30,6 +30,7 @@ import {
 } from "@api";
 import { toast } from "react-toastify";
 import { towns } from "../../data/towns";
+import Switch from "../../components/Switch/Switch";
 
 interface ErrorMessages {
   streetName?: string;
@@ -79,6 +80,7 @@ const ChangeStreetPage: React.FC = () => {
   const [streetDescription, setStreetDescription] = useState<string>("");
   const [streetImages, setStreetImages] = useState<IStreetImage[]>([]);
   const [histories, setHistories] = useState<IStreetHistory[]>([]);
+  const [isApproved, setIsApproved] = useState<boolean>(false);
   const [errors, setErrors] = useState<ErrorMessages>({});
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -89,11 +91,13 @@ const ChangeStreetPage: React.FC = () => {
         const response = await adminGetStreetById(_streetId);
 
         const streetData = response.data as IStreet;
+        console.log("streetData", streetData);
         setWaypoints(
           streetData.wayPoints?.coordinates.map(
             (coord: [number, number]) => new LatLng(coord[0], coord[1])
           ) || []
         );
+        setIsApproved(streetData.isApproved);
         setStreetName(streetData.streetName);
         setStreetTypeId(streetData.streetTypeId);
         setStreetAddress(streetData.address);
@@ -166,6 +170,7 @@ const ChangeStreetPage: React.FC = () => {
         address: streetAddress as string,
         imageUrl: "",
         description: streetDescription,
+        isApproved: isApproved,
         wayPoints: {
           coordinates: waypoints?.map((wp: LatLng) => [wp.lat, wp.lng])
         },
@@ -222,6 +227,17 @@ const ChangeStreetPage: React.FC = () => {
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <form onSubmit={handleSubmit}>
           <fieldset disabled={loading} className="flex flex-col gap-5.5 p-6.5">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Trạng thái
+              </label>
+              <div className="flex justify-start align-center">
+                <Switch checked={isApproved} onChange={setIsApproved} />
+                <span className="ml-2">
+                  {isApproved ? "Đã duyệt" : "Chưa duyệt"}
+                </span>
+              </div>
+            </div>
             <div className="flex flex-col gap-6 xl:flex-row">
               <div className="w-full xl:w-1/2">
                 <Input

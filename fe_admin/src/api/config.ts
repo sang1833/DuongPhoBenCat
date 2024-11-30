@@ -33,6 +33,7 @@ reApi.interceptors.response.use(
           console.log("Refresh token success user", response.data.user);
           const userInfo: UserData = response.data.user;
           localStorage.setItem("user", JSON.stringify(userInfo));
+          window.location.reload();
           return reApi(originalRequest);
         } else {
           window.location.href = "/login";

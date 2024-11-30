@@ -233,6 +233,7 @@ namespace be.Repositories
             existingStreet.UpdatedDate = DateTime.Now;
             existingStreet.Route = streetModel.Route;
             existingStreet.WayPoints = streetModel.WayPoints;
+            existingStreet.IsApproved = streetModel.IsApproved;
 
             await _context.SaveChangesAsync();
 

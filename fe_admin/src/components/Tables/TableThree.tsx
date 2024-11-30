@@ -136,7 +136,7 @@ const TableThree = () => {
                   <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                     STT
                   </th>
-                  <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white">
+                  <th className="min-w-[200px] py-4 px-4 font-medium text-black dark:text-white">
                     Tên đường
                   </th>
                   <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
@@ -166,6 +166,9 @@ const TableThree = () => {
                         <UpDownSymbol isDesc={isDesc} />
                       )}
                     </div>
+                  </th>
+                  <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
+                    Trạng thái
                   </th>
                   <th className="py-4 px-4 font-medium text-black dark:text-white">
                     Thao tác
@@ -228,6 +231,20 @@ const TableThree = () => {
                             "dd-MM-yyyy"
                           )}
                       </p>
+                    </td>
+                    <td className="max-w-[220px] border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                      <h5 className="text-black dark:text-white truncate">
+                        {/* {packageItem.isApproved ? "Đã duyệt" : "Chưa duyệt"} */}
+                        <p
+                          className={`inline-flex rounded-full truncate bg-opacity-10 px-2 text-sm font-medium ${
+                            packageItem.isApproved
+                              ? "bg-green-700 text-green-700"
+                              : "bg-pink-700 text-pink-700"
+                          }`}
+                        >
+                          {packageItem.isApproved ? "Đã duyệt" : "Chưa duyệt"}
+                        </p>
+                      </h5>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <div className="flex items-center space-x-3.5">
