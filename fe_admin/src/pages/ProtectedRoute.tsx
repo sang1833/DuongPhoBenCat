@@ -8,7 +8,7 @@ const ProtectedRoute: React.FC<{ children: ReactNode }> = ({ children }) => {
     try {
       const userInfo = JSON.parse(localStorage.getItem("user") as string);
       const isLogin =
-        userInfo?.token && userInfo?.refreshToken && userInfo?.role;
+        userInfo?.token !== null && userInfo?.refreshToken && userInfo?.role;
       setIsLogin(isLogin);
     } catch (error: unknown) {
       console.error("Unexpected error during checking login:", error);

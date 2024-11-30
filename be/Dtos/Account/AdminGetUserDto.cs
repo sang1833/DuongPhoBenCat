@@ -11,6 +11,7 @@ namespace be.Dtos.Account
         public string? UserName { get; set; }
         public string? Email { get; set; }
         public required List<string> Roles { get; set; }
+        public DateTime LastActive { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
     }

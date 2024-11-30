@@ -164,6 +164,9 @@ const TableThree = () => {
                       )}
                     </div>
                   </th>
+                  <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
+                    Lần đăng nhập cuối
+                  </th>
                   <th className="py-4 px-4 font-medium text-black dark:text-white">
                     Thao tác
                   </th>
@@ -206,6 +209,12 @@ const TableThree = () => {
                       <p className="text-black dark:text-white">
                         {user.updatedDate &&
                           format(parseISO(user.updatedDate), "dd-MM-yyyy")}
+                      </p>
+                    </td>
+                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                      <p className="text-black dark:text-white">
+                        {user.lastActive &&
+                          format(parseISO(user.lastActive), "dd-MM-yyyy")}
                       </p>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">

@@ -66,6 +66,7 @@ namespace be.Repositories
                     UserName = user.UserName,
                     Email = user.Email,
                     Roles = roles.ToList(),
+                    LastActive = user.LastActive,
                     CreatedDate = user.CreatedDate,
                     UpdatedDate = user.UpdatedDate
                 });
