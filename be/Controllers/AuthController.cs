@@ -56,6 +56,10 @@ namespace be.Controllers
                 if(!result.Succeeded)
                     return Unauthorized("Invalid username or password");
 
+                // Update the LastLoginDate
+                appUser.LastActive = DateTime.UtcNow;
+                await _userManager.UpdateAsync(appUser);
+
                 IList<string> roles = await _userManager.GetRolesAsync(appUser);
 
                 string accessToken = _tokenService.CreateToken(appUser, roles);
@@ -155,6 +159,9 @@ namespace be.Controllers
 
             if(appUser == null)
                 return BadRequest("Dont have account");
+
+            appUser.LastActive = DateTime.UtcNow;
+            await _userManager.UpdateAsync(appUser);
 
             IList<string> roles = await _userManager.GetRolesAsync(appUser);
 
