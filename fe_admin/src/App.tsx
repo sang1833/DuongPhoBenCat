@@ -16,8 +16,11 @@ import {
   ChangePasswordPage,
   ManageUser,
   UserCreate,
-  UserDetail
+  UserDetail,
+  Line,
+  Access
 } from "@pages";
+import ChartLayout from "./layout/ChartLayout";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -76,6 +79,20 @@ const App = () => {
             {
               path: "user/detail/:userId",
               element: <UserDetail />
+            },
+            {
+              path: "chart",
+              element: <ChartLayout />,
+              children: [
+                {
+                  path: "line",
+                  element: <Line />
+                },
+                {
+                  path: "access",
+                  element: <Access />
+                }
+              ]
             },
             {
               path: "change-password",
