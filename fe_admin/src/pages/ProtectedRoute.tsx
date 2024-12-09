@@ -1,8 +1,13 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import checkAuth from "../api/auth";
 
 const ProtectedRoute: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isLogin, setIsLogin] = useState<boolean | null>(null);
+  const token = checkAuth();
+  if (!token) {
+    <Navigate to="/login" />;
+  }
 
   useEffect(() => {
     try {

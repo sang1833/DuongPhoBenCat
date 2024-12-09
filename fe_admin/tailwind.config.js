@@ -1,18 +1,20 @@
-const defaultTheme = require("tailwindcss/defaultTheme");
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   darkMode: "class",
   theme: {
     fontFamily: {
-      sans: ["Inter", ...defaultTheme.fontFamily.sans]
+      sans: ["Inter", "system-ui", "sans-serif"]
     },
     screens: {
       "2xsm": "375px",
       xsm: "425px",
       "3xl": "2000px",
-      ...defaultTheme.screens
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+      "2xl": "1536px"
     },
     extend: {
       colors: {
