@@ -1,4 +1,4 @@
-import { UserData } from "@types/user";
+import { UserData } from "../types/user";
 import { reApi } from "./config";
 
 const checkAuth = () => {

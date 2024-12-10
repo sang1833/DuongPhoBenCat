@@ -18,9 +18,10 @@ export default defineConfig({
       "@contexts": fileURLToPath(
         new URL("src/contexts/index.ts", import.meta.url)
       ),
-      "@api": fileURLToPath(
-        new URL("src/api/index.ts", import.meta.url)
-      )
+      "@api": fileURLToPath(new URL("src/api/index.ts", import.meta.url))
     }
+  },
+  build: {
+    commonjsOptions: { transformMixedEsModules: true }
   }
 });
