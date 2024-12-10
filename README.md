@@ -2,6 +2,11 @@
   <img src="./BenCatMap.png" alt="Ứng dụng bản đồ thành phố Bến Cát">
 </p>
 
+## URL
+
+Website: https://bandobencat.vercel.app
+Admin: https://bdbc-admin.vercel.app
+
 ## Quick run
 
 - FE: npm install && npm run dev
