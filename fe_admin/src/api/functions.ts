@@ -88,7 +88,6 @@ export const adminChangeUser = async (
     username: string;
     email: string;
     role: string;
-    password?: string;
   }
 ) => {
   try {
@@ -97,12 +96,25 @@ export const adminChangeUser = async (
       email: userData.email,
       role: userData.role
     };
-    if (userData.password) {
-      requestBody.password = userData.password;
-    }
     const response = await reApi.put(
       `/api/auth/adminChangeUser/${userId}`,
       requestBody
+    );
+    return response;
+  } catch (error) {
+    console.error("Admin change user error:", error);
+    throw error;
+  }
+};
+
+export const adminChangeUserPassword = async (
+  userId: string,
+  password: string
+) => {
+  try {
+    const response = await reApi.put(
+      `/api/auth/adminChangeUserPassword/${userId}`,
+      password
     );
     return response;
   } catch (error) {
