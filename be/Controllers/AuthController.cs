@@ -241,7 +241,7 @@ namespace be.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if(adminChangeUserDto.Username == null && adminChangeUserDto.Email == null && adminChangeUserDto.Password == null && adminChangeUserDto.Role == null)
+            if(adminChangeUserDto.Username == null && adminChangeUserDto.Email == null && adminChangeUserDto.Role == null)
                 return BadRequest(new { message = "Dữ liệu đầu vào trống" });
 
             AppUser? appUser = await _userManager.FindByIdAsync(userId);
@@ -274,21 +274,6 @@ namespace be.Controllers
                 }
             }
 
-            if (adminChangeUserDto.Password != null)
-            {
-                var removePasswordResult = await _userManager.RemovePasswordAsync(appUser);
-                if (!removePasswordResult.Succeeded)
-                {
-                    return BadRequest(removePasswordResult.Errors);
-                }
-
-                var addPasswordResult = await _userManager.AddPasswordAsync(appUser, adminChangeUserDto.Password);
-                if (!addPasswordResult.Succeeded)
-                {
-                    return BadRequest(addPasswordResult.Errors);
-                }
-            }
-
             if (adminChangeUserDto.Role != null)
             {
                 var currentRoles = await _userManager.GetRolesAsync(appUser);
@@ -306,6 +291,34 @@ namespace be.Controllers
             }
 
             return Ok(new { message = "Cập nhật người dùng thành công" });
+        }
+
+        [HttpPut("adminChangeUserPassword/{userId}")]
+        [Authorize(Roles = "SupAdmin")]
+        public async Task<IActionResult> AdminChangeUserPassword([FromRoute] string userId, [FromBody] string password)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            AppUser? appUser = await _userManager.FindByIdAsync(userId);
+            if (appUser == null)
+            {
+                return NotFound(new { message = "Không tìm thấy người dùng" });
+            }
+
+            var removePasswordResult = await _userManager.RemovePasswordAsync(appUser);
+            if (!removePasswordResult.Succeeded)
+            {
+                return BadRequest(removePasswordResult.Errors);
+            }
+
+            var addPasswordResult = await _userManager.AddPasswordAsync(appUser, password);
+            if (!addPasswordResult.Succeeded)
+            {
+                return BadRequest(addPasswordResult.Errors);
+            }
+
+            return Ok(new { message = "Cập nhật mật khẩu người dùng thành công" });
         }
 
         [HttpDelete("deleteUser/{userId}")]
