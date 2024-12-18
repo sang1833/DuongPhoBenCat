@@ -119,12 +119,24 @@ const TableThree = () => {
         <table className="w-full table-auto">
           {!userList && (
             <thead className="flex justify-center items-center h-20">
-              <p className="text-black dark:text-white">Đang tải dữ liệu...</p>
+              <tr>
+                <th col-span="100%">
+                  <div className="text-black dark:text-white">
+                    Đang tải dữ liệu...
+                  </div>
+                </th>
+              </tr>
             </thead>
           )}
           {userList?.length === 0 ? (
             <thead className="flex justify-center items-center h-20">
-              <p className="text-black dark:text-white">Không có dữ liệu</p>
+              <tr>
+                <th col-span="100%">
+                  <div className="text-black dark:text-white">
+                    Không có dữ liệu
+                  </div>
+                </th>
+              </tr>
             </thead>
           ) : (
             <>
