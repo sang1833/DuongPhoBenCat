@@ -113,7 +113,7 @@ const TableThree = () => {
             className=" max-h-12"
             onClick={() => navigate("/user/create")}
           >
-            {"Thêm người dùng"}
+            {"Thêm nhân viên"}
           </ContainedNormalButton>
         </div>
         <table className="w-full table-auto">
@@ -134,7 +134,7 @@ const TableThree = () => {
                     STT
                   </th>
                   <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
-                    Tên người dùng
+                    Tên nhân viên
                   </th>
                   <th className="min-w-[140px] py-4 px-4 font-medium text-black dark:text-white">
                     Email
