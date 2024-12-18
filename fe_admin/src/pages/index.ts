@@ -15,3 +15,4 @@ export { default as UserCreate } from "./user/UserCreate";
 export { default as UserDetail } from "./user/UserDetail";
 export { default as Line } from "./chart/Line";
 export { default as Access } from "./chart/Access";
+export { default as DashBoard } from "./dashboard/DashBoard";

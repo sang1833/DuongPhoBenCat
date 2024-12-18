@@ -10,6 +10,7 @@ import {
 import { getUserById, adminChangeUser } from "@api";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
+import UserPassword from "./UserPassword";
 
 const userRoles = [
   { value: "SupAdmin", label: "SupAdmin" },
@@ -22,8 +23,6 @@ const userRoles = [
 interface State {
   userName: string;
   email: string;
-  password: string;
-  confirmPassword: string;
   role: string;
   errors: Record<string, string>;
   loading: boolean;
@@ -56,8 +55,6 @@ function reducer(state: State, action: Action): State {
 const initialState: State = {
   userName: "",
   email: "",
-  password: "",
-  confirmPassword: "",
   role: "",
   errors: {},
   loading: false
@@ -106,18 +103,12 @@ const ChangeUserPage: React.FC = () => {
 
   const handlePostUser = async () => {
     dispatch({ type: "SET_LOADING", loading: true });
-    if (state.password !== state.confirmPassword && state.password) {
-      toast.error("Mật khẩu xác nhận không khớp");
-      dispatch({ type: "SET_LOADING", loading: false });
-      return;
-    }
 
     try {
       const response = await adminChangeUser(userId as string, {
         username: state.userName,
         email: state.email,
-        role: state.role,
-        ...(state.password && { password: state.password })
+        role: state.role
       });
       if (response.status === 200 || response.status === 201) {
         toast.success("Chỉnh sửa người dùng thành công");
@@ -145,7 +136,11 @@ const ChangeUserPage: React.FC = () => {
     <div className="container mx-auto px-4 py-8">
       <BackButton onClick={() => navigate(-1)} />
       <Breadcrumb pageName="Chỉnh sửa người dùng" />
+
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+        <h2 className="px-4 text-xl font-semibold text-heading mt-4">
+          Thông tin cá nhân
+        </h2>
         <form onSubmit={handleSubmit}>
           <fieldset
             disabled={state.loading}
@@ -188,46 +183,6 @@ const ChangeUserPage: React.FC = () => {
                   error={state.errors.email}
                   isAutoFill={false}
                   required
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-6 xl:flex-row">
-              <div className="w-full">
-                <Input
-                  title="Mật khẩu"
-                  placeholder="Nhập mật khẩu"
-                  type="password"
-                  value={state.password}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "SET_FIELD",
-                      field: "password",
-                      value: e.target.value
-                    })
-                  }
-                  isAutoFill={false}
-                  error={state.errors.password}
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-6 xl:flex-row">
-              <div className="w-full">
-                <Input
-                  title="Mật khẩu xác nhận"
-                  placeholder="Nhập mật khẩu xác nhận"
-                  type="password"
-                  value={state.confirmPassword}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "SET_FIELD",
-                      field: "confirmPassword",
-                      value: e.target.value
-                    })
-                  }
-                  isAutoFill={false}
-                  error={state.errors.confirmPassword}
                 />
               </div>
             </div>
@@ -321,6 +276,8 @@ const ChangeUserPage: React.FC = () => {
           </fieldset>
         </form>
       </div>
+
+      <UserPassword userId={userId} />
     </div>
   );
 };

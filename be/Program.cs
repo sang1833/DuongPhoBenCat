@@ -175,6 +175,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseMiddleware<TokenMiddleware>();
+
 app.MapControllers();
 
 // Seed the database
