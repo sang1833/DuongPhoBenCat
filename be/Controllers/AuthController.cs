@@ -210,6 +210,37 @@ namespace be.Controllers
             return Ok(new { message = "Đổi mật khẩu thành công" });
         }
 
+        [HttpGet("getMyProfile")]
+        [Authorize]
+        public async Task<IActionResult> GetMyProfile()
+        {
+            string? token = HttpContext.Items["AuthorizationToken"] as string;
+            if (token == null)
+            {
+                return Unauthorized("Token not found");
+            }
+
+            string? username = _tokenService.GetUsernameFromToken(token);
+            if (username == null)
+            {
+                return Unauthorized("User not found");
+            }
+
+            AppUser? appUser = await _userManager.FindByNameAsync(username);
+            if (appUser == null)
+            {
+                return Unauthorized("User not found");
+            }
+
+            IList<string> roles = await _userManager.GetRolesAsync(appUser);
+
+            return Ok(new NewUserDto {
+                Username = appUser.UserName,
+                Email = appUser.Email,
+                Role = roles.Count > 0 ? roles[0] : "NoRole"
+            });
+        }
+
         [HttpGet("getAllUser")]
         [Authorize(Roles = "SupAdmin")]
         public async Task<IActionResult> GetAllUser([FromQuery] UserQueryObject userQueryObject)
