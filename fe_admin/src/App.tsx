@@ -18,7 +18,8 @@ import {
   UserCreate,
   UserDetail,
   Line,
-  Access
+  Access,
+  DashBoard
 } from "@pages";
 import ChartLayout from "./layout/ChartLayout";
 
@@ -36,6 +37,10 @@ const App = () => {
             </ProtectedRoute>
           ),
           children: [
+            {
+              path: "/",
+              element: <DashBoard />
+            },
             {
               path: "map/street-type",
               element: <StreetType />

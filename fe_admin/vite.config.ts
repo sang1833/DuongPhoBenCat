@@ -18,7 +18,8 @@ export default defineConfig({
       "@contexts": fileURLToPath(
         new URL("src/contexts/index.ts", import.meta.url)
       ),
-      "@api": fileURLToPath(new URL("src/api/index.ts", import.meta.url))
+      "@api": fileURLToPath(new URL("src/api/index.ts", import.meta.url)),
+      "@": fileURLToPath(new URL("./src", import.meta.url))
     }
   },
   build: {
