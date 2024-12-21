@@ -8,7 +8,7 @@
 - Admin website: https://bdbc-admin.vercel.app
 - Admin account:
   - Username: `SuperAdmin`
-  - Password: `Bc2024$%vietnam`
+  - Password: `Superadmin$123`
 
 ## Quick run
 

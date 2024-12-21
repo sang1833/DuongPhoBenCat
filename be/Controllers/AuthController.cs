@@ -183,16 +183,16 @@ namespace be.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            string? username;
-            if (changePasswordDto.Token == null)
+            string? token = HttpContext.Items["AuthorizationToken"] as string;
+            if (token == null)
             {
-                return Unauthorized(new { message = "Thông tin khách hàng không hợp lệ" });
-            } else {
-                username = _tokenService.GetUsernameFromToken(changePasswordDto.Token);
-                if (username == null)
-                {
-                    return Unauthorized(new { message = "No username found" });
-                }
+                return Unauthorized(new { message = "Token not found" });
+            }
+
+            string? username = _tokenService.GetUsernameFromToken(token);
+            if (username == null)
+            {
+                return Unauthorized(new { message = "No username found" });
             }
 
             AppUser? appUser = await _userManager.FindByNameAsync(username);
