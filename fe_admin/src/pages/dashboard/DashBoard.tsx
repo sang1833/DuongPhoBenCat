@@ -10,15 +10,15 @@ const DashBoard: React.FC = () => {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         <CardDataStats
           title="Tổng lượt truy cập"
-          total="$3.456K"
+          total="3.456K"
           rate="0.43%"
           levelUp
         >
           <Eye color="#3C50E0" />
         </CardDataStats>
         <CardDataStats
-          title="Tổng số người dùng"
-          total="$45,2K"
+          title="Lượt truy cập hôm nay"
+          total="45K"
           rate="4.35%"
           levelUp
         >
@@ -32,7 +32,12 @@ const DashBoard: React.FC = () => {
         >
           <Route color="#3C50E0" />
         </CardDataStats>
-        <CardDataStats title="Tổng nhân viên" total="3.456">
+        <CardDataStats
+          title="Tổng nhân viên"
+          total="3.456"
+          rate="2.59%"
+          levelUp
+        >
           <UsersRound color="#3C50E0" />
         </CardDataStats>
       </div>
