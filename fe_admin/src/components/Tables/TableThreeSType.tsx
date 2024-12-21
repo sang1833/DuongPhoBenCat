@@ -83,6 +83,9 @@ const TableThree = () => {
         content: (
           <div>
             <h3>Bạn có chắc muốn xoá loại đường này?</h3>
+            <p className="font-bold text-red-700">
+              Lưu ý: xoá loại đường sẽ xoá luôn các tuyến đường thuộc loại đó
+            </p>
             <div className="flex justify-center items-center gap-3 mt-5">
               <ContainedNormalButton
                 color="primary"

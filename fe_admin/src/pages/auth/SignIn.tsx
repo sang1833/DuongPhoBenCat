@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Contact, LockKeyhole } from "lucide-react";
+import { Contact, Eye, EyeOff, LockKeyhole } from "lucide-react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { login } from "@api";
@@ -10,6 +10,7 @@ const SignIn: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -79,7 +80,7 @@ const SignIn: React.FC = () => {
                     </label>
                     <div className="relative">
                       <input
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         autoComplete="current-password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -88,8 +89,11 @@ const SignIn: React.FC = () => {
                         className="w-full min-w-90 rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                       />
 
-                      <span className="absolute right-4 top-4 text-body text-opacity-80">
-                        <LockKeyhole />
+                      <span
+                        className="absolute right-4 top-4 text-body text-opacity-80 cursor-pointer"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <EyeOff /> : <Eye />}
                       </span>
                     </div>
                   </div>
