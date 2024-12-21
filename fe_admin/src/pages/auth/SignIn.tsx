@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Contact, Eye, EyeOff, LockKeyhole } from "lucide-react";
+import { Contact, Eye, EyeOff } from "lucide-react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { login } from "@api";
