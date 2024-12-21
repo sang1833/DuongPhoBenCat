@@ -64,7 +64,7 @@ export const changePassword = async (
   newPassword: string
 ) => {
   try {
-    const response = await reApi.post("/api/auth/changePassword", {
+    const response = await reApi.put("/api/auth/changePassword", {
       currentPassword,
       newPassword
     });
