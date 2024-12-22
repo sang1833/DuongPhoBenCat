@@ -56,7 +56,7 @@ namespace be.Controllers
     [HttpGet("requests")]
     [Authorize(Roles = "Admin,SupAdmin")]
     public async Task<IActionResult> GetAccessRequests(
-        [FromBody] TrackRequestQueryObject queryObject
+        [FromQuery] TrackRequestQueryObject queryObject
     )
     {
         var (requests, totalPages) = await _userAccessRepo.GetAccessRequestsAsync(queryObject);
