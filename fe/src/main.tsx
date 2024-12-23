@@ -11,6 +11,8 @@ import App from "./App.tsx";
 import DefaultLayout from "./pages/DefaultLayout.tsx";
 import StreetInfoCard from "./components/StreetDetail/StreetInfo.tsx";
 import OnDevelopPage from "./pages/OnDevelopPage.tsx";
+import Contribution from "./pages/Contribution.tsx";
+import Popup from "./components/Popup.tsx";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +34,10 @@ const router = createBrowserRouter([
         element: <OnDevelopPage />
       },
       {
+        path: "contribution",
+        element: <Contribution />
+      },
+      {
         path: "*",
         element: <Navigate to="/" />
       }
@@ -42,5 +48,6 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <RouterProvider router={router} />
+    <Popup />
   </Provider>
 );

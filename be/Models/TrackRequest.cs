@@ -20,5 +20,6 @@ namespace be.Models
         public required string Postal { get; set; }
         public required string Timezone { get; set; }
         public int AccessNumber { get; set; }
+        public DateTime LastAccess { get; set; }
     }
 }

@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import streetSlice from "./StreetSlice";
 import mapSlice from "./mapSlice";
+import popupSlice from "./popupSlice";
 
 const store = configureStore({
   reducer: {
     street: streetSlice,
-    mapState: mapSlice
+    mapState: mapSlice,
+    popup: popupSlice
   }
 });
 
