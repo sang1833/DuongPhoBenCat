@@ -48,3 +48,11 @@ export const trackUserAccess = async (
   });
   return response.data;
 };
+
+export const reportStreet = async (title: string, content: string) => {
+  const response = await api.post("/api/suggestion", {
+    title: title,
+    content: content
+  });
+  return response;
+};

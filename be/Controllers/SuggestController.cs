@@ -40,6 +40,8 @@ namespace be.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            else if (suggestionDto.Title == "" && suggestionDto.Content == "")
+                return BadRequest(new { message = "Title and content cannot be empty at same time" });
 
             Suggestion createdSuggestion = await _suggestRepository.CreateAsync(suggestionDto.ToSuggestionFromCreateDto());
 
