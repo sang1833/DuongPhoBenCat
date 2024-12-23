@@ -331,3 +331,37 @@ export const adminDeleteStreetType = async (streetTypeId: number) => {
     throw error;
   }
 };
+
+export const getAllSuggestions = async (
+  title?: string,
+  sortBy?: string,
+  isDescending?: boolean,
+  pageNumber?: number,
+  pageSize?: number
+) => {
+  try {
+    const response = await reApi.get("/api/suggestion", {
+      params: {
+        Title: title,
+        SortBy: sortBy,
+        IsDescending: isDescending,
+        PageNumber: pageNumber,
+        PageSize: pageSize
+      }
+    });
+    return response;
+  } catch (error) {
+    console.error("Get all suggestions error:", error);
+    throw error;
+  }
+};
+
+export const getSuggestionById = async (suggestionId: string) => {
+  try {
+    const response = await reApi.get(`/api/suggestion/${suggestionId}`);
+    return response;
+  } catch (error) {
+    console.error("Get suggestion by id error:", error);
+    throw error;
+  }
+};

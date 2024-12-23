@@ -2,7 +2,7 @@ const TextArea: React.FC<{
   title: string;
   value: string;
   id?: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   rows?: number;
   placeholder: string;
   required?: boolean;

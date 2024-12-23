@@ -19,7 +19,9 @@ import {
   UserDetail,
   Line,
   Access,
-  DashBoard
+  DashBoard,
+  Suggest,
+  SuggestDetail
 } from "@pages";
 import ChartLayout from "./layout/ChartLayout";
 
@@ -102,6 +104,14 @@ const App = () => {
             {
               path: "change-password",
               element: <ChangePasswordPage />
+            },
+            {
+              path: "suggest",
+              element: <Suggest />
+            },
+            {
+              path: "suggest/detail/:suggestionId",
+              element: <SuggestDetail />
             },
             {
               path: "intercept",

@@ -16,3 +16,5 @@ export { default as UserDetail } from "./user/UserDetail";
 export { default as Line } from "./chart/Line";
 export { default as Access } from "./chart/Access";
 export { default as DashBoard } from "./dashboard/DashBoard";
+export { default as Suggest } from "./suggest/Suggest";
+export { default as SuggestDetail } from "./suggest/SuggestDetail";
