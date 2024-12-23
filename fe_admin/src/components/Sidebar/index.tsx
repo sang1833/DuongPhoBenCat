@@ -7,6 +7,7 @@ import Logo from "/logo.png";
 import {
   ChartPie,
   LayoutDashboard,
+  MailQuestion,
   MapPinned,
   Settings,
   User
@@ -313,6 +314,23 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 }}
               </SidebarLinkGroup>
               {/* <!-- Menu Item Map --> */}
+
+              {/* <!-- Menu Item Suggest --> */}
+              {showProfileGroup && (
+                <li>
+                  <NavLink
+                    to="/suggest"
+                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                      pathname.includes("suggest") &&
+                      "bg-graydark dark:bg-meta-4"
+                    }`}
+                  >
+                    <MailQuestion />
+                    Phản hồi
+                  </NavLink>
+                </li>
+              )}
+              {/* <!-- Menu Item Suggest --> */}
 
               {/* <!-- Menu Item Settings --> */}
               <li>
