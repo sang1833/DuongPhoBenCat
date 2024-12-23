@@ -39,7 +39,8 @@ namespace be.Controllers
             Org = request.Org,
             Postal = request.Postal,
             Timezone = request.Timezone,
-            AccessNumber = 1
+            AccessNumber = 1,
+            LastAccess = DateTime.Now
         };
         await _userAccessRepo.TrackAccessAsync(trackRequest);
         return Ok(new { message = "User access tracked" });

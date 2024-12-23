@@ -10,7 +10,6 @@ namespace be.Dtos.TrackRequest
     {
         [Required, Length(1, 20)]
         public required string Ip { get; set; }
-        public DateTime AccessTime { get; set; }
         public string Hostname { get; set; } = "";
         public string City { get; set; } = "";
         public string Region { get; set; } = "";

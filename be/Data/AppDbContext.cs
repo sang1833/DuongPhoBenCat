@@ -94,6 +94,16 @@ namespace be.Data
                 .Property(s => s.UpdatedDate)
                 .ValueGeneratedOnAddOrUpdate()
                 .HasDefaultValueSql("now()");
+
+            builder.Entity<TrackRequest>()
+                .Property(tr => tr.LastAccess)
+                .ValueGeneratedOnAddOrUpdate()
+                .HasDefaultValueSql("now()");
+
+            builder.Entity<Suggestion>()
+                .Property(tr => tr.CreatedDate)
+                .ValueGeneratedOnAdd()
+                .HasDefaultValueSql("now()");
         }
 
         public DbSet<Street> Streets { get; set; }
@@ -101,5 +111,6 @@ namespace be.Data
         public DbSet<StreetHistory> StreetHistories { get; set; }
         public DbSet<StreetImage> StreetImages { get; set; }
         public DbSet<TrackRequest> TrackRequests { get; set; }
+        public DbSet<Suggestion> Suggestions { get; set; }
     }
 }
