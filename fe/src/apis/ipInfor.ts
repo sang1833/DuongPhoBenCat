@@ -15,7 +15,12 @@ interface IpInfor {
 
 export const getIpInfor = async () => {
   try {
-    const response = await axios.get("https://ipinfo.io/14.191.68.78", {
+    // Get the user's IP address
+    const ipResponse = await axios.get("https://api.ipify.org?format=json");
+    const userIp = ipResponse.data.ip;
+
+    // Get IP information using the obtained IP address
+    const response = await axios.get(`https://ipinfo.io/${userIp}`, {
       params: {
         token: import.meta.env.VITE_IPINFO_API_KEY
       }

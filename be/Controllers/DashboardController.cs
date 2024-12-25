@@ -14,17 +14,17 @@ namespace be.Controllers
     public class DashboardController : ControllerBase
     {
         private readonly IStreetRepository _streetRepo;
-        private readonly IUserAccessRepository _userAccessRepo;
+        private readonly IVisitorRepository _visitorRepo;
         private readonly UserManager<AppUser> _userManager;
 
         public DashboardController(
             IStreetRepository streetRepo,
-            IUserAccessRepository userAccessRepo,
+            IVisitorRepository visitorRepo,
             UserManager<AppUser> userManager
         )
         {
             _streetRepo = streetRepo;
-            _userAccessRepo = userAccessRepo;
+            _visitorRepo = visitorRepo;
             _userManager = userManager;
         }
 
