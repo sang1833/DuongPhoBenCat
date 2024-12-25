@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Map from "./components/Map/Map";
 import StreetSearch from "./components/Header/StreetSearch";
@@ -11,11 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { StreetInfoToIStreetRoute } from "./utils/Mapper";
 import { addMapState } from "./redux/mapSlice";
 import { removeCurrentStreet } from "./redux/StreetSlice";
-import { getIpInfor } from "./apis/ipInfor";
 
 function App() {
-  const isIpInfoFetched = useRef(false);
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // const { currentStreetId } = useParams();
@@ -41,13 +38,6 @@ function App() {
   //     });
   //   }
   // };
-
-  useEffect(() => {
-    if (!isIpInfoFetched.current) {
-      getIpInfor();
-      isIpInfoFetched.current = true;
-    }
-  }, []);
 
   useEffect(() => {
     if (currentStreet !== null) {

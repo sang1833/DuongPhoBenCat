@@ -157,7 +157,7 @@ builder.Services.AddScoped<IStreetTypeRepository, StreetTypeRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IImageUploadService, ImageUploadService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IUserAccessRepository, UserAccessRepository>();
+builder.Services.AddScoped<IVisitorRepository, VisitorRepository>();
 builder.Services.AddScoped<ISuggestRepository, SuggestRepository>();
 
 var app = builder.Build();
@@ -181,20 +181,20 @@ app.UseMiddleware<TokenMiddleware>();
 app.MapControllers();
 
 // Seed the database
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        var userManager = services.GetRequiredService<UserManager<AppUser>>();
-        await SeedData.Initialize(userManager);
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while seeding the database.");
-    }
-}
+// using (var scope = app.Services.CreateScope())
+// {
+//     var services = scope.ServiceProvider;
+//     try
+//     {
+//         var userManager = services.GetRequiredService<UserManager<AppUser>>();
+//         await SeedData.Initialize(userManager);
+//     }
+//     catch (Exception ex)
+//     {
+//         var logger = services.GetRequiredService<ILogger<Program>>();
+//         logger.LogError(ex, "An error occurred while seeding the database.");
+//     }
+// }
 
 app.Run();
 

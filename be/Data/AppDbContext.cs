@@ -10,12 +10,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace be.Data
 {
-    public class AppDbContext : IdentityDbContext<AppUser>
+    public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<AppUser>(options)
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
-        }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -95,9 +91,9 @@ namespace be.Data
                 .ValueGeneratedOnAddOrUpdate()
                 .HasDefaultValueSql("now()");
 
-            builder.Entity<TrackRequest>()
-                .Property(tr => tr.LastAccess)
-                .ValueGeneratedOnAddOrUpdate()
+            builder.Entity<Visitor>()
+                .Property(tr => tr.FirstVisit)
+                .ValueGeneratedOnAdd()
                 .HasDefaultValueSql("now()");
 
             builder.Entity<Suggestion>()
@@ -106,11 +102,11 @@ namespace be.Data
                 .HasDefaultValueSql("now()");
         }
 
-        public DbSet<Street> Streets { get; set; }
-        public DbSet<StreetType> StreetTypes { get; set; }
-        public DbSet<StreetHistory> StreetHistories { get; set; }
-        public DbSet<StreetImage> StreetImages { get; set; }
-        public DbSet<TrackRequest> TrackRequests { get; set; }
-        public DbSet<Suggestion> Suggestions { get; set; }
+        public required DbSet<Street> Streets { get; set; }
+        public required DbSet<StreetType> StreetTypes { get; set; }
+        public required DbSet<StreetHistory> StreetHistories { get; set; }
+        public required DbSet<StreetImage> StreetImages { get; set; }
+        public required DbSet<Visitor> Visitors { get; set; }
+        public required DbSet<Suggestion> Suggestions { get; set; }
     }
 }
