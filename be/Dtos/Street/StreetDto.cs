@@ -21,11 +21,16 @@ namespace be.Dtos
         public string? Address { get; set; }
         public string? Description { get; set; }
         public string? ImageUrl { get; set; }
+        public string? Color { get; set; }
+        public int? Weight { get; set; }
+        public double? Opacity { get; set; } 
         public DateTime UpdatedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool IsApproved { get; set; }
         public LineString? Route { get; set; }
         public LineString? WayPoints { get; set; }
+        public LineString? ManualRoute { get; set; }
+        public LineString? ManualWayPoints { get; set; }
         public List<HistoryInStreetDto>? Histories { get; set; }
         public List<ImageInStreetDto>? Images { get; set; }
     }

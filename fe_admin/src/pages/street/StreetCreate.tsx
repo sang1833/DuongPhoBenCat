@@ -27,6 +27,7 @@ import {
   adminGetStreetTypes
 } from "@api";
 import { towns } from "../../data/towns";
+// import PolylineSimulator from "./PolylineSimulator";
 
 interface ErrorMessages {
   streetName?: string;
@@ -78,6 +79,11 @@ const PostStreetPage: React.FC = () => {
   const [streetDescription, setStreetDescription] = useState<string>("");
   const [streetImages, setStreetImages] = useState<IStreetImage[]>([]);
   const [histories, setHistories] = useState<IStreetHistory[]>([]);
+
+  // const [color, setColor] = useState("#3388ff");
+  // const [opacity, setOpacity] = useState(1);
+  // const [weight, setWeight] = useState(5);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<ErrorMessages>({});
 
@@ -112,8 +118,8 @@ const PostStreetPage: React.FC = () => {
     if (!streetName.trim()) newErrors.streetName = "Phải có tên đường";
     setErrors(newErrors);
     if (
-      (osrmWaypoints as LatLng[]).length < 2 ||
-      (osrmRoute as LatLng[])?.length < 2
+      (osrmWaypoints as LatLng[]).length < 2 &&
+      (manualWaypoints as LatLng[])?.length < 2
     )
       newErrors.streetWaypoint = "Phải có toạ độ tuyến đường";
     setErrors(newErrors);
@@ -142,6 +148,7 @@ const PostStreetPage: React.FC = () => {
         route: {
           coordinates: osrmRoute?.map((wp: LatLng) => [wp.lat, wp.lng])
         },
+
         images: streetImages.map((image) => ({
           imageUrl: image.imageUrl || "",
           publicId: image.publicId || "",
@@ -150,7 +157,13 @@ const PostStreetPage: React.FC = () => {
         histories: histories.map((history) => ({
           period: history.period,
           description: history.description
-        }))
+        })),
+        manualWayPoints: {
+          coordinates: manualWaypoints?.map((wp: LatLng) => [wp.lat, wp.lng])
+        },
+        manualRoute: {
+          coordinates: manualRoute?.map((wp: LatLng) => [wp.lat, wp.lng])
+        }
       };
 
       const response = await adminCreateStreet(createStreetRequestDto);
@@ -261,6 +274,19 @@ const PostStreetPage: React.FC = () => {
               </p>
             </div>
 
+            {/* <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Cấu hình tuyến đường
+              </label>
+              <PolylineSimulator
+                color={color}
+                weight={weight}
+                opacity={opacity}
+                setColor={setColor}
+                setWeight={setWeight}
+                setOpacity={setOpacity}
+              />
+            </div> */}
             <StreetImage
               streetImages={streetImages}
               setStreetImages={setStreetImages}

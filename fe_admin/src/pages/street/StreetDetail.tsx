@@ -30,6 +30,7 @@ import {
 import { toast } from "react-toastify";
 import { towns } from "../../data/towns";
 import Switch from "../../components/Switch/Switch";
+// import PolylineSimulator from "./PolylineSimulator";
 
 interface ErrorMessages {
   streetName?: string;
@@ -85,6 +86,11 @@ const ChangeStreetPage: React.FC = () => {
   const [streetImages, setStreetImages] = useState<IStreetImage[]>([]);
   const [histories, setHistories] = useState<IStreetHistory[]>([]);
   const [isApproved, setIsApproved] = useState<boolean>(false);
+
+  // const [color, setColor] = useState("#3388ff");
+  // const [opacity, setOpacity] = useState(1);
+  // const [weight, setWeight] = useState(5);
+
   const [errors, setErrors] = useState<ErrorMessages>({});
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -106,6 +112,16 @@ const ChangeStreetPage: React.FC = () => {
             (coord: [number, number]) => new LatLng(coord[0], coord[1])
           ) || []
         );
+        setManualWaypoints(
+          streetData.manualWayPoints?.coordinates.map(
+            (coord: [number, number]) => new LatLng(coord[0], coord[1])
+          ) || []
+        );
+        setManualRoute(
+          streetData.manualRoute?.coordinates.map(
+            (coord: [number, number]) => new LatLng(coord[0], coord[1])
+          ) || []
+        );
         setIsApproved(streetData.isApproved);
         setStreetName(streetData.streetName);
         setStreetTypeId(streetData.streetTypeId);
@@ -119,6 +135,9 @@ const ChangeStreetPage: React.FC = () => {
           }))
         );
         setHistories(streetData.histories);
+        // setColor(streetData.color);
+        // setOpacity(streetData.opacity);
+        // setWeight(streetData.weight);
       } catch (error) {
         console.error("Error fetching streets:", error);
       }
@@ -157,8 +176,8 @@ const ChangeStreetPage: React.FC = () => {
     if (!streetName.trim()) newErrors.streetName = "Phải có tên đường";
     setErrors(newErrors);
     if (
-      (osrmWaypoints as LatLng[]).length < 2 ||
-      (osrmRoute as LatLng[])?.length < 2
+      (osrmWaypoints as LatLng[]).length < 2 &&
+      (manualWaypoints as LatLng[])?.length < 2
     )
       newErrors.streetWaypoint = "Phải có toạ độ tuyến đường";
     setErrors(newErrors);
@@ -203,7 +222,16 @@ const ChangeStreetPage: React.FC = () => {
               period: history.period,
               description: history.description
             };
-        })
+        }),
+        // color: color,
+        // opacity: opacity,
+        // weight: weight,
+        manualWayPoints: {
+          coordinates: manualWaypoints?.map((wp: LatLng) => [wp.lat, wp.lng])
+        },
+        manualRoute: {
+          coordinates: manualRoute?.map((wp: LatLng) => [wp.lat, wp.lng])
+        }
       };
 
       const response = await adminUpdateStreet(
@@ -330,6 +358,20 @@ const ChangeStreetPage: React.FC = () => {
                 {t("Click on the map to add markers and create a route.")}
               </p>
             </div>
+
+            {/* <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Cấu hình tuyến đường
+              </label>
+              <PolylineSimulator
+                color={color}
+                weight={weight}
+                opacity={opacity}
+                setColor={setColor}
+                setWeight={setWeight}
+                setOpacity={setOpacity}
+              />
+            </div> */}
 
             <StreetImage
               streetImages={streetImages}

@@ -36,6 +36,9 @@ export interface IStreet {
   description: string;
   imageUrl: string;
   isApproved: boolean;
+  weight: number;
+  opacity: number;
+  color: string;
   images: IStreetImage[];
   histories: IStreetHistory[];
   updatedDate: string; // You can use Date if you plan to parse it into a Date object
@@ -44,6 +47,12 @@ export interface IStreet {
     coordinates: [number, number][];
   };
   route: {
+    coordinates: [number, number][];
+  };
+  manualWayPoints: {
+    coordinates: [number, number][];
+  };
+  manualRoute: {
     coordinates: [number, number][];
   };
 }

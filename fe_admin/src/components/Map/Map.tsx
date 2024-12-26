@@ -154,7 +154,7 @@ const MapComponent: React.FC<MapProps> = ({
     <div className="flex">
       {/* Sidebar to display waypoints and remove buttons */}
       <div className="w-[220px] h-[80vh] p-8 bg-white overflow-y-scroll">
-        <h4 className="font-bold">Tự định tuyến</h4>
+        <h4 className="font-bold text-nowrap">Tự định tuyến</h4>
         <ul className="list-none p-0">
           {osrmWaypoints &&
             osrmWaypoints.map((waypoint, index) => (
@@ -174,7 +174,7 @@ const MapComponent: React.FC<MapProps> = ({
               </li>
             ))}
         </ul>
-        <h4 className="font-bold">Thủ công</h4>
+        <h4 className="font-bold text-nowrap">Thủ công</h4>
         <ul className="list-none p-0">
           {manualWaypoints &&
             manualWaypoints.map((waypoint, index) => (

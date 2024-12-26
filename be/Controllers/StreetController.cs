@@ -278,7 +278,7 @@ namespace be.Controllers
                 return BadRequest(new { message = "Data don't meet requirement", ModelState });
             else if (!await _streetTypeRepo.IsStreetTypeExistsAsync(streetDto.StreetTypeId))
                 return BadRequest("Street type not found");
-            else if (streetDto?.Route?.Coordinates.Count < 2 || streetDto?.WayPoints?.Coordinates.Count < 2)
+            else if (streetDto?.ManualWayPoints?.Coordinates.Count < 2 && streetDto?.WayPoints?.Coordinates.Count < 2)
                 return BadRequest(new { message = "At least 2 points are required for Route and WayPoints" });
 
             if (streetDto == null)
@@ -367,7 +367,7 @@ namespace be.Controllers
                 return BadRequest(new { message = "Data don't meet requirement", ModelState });
             else if (streetDto == null)
                 return BadRequest(new { message = "Street data is required" });
-            else if (streetDto?.Route?.Coordinates.Count < 2 || streetDto?.WayPoints?.Coordinates.Count < 2)
+            else if (streetDto?.ManualWayPoints?.Coordinates.Count < 2 && streetDto?.WayPoints?.Coordinates.Count < 2)
                 return BadRequest(new { message = "At least 2 points are required for Route and WayPoints" });
 
             Street? existingStreet = await _streetRepo.GetByIdAsync(id);
