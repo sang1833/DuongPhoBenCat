@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -7,7 +7,6 @@ import {
   Input,
   OutlinedNormalButton
 } from "@components";
-import { MapContext } from "@contexts";
 import {
   adminGetStreetTypeById,
   adminUpdateStreetType,
@@ -24,7 +23,6 @@ const ChangeStreetTypePage: React.FC = () => {
   const { t } = useTranslation();
   const { streetTypeId } = useParams();
   const navigate = useNavigate();
-  const { waypoints, routePolylines } = useContext(MapContext);
 
   const [streetTypeName, setStreetTypeName] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -56,11 +54,6 @@ const ChangeStreetTypePage: React.FC = () => {
 
   const handlePostStreet = async () => {
     setLoading(true);
-
-    if (!waypoints || !routePolylines) {
-      console.error("No waypoints or route polylines to post street");
-      return;
-    }
 
     const updateStreetTypeRequestDto: UpdateStreetTypeRequestDto = {
       streetTypeName: streetTypeName

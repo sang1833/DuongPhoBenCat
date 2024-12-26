@@ -1,7 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AdminLayout from "./layout/AdminLayout";
 import DefaultLayout from "./layout/DefaultLayout";
-import { MapProvider } from "@contexts";
 import {
   InterceptPage,
   StreetDetail,
@@ -61,19 +60,11 @@ const App = () => {
             },
             {
               path: "map/street-detail/:streetId",
-              element: (
-                <MapProvider>
-                  <StreetDetail />
-                </MapProvider>
-              )
+              element: <StreetDetail />
             },
             {
               path: "map/street-create",
-              element: (
-                <MapProvider>
-                  <StreetCreate />
-                </MapProvider>
-              )
+              element: <StreetCreate />
             },
             {
               path: "user",

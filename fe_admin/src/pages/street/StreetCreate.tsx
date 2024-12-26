@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LatLng } from "leaflet";
 import { toast } from "react-toastify";
@@ -21,7 +21,6 @@ import {
   IStreetTypeList,
   ISelectOption
 } from "@types";
-import { MapContext } from "@contexts";
 import {
   CreateStreetRequestDto,
   adminCreateStreet,
@@ -64,7 +63,11 @@ const addressOptions: ISelectOption[] = [
 const PostStreetPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { waypoints, routePolylines } = useContext(MapContext);
+  const [osrmWaypoints, setOsrmWaypoints] = useState<L.LatLng[]>([]);
+  const [osrmRoute, setOsrmRoute] = useState<L.LatLng[]>([]);
+
+  const [manualWaypoints, setManualWaypoints] = useState<L.LatLng[]>([]);
+  const [manualRoute, setManualRoute] = useState<L.LatLng[]>([]);
 
   const [streetName, setStreetName] = useState<string>("");
   const [streetTypeId, setStreetTypeId] = useState<number | string>(1);
@@ -109,8 +112,8 @@ const PostStreetPage: React.FC = () => {
     if (!streetName.trim()) newErrors.streetName = "Phải có tên đường";
     setErrors(newErrors);
     if (
-      (waypoints as LatLng[]).length < 2 ||
-      (routePolylines as LatLng[])?.length < 2
+      (osrmWaypoints as LatLng[]).length < 2 ||
+      (osrmRoute as LatLng[])?.length < 2
     )
       newErrors.streetWaypoint = "Phải có toạ độ tuyến đường";
     setErrors(newErrors);
@@ -121,7 +124,7 @@ const PostStreetPage: React.FC = () => {
     setLoading(true);
 
     try {
-      if (!waypoints || !routePolylines) {
+      if (!osrmWaypoints || !osrmRoute) {
         console.error("No waypoints or route polylines to post street");
         setLoading(false);
         return;
@@ -134,10 +137,10 @@ const PostStreetPage: React.FC = () => {
         imageUrl: "",
         description: streetDescription,
         wayPoints: {
-          coordinates: waypoints?.map((wp: LatLng) => [wp.lat, wp.lng])
+          coordinates: osrmWaypoints?.map((wp: LatLng) => [wp.lat, wp.lng])
         },
         route: {
-          coordinates: routePolylines?.map((wp: LatLng) => [wp.lat, wp.lng])
+          coordinates: osrmRoute?.map((wp: LatLng) => [wp.lat, wp.lng])
         },
         images: streetImages.map((image) => ({
           imageUrl: image.imageUrl || "",
@@ -238,7 +241,16 @@ const PostStreetPage: React.FC = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Tuyến đường <span className="text-meta-1">*</span>
               </label>
-              <Map />
+              <Map
+                osrmWaypoints={osrmWaypoints}
+                setOsrmWaypoints={setOsrmWaypoints}
+                osrmRoute={osrmRoute}
+                setOsrmRoute={setOsrmRoute}
+                manualWaypoints={manualWaypoints}
+                setManualWaypoints={setManualWaypoints}
+                manualRoute={manualRoute}
+                setManualRoute={setManualRoute}
+              />
               {errors.streetWaypoint && (
                 <p className="mt-2 text-sm text-red-600">
                   {errors.streetWaypoint}

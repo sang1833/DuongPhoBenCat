@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { LatLng } from "leaflet";
 import { useTranslation } from "react-i18next";
@@ -21,7 +21,6 @@ import {
   IStreetTypeList,
   ISelectOption
 } from "@types";
-import { MapContext } from "@contexts";
 import {
   adminGetStreetById,
   adminGetStreetTypes,
@@ -68,7 +67,12 @@ const ChangeStreetPage: React.FC = () => {
   const { t } = useTranslation();
   const { streetId } = useParams();
   const navigate = useNavigate();
-  const { waypoints, routePolylines, setWaypoints } = useContext(MapContext);
+
+  const [osrmWaypoints, setOsrmWaypoints] = useState<L.LatLng[]>([]);
+  const [osrmRoute, setOsrmRoute] = useState<L.LatLng[]>([]);
+
+  const [manualWaypoints, setManualWaypoints] = useState<L.LatLng[]>([]);
+  const [manualRoute, setManualRoute] = useState<L.LatLng[]>([]);
 
   const [streetName, setStreetName] = useState<string>("");
   const [streetTypeId, setStreetTypeId] = useState<number>(1);
@@ -92,8 +96,13 @@ const ChangeStreetPage: React.FC = () => {
 
         const streetData = response.data as IStreet;
         console.log("streetData", streetData);
-        setWaypoints(
+        setOsrmWaypoints(
           streetData.wayPoints?.coordinates.map(
+            (coord: [number, number]) => new LatLng(coord[0], coord[1])
+          ) || []
+        );
+        setOsrmRoute(
+          streetData.route?.coordinates.map(
             (coord: [number, number]) => new LatLng(coord[0], coord[1])
           ) || []
         );
@@ -116,7 +125,7 @@ const ChangeStreetPage: React.FC = () => {
     };
 
     fetchStreets();
-  }, [setWaypoints, streetId]);
+  }, [setOsrmWaypoints, streetId]);
 
   useEffect(() => {
     const fetchStreetTypes = async () => {
@@ -148,8 +157,8 @@ const ChangeStreetPage: React.FC = () => {
     if (!streetName.trim()) newErrors.streetName = "Phải có tên đường";
     setErrors(newErrors);
     if (
-      (waypoints as LatLng[]).length < 2 ||
-      (routePolylines as LatLng[])?.length < 2
+      (osrmWaypoints as LatLng[]).length < 2 ||
+      (osrmRoute as LatLng[])?.length < 2
     )
       newErrors.streetWaypoint = "Phải có toạ độ tuyến đường";
     setErrors(newErrors);
@@ -159,8 +168,8 @@ const ChangeStreetPage: React.FC = () => {
   const handlePutStreet = async () => {
     setLoading(true);
     try {
-      if (!waypoints || !routePolylines) {
-        console.error("No waypoints or route polylines to post street");
+      if (!osrmWaypoints || !osrmRoute) {
+        console.error("No osrmWaypoints or route polylines to post street");
         return;
       }
 
@@ -172,10 +181,10 @@ const ChangeStreetPage: React.FC = () => {
         description: streetDescription,
         isApproved: isApproved,
         wayPoints: {
-          coordinates: waypoints?.map((wp: LatLng) => [wp.lat, wp.lng])
+          coordinates: osrmWaypoints?.map((wp: LatLng) => [wp.lat, wp.lng])
         },
         route: {
-          coordinates: routePolylines?.map((wp: LatLng) => [wp.lat, wp.lng])
+          coordinates: osrmRoute?.map((wp: LatLng) => [wp.lat, wp.lng])
         },
         images: streetImages.map((image) => ({
           imageUrl: image.imageUrl || "",
@@ -302,7 +311,16 @@ const ChangeStreetPage: React.FC = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Tuyến đường <span className="text-meta-1">*</span>
               </label>
-              <Map />
+              <Map
+                osrmWaypoints={osrmWaypoints}
+                setOsrmWaypoints={setOsrmWaypoints}
+                osrmRoute={osrmRoute}
+                setOsrmRoute={setOsrmRoute}
+                manualWaypoints={manualWaypoints}
+                setManualWaypoints={setManualWaypoints}
+                manualRoute={manualRoute}
+                setManualRoute={setManualRoute}
+              />
               {errors.streetWaypoint && (
                 <p className="mt-2 text-sm text-red-600">
                   {errors.streetWaypoint}
