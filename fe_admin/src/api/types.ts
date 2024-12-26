@@ -5,10 +5,19 @@ export interface CreateStreetRequestDto {
   address: string;
   imageUrl: string;
   description: string;
+  color?: string;
+  opacity?: number;
+  weight?: number;
   wayPoints: {
     coordinates: number[][];
   };
   route: {
+    coordinates: number[][];
+  };
+  manualWayPoints: {
+    coordinates: number[][];
+  };
+  manualRoute: {
     coordinates: number[][];
   };
   images: {
@@ -28,10 +37,19 @@ export interface UpdateStreetRequestDto {
   imageUrl: string;
   description: string;
   isApproved: boolean;
+  color?: string;
+  opacity?: number;
+  weight?: number;
   wayPoints: {
     coordinates: number[][];
   };
   route: {
+    coordinates: number[][];
+  };
+  manualWayPoints: {
+    coordinates: number[][];
+  };
+  manualRoute: {
     coordinates: number[][];
   };
   images: {

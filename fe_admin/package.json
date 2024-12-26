@@ -12,9 +12,11 @@
     "generate-api": "openapi-generator-cli generate -i http://localhost:5208/swagger/v1/swagger.json -g typescript-axios -o ./src/generated-api"
   },
   "dependencies": {
+    "@mapbox/polyline": "^1.2.1",
     "@reduxjs/toolkit": "^2.2.7",
     "@types/js-cookie": "^3.0.6",
     "@types/leaflet-routing-machine": "^3.2.8",
+    "@types/mapbox__polyline": "^1.0.5",
     "apexcharts": "^4.2.0",
     "axios": "^1.7.7",
     "date-fns": "^4.1.0",

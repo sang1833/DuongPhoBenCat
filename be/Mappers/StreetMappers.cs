@@ -17,10 +17,10 @@ namespace be.Mappers
                 Address = streetCreateDto.Address ?? "",
                 Description = streetCreateDto.Description ?? "",
                 ImageUrl = streetCreateDto.ImageUrl ?? "",
-                // UpdatedDate = DateTime.Now,
-                // CreatedDate = DateTime.Now,
                 Route = new LineString(streetCreateDto?.Route?.Coordinates.Select(coord => new Coordinate(coord[0], coord[1])).ToArray()),
-                WayPoints = new LineString(streetCreateDto?.WayPoints?.Coordinates.Select(coord => new Coordinate(coord[0], coord[1])).ToArray())
+                WayPoints = new LineString(streetCreateDto?.WayPoints?.Coordinates.Select(coord => new Coordinate(coord[0], coord[1])).ToArray()),
+                ManualRoute = new LineString(streetCreateDto?.ManualRoute?.Coordinates.Select(coord => new Coordinate(coord[0], coord[1])).ToArray()),
+                ManualWayPoints = new LineString(streetCreateDto?.ManualWayPoints?.Coordinates.Select(coord => new Coordinate(coord[0], coord[1])).ToArray())
             };
         }
 
@@ -40,6 +40,8 @@ namespace be.Mappers
                 IsApproved = street.IsApproved,
                 Route = street.Route,
                 WayPoints = street.WayPoints,
+                ManualRoute = street.ManualRoute,
+                ManualWayPoints = street.ManualWayPoints,
                 Histories = street.Histories.Select(c => c.ToHistoryInStreetDto()).ToList(),
                 Images = street.Images.Select(c => c.ToImageInStreetDto()).ToList()
             };
@@ -51,7 +53,8 @@ namespace be.Mappers
             {
                 Id = street.Id,
                 StreetName = street.StreetName,
-                Route = street.Route
+                Route = street.Route,
+                ManualRoute = street.ManualRoute
             };
         }
 
@@ -96,7 +99,9 @@ namespace be.Mappers
                 IsApproved = streetUpdateDto.IsApproved,
                 UpdatedDate = DateTime.Now,
                 Route = new LineString(streetUpdateDto?.Route?.Coordinates.Select(coord => new Coordinate(coord[0], coord[1])).ToArray()),
-                WayPoints = new LineString(streetUpdateDto?.WayPoints?.Coordinates.Select(coord => new Coordinate(coord[0], coord[1])).ToArray())
+                WayPoints = new LineString(streetUpdateDto?.WayPoints?.Coordinates.Select(coord => new Coordinate(coord[0], coord[1])).ToArray()),
+                ManualRoute = new LineString(streetUpdateDto?.ManualRoute?.Coordinates.Select(coord => new Coordinate(coord[0], coord[1])).ToArray()),
+                ManualWayPoints = new LineString(streetUpdateDto?.ManualWayPoints?.Coordinates.Select(coord => new Coordinate(coord[0], coord[1])).ToArray())
             };
         }
     }

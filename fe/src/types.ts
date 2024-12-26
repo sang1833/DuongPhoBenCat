@@ -7,7 +7,13 @@ export interface StreetInfo {
   };
   address: string;
   description: string;
+  color: string;
+  opacity: number;
+  weight: number;
   route: {
+    coordinates: [number, number][];
+  }; // Array of [lat, lng] coordinates
+  manualRoute: {
     coordinates: [number, number][];
   }; // Array of [lat, lng] coordinates
   images: IImage[];

@@ -6,6 +6,8 @@ export type IMapContext = {
   setWaypoints: React.Dispatch<React.SetStateAction<L.LatLng[]>>;
   routePolylines?: L.LatLng[];
   setRoutePolylines: React.Dispatch<React.SetStateAction<L.LatLng[]>>;
+  manualPolyline?: L.LatLng[];
+  setManualPolyline: React.Dispatch<React.SetStateAction<L.LatLng[]>>;
 };
 
 export interface ProtomapsLayerProps {

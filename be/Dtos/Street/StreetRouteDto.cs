@@ -15,5 +15,6 @@ namespace be.Dtos
         public int Id { get; set; }
         public required string StreetName { get; set; }
         public LineString? Route { get; set; }
+        public LineString? ManualRoute { get; set; }
     }
 }

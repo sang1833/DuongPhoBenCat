@@ -11,5 +11,7 @@ namespace be.Dtos.Street
         public int Id { get; set; }
         public new LineString? Route { get; set; }
         public new LineString? WayPoints { get; set; }
+        public new LineString? ManualRoute { get; set; }
+        public new LineString? ManualWayPoints { get; set; }
     }
 }

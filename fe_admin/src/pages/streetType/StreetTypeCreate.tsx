@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -7,7 +7,6 @@ import {
   Input,
   OutlinedNormalButton
 } from "@components";
-import { MapContext } from "@contexts";
 import { adminCreateStreetType, CreateStreetTypeRequestDto } from "@api";
 import { toast } from "react-toastify";
 
@@ -18,7 +17,6 @@ interface ErrorMessages {
 const PostStreetTypePage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { waypoints, routePolylines } = useContext(MapContext);
 
   const [streetTypeName, setStreetTypeName] = useState<string>("");
   const [errors, setErrors] = useState<ErrorMessages>({});
@@ -34,10 +32,6 @@ const PostStreetTypePage: React.FC = () => {
 
   const handlePostStreet = async () => {
     setLoading(true);
-    if (!waypoints || !routePolylines) {
-      console.error("No waypoints or route polylines to post street");
-      return;
-    }
 
     const createStreetTypeRequestDto: CreateStreetTypeRequestDto = {
       streetTypeName: streetTypeName

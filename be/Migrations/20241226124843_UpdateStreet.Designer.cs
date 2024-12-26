@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,11 @@ using be.Data;
 namespace be.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241226124843_UpdateStreet")]
+    partial class UpdateStreet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,25 +55,25 @@ namespace be.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a9840def-59e2-482b-969e-5deaa7abd992",
+                            Id = "7557beb9-8a4f-4636-b71e-ab9ab8c4fb9a",
                             Name = "SupAdmin",
                             NormalizedName = "SUPADMIN"
                         },
                         new
                         {
-                            Id = "94e18170-1229-42c5-bca7-39b7f15dc554",
+                            Id = "413c40b3-8524-4e60-8c49-52dc481920d2",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "5d6f547a-b4d3-4f4a-9f27-691c8b0e39bd",
+                            Id = "fdca1225-bcb1-439a-a40a-045dae654645",
                             Name = "Collab",
                             NormalizedName = "COLLAB"
                         },
                         new
                         {
-                            Id = "607a245e-2b97-4a7c-8990-a9cf4555f826",
+                            Id = "dbb16b5f-acc1-49f4-b33c-132f1615dc5d",
                             Name = "Director",
                             NormalizedName = "DIRECTOR"
                         });
@@ -271,6 +274,9 @@ namespace be.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Color")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp without time zone")
@@ -293,6 +299,9 @@ namespace be.Migrations
                     b.Property<LineString>("ManualWayPoints")
                         .HasColumnType("geometry");
 
+                    b.Property<double?>("Opacity")
+                        .HasColumnType("double precision");
+
                     b.Property<LineString>("Route")
                         .HasColumnType("geometry");
 
@@ -310,6 +319,9 @@ namespace be.Migrations
 
                     b.Property<LineString>("WayPoints")
                         .HasColumnType("geometry");
+
+                    b.Property<int?>("Weight")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

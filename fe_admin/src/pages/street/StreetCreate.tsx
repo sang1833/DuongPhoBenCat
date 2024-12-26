@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LatLng } from "leaflet";
 import { toast } from "react-toastify";
@@ -21,13 +21,13 @@ import {
   IStreetTypeList,
   ISelectOption
 } from "@types";
-import { MapContext } from "@contexts";
 import {
   CreateStreetRequestDto,
   adminCreateStreet,
   adminGetStreetTypes
 } from "@api";
 import { towns } from "../../data/towns";
+// import PolylineSimulator from "./PolylineSimulator";
 
 interface ErrorMessages {
   streetName?: string;
@@ -64,7 +64,11 @@ const addressOptions: ISelectOption[] = [
 const PostStreetPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { waypoints, routePolylines } = useContext(MapContext);
+  const [osrmWaypoints, setOsrmWaypoints] = useState<L.LatLng[]>([]);
+  const [osrmRoute, setOsrmRoute] = useState<L.LatLng[]>([]);
+
+  const [manualWaypoints, setManualWaypoints] = useState<L.LatLng[]>([]);
+  const [manualRoute, setManualRoute] = useState<L.LatLng[]>([]);
 
   const [streetName, setStreetName] = useState<string>("");
   const [streetTypeId, setStreetTypeId] = useState<number | string>(1);
@@ -75,6 +79,11 @@ const PostStreetPage: React.FC = () => {
   const [streetDescription, setStreetDescription] = useState<string>("");
   const [streetImages, setStreetImages] = useState<IStreetImage[]>([]);
   const [histories, setHistories] = useState<IStreetHistory[]>([]);
+
+  // const [color, setColor] = useState("#3388ff");
+  // const [opacity, setOpacity] = useState(1);
+  // const [weight, setWeight] = useState(5);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<ErrorMessages>({});
 
@@ -109,8 +118,8 @@ const PostStreetPage: React.FC = () => {
     if (!streetName.trim()) newErrors.streetName = "Phải có tên đường";
     setErrors(newErrors);
     if (
-      (waypoints as LatLng[]).length < 2 ||
-      (routePolylines as LatLng[])?.length < 2
+      (osrmWaypoints as LatLng[]).length < 2 &&
+      (manualWaypoints as LatLng[])?.length < 2
     )
       newErrors.streetWaypoint = "Phải có toạ độ tuyến đường";
     setErrors(newErrors);
@@ -121,7 +130,7 @@ const PostStreetPage: React.FC = () => {
     setLoading(true);
 
     try {
-      if (!waypoints || !routePolylines) {
+      if (!osrmWaypoints || !osrmRoute) {
         console.error("No waypoints or route polylines to post street");
         setLoading(false);
         return;
@@ -134,11 +143,12 @@ const PostStreetPage: React.FC = () => {
         imageUrl: "",
         description: streetDescription,
         wayPoints: {
-          coordinates: waypoints?.map((wp: LatLng) => [wp.lat, wp.lng])
+          coordinates: osrmWaypoints?.map((wp: LatLng) => [wp.lat, wp.lng])
         },
         route: {
-          coordinates: routePolylines?.map((wp: LatLng) => [wp.lat, wp.lng])
+          coordinates: osrmRoute?.map((wp: LatLng) => [wp.lat, wp.lng])
         },
+
         images: streetImages.map((image) => ({
           imageUrl: image.imageUrl || "",
           publicId: image.publicId || "",
@@ -147,7 +157,13 @@ const PostStreetPage: React.FC = () => {
         histories: histories.map((history) => ({
           period: history.period,
           description: history.description
-        }))
+        })),
+        manualWayPoints: {
+          coordinates: manualWaypoints?.map((wp: LatLng) => [wp.lat, wp.lng])
+        },
+        manualRoute: {
+          coordinates: manualRoute?.map((wp: LatLng) => [wp.lat, wp.lng])
+        }
       };
 
       const response = await adminCreateStreet(createStreetRequestDto);
@@ -238,7 +254,16 @@ const PostStreetPage: React.FC = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Tuyến đường <span className="text-meta-1">*</span>
               </label>
-              <Map />
+              <Map
+                osrmWaypoints={osrmWaypoints}
+                setOsrmWaypoints={setOsrmWaypoints}
+                osrmRoute={osrmRoute}
+                setOsrmRoute={setOsrmRoute}
+                manualWaypoints={manualWaypoints}
+                setManualWaypoints={setManualWaypoints}
+                manualRoute={manualRoute}
+                setManualRoute={setManualRoute}
+              />
               {errors.streetWaypoint && (
                 <p className="mt-2 text-sm text-red-600">
                   {errors.streetWaypoint}
@@ -249,6 +274,19 @@ const PostStreetPage: React.FC = () => {
               </p>
             </div>
 
+            {/* <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Cấu hình tuyến đường
+              </label>
+              <PolylineSimulator
+                color={color}
+                weight={weight}
+                opacity={opacity}
+                setColor={setColor}
+                setWeight={setWeight}
+                setOpacity={setOpacity}
+              />
+            </div> */}
             <StreetImage
               streetImages={streetImages}
               setStreetImages={setStreetImages}
