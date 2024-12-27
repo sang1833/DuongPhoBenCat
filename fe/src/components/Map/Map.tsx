@@ -41,17 +41,27 @@ const Map: React.FC<MapProps> = ({
     >
       <ProtomapsLayer theme="light" />
       {streets.map((street) => (
-        <Polyline
-          key={street.id}
-          positions={street.route.coordinates}
-          color={config.street.color}
-          weight={8}
-          eventHandlers={{
-            click: () => onStreetClick(street.id)
-          }}
-        >
-          <Popup>{street.streetName}</Popup>
-        </Polyline>
+        <>
+          <Polyline
+            key={street.id}
+            positions={street.route.coordinates}
+            color={config.street.color}
+            weight={5}
+            eventHandlers={{
+              click: () => onStreetClick(street.id)
+            }}
+          >
+            <Popup>{street.streetName}</Popup>
+          </Polyline>
+          <Polyline
+            positions={street.route.coordinates}
+            color="transparent"
+            weight={20} // Increase the weight for the invisible clickable area
+            eventHandlers={{
+              click: () => onStreetClick(street.id)
+            }}
+          />
+        </>
       ))}
       <FlyToStreet street={selectedStreet} streets={streets} />
       <Polygon
