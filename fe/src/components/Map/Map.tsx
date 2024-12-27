@@ -45,6 +45,7 @@ const Map: React.FC<MapProps> = ({
           key={street.id}
           positions={street.route.coordinates}
           color={config.street.color}
+          weight={8}
           eventHandlers={{
             click: () => onStreetClick(street.id)
           }}
