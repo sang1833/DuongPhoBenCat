@@ -74,6 +74,12 @@ namespace be.Controllers
 
             List<Street> streets = await _streetRepo.GetStreetListByTownAsync(address);
             List<StreetRouteDto> streetDtos = streets.Select(s => s.ToStreetRouteDto()).ToList();
+            
+            foreach (var streetDto in streetDtos)
+            {
+                streetDto.CombineRoutes();
+            }
+            
             return Ok(streetDtos);
         }
 

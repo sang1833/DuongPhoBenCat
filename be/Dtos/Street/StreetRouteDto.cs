@@ -16,5 +16,18 @@ namespace be.Dtos
         public required string StreetName { get; set; }
         public LineString? Route { get; set; }
         public LineString? ManualRoute { get; set; }
+
+        public void CombineRoutes()
+        {
+            if (Route != null && ManualRoute != null)
+            {
+                var combinedCoordinates = Route.Coordinates.Concat(ManualRoute.Coordinates).ToArray();
+                Route = new LineString(combinedCoordinates);
+            }
+            else if (ManualRoute != null)
+            {
+                Route = ManualRoute;
+            }
+        }
     }
 }
