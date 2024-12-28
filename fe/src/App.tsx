@@ -11,10 +11,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { StreetInfoToIStreetRoute } from "./utils/Mapper";
 import { addMapState } from "./redux/mapSlice";
 import { removeCurrentStreet } from "./redux/StreetSlice";
+import useVisitor from "./hooks/useVisitor";
 
 function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  useVisitor();
   // const { currentStreetId } = useParams();
   const { currentStreet } = useSelector((state: RootState) => state.street);
   // Current street ROUTE show on map
