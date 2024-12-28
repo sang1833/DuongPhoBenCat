@@ -56,3 +56,10 @@ export const reportStreet = async (title: string, content: string) => {
   });
   return response;
 };
+
+export const trackVisitor = async (visitorId: string | null) => {
+  const response = await api.post("/api/Visitor", {
+    visitorId: visitorId
+  });
+  return response;
+};

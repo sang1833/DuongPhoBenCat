@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
-import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import { trackVisitor } from "@/apis/function";
 
 const useVisitor = () => {
   const [visitorId, setVisitorId] = useState<string | null>(null);
@@ -9,10 +9,8 @@ const useVisitor = () => {
   useEffect(() => {
     const fetchVisitorData = async (newId: string | null) => {
       try {
-        const response = await axios.post("http://localhost:5208/api/Visitor", {
-          visitorId: newId
-        });
-        console.log(response.data);
+        const response = trackVisitor(newId);
+        console.log(response);
       } catch (error) {
         console.error("Error fetching visitor data:", error);
       }
