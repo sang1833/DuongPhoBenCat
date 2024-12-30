@@ -14,6 +14,7 @@ namespace be.Interfaces
         Task<Visitor> TrackVisitorAsync(Visitor request);
         Task<int> GetVisitorCountAsync();
         Task<int> GetVisitorVisitCountAsync();
+        Task<(int, double)> GetVisitorTodayCountAsync();
         IEnumerable<Visitor> GetVisitorsToday();
         IEnumerable<Visitor> GetVisitorsThisWeek();
         IEnumerable<Visitor> GetVisitorsThisMonth();

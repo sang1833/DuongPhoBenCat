@@ -1,3 +1,4 @@
+using be.Dtos.Dashboard;
 using be.Helpers;
 using be.Models;
 
@@ -15,5 +16,7 @@ namespace be.Interfaces
         Task<Street?> UpdateAsync(Street? street, int id);
         Task<Street?> DeleteAsync(int id);
         Task<bool> IsStreetExistsAsync(int id);
+        Task<(int, double)> GetStreetCountWithChangeTodayAsync();
+        Task<AddressChart> GetAddressChartAsync();
     }
 }

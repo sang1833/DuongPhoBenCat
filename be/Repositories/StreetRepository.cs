@@ -1,4 +1,5 @@
 using be.Data;
+using be.Dtos.Dashboard;
 using be.Helpers;
 using be.Interfaces;
 using be.Models;
@@ -48,6 +49,29 @@ namespace be.Repositories
             await _context.SaveChangesAsync();
 
             return deleteStreet;
+        }
+
+        public async Task<AddressChart> GetAddressChartAsync()
+        {
+            var addresses = await _context.Streets.Select(s => s.Address).ToListAsync();
+            var totalAddresses = addresses.Count;
+        
+            // Normalize addresses by replacing empty or whitespace addresses with "Nhiều khu vực"
+            var normalizedAddresses = addresses.Select(a => string.IsNullOrWhiteSpace(a) ? "Nhiều khu vực" : a).ToList();
+        
+            // Calculate the percentage of each address
+            var addressGroups = normalizedAddresses.GroupBy(a => a)
+                                                    .Select(g => new { Address = g.Key, Count = g.Count() })
+                                                    .ToList();
+        
+            var addressChart = new AddressChart();
+            foreach (var group in addressGroups)
+            {
+                var percentage = (double)group.Count / totalAddresses * 100;
+                addressChart.AddAddressPercentage(group.Address, (int)percentage);
+            }
+        
+            return addressChart;
         }
 
         public async Task<(List<Street> pagedStreets, int totalPages)> GetAllAsync(StreetQueryObject queryObject)
@@ -124,6 +148,24 @@ namespace be.Repositories
                  .Include(c => c.Histories)
                  .Include(c => c.Images)
                  .FirstOrDefaultAsync(s => s.Id == id);
+        }
+
+        public async Task<(int, double)> GetStreetCountWithChangeTodayAsync()
+        {
+            var streets = _context.Streets;
+            var totalStreets = await streets.CountAsync();
+            var today = DateTime.Today;
+            
+            var todayStreets = await streets.Where(s => s.CreatedDate.Date == today.Date).CountAsync();
+            var yesterdayStreets = await streets.Where(s => s.CreatedDate.Date == today.AddDays(-1).Date).CountAsync();
+
+            double changeValue = 0;
+            if (yesterdayStreets != 0)
+            {
+                changeValue = (double)(todayStreets - yesterdayStreets) / yesterdayStreets * 100;
+            }
+
+            return (totalStreets, changeValue);
         }
 
         public async Task<List<Street>> GetStreetListByTownAsync(string? town)
@@ -241,6 +283,5 @@ namespace be.Repositories
 
             return existingStreet;
         }
-
     }
 }

@@ -94,5 +94,10 @@ namespace be.Repositories
                 UpdatedDate = user.UpdatedDate
             };
         }
+
+        public Task<int> GetUserCount()
+        {
+            return _userManager.Users.CountAsync();
+        }
     }
 }

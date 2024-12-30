@@ -85,5 +85,20 @@ namespace be.Repositories
         {
             return _context.Visitors;
         }
+
+        public async Task<(int, double)> GetVisitorTodayCountAsync()
+        {
+            var today = DateTime.Today;
+            var todayCount = await _context.Visitors.CountAsync(v => v.LastAccess.Date == today);
+            var yesterdayCount = await _context.Visitors.CountAsync(v => v.LastAccess.Date == today.AddDays(-1));
+
+            double changeValue = 0;
+            if (yesterdayCount != 0)
+            {
+                changeValue = ((double)todayCount - yesterdayCount) / yesterdayCount * 100;
+            }
+
+            return (todayCount, changeValue);
+        }
     }
 }
