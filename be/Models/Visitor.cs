@@ -10,10 +10,10 @@ namespace be.Models
     public class Visitor
     {
         [Key]
-        public int Id { get; set; }
         public string VisitorId { get; set; } = "";
         public int VisitCount { get; set; }
         public DateTime FirstVisit { get; set; }
         public DateTime LastAccess { get; set; }
+        public List<VisitorDetail>? VisitorDetails { get; set; } = new List<VisitorDetail>();
     }
 }
