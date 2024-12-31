@@ -22,7 +22,7 @@ namespace be.Repositories
 
         public async Task<int> GetVisitorVisitCountAsync()
         {
-            return await _context.Visitors.SumAsync(v => v.VisitCount);
+            return await _context.VisitorDetails.CountAsync();
         }
 
         public async Task<int> GetVisitorCountAsync()
@@ -32,8 +32,8 @@ namespace be.Repositories
 
         public async Task<Visitor> TrackVisitorAsync(Visitor request)
         {
-            var visitor = _context.Visitors.FirstOrDefault(v => v.VisitorId == request.VisitorId);
-
+            Visitor? visitor = _context.Visitors.FirstOrDefault(v => v.VisitorId == request.VisitorId);
+        
             if (visitor == null)
             {
                 visitor = new Visitor
@@ -41,19 +41,30 @@ namespace be.Repositories
                     VisitorId = request.VisitorId,
                     FirstVisit = DateTime.Now,
                     LastAccess = DateTime.Now,
-                    VisitCount = 1
+                    VisitorDetails = new List<VisitorDetail>
+                    {
+                        new VisitorDetail
+                        {
+                            VisitorId = request.VisitorId,
+                            AccessTime = DateTime.Now
+                        }
+                    }
                 };
-
+        
                 await _context.Visitors.AddAsync(visitor);
             }
             else
             {
                 visitor.LastAccess = DateTime.Now;
-                visitor.VisitCount++;
+                visitor.VisitorDetails?.Add(new VisitorDetail
+                {
+                    VisitorId = request.VisitorId,
+                    AccessTime = DateTime.Now
+                });
             }
-
+        
             await _context.SaveChangesAsync();
-
+        
             return visitor;
         }
 
@@ -84,6 +95,21 @@ namespace be.Repositories
         public IEnumerable<Visitor> GetAllVisitors()
         {
             return _context.Visitors;
+        }
+
+        public async Task<(int, double)> GetVisitorTodayCountAsync()
+        {
+            var today = DateTime.Today;
+            var todayCount = await _context.Visitors.CountAsync(v => v.LastAccess.Date == today);
+            var yesterdayCount = await _context.Visitors.CountAsync(v => v.LastAccess.Date == today.AddDays(-1));
+
+            double changeValue = 0;
+            if (yesterdayCount != 0)
+            {
+                changeValue = ((double)todayCount - yesterdayCount) / yesterdayCount * 100;
+            }
+
+            return (todayCount, changeValue);
         }
     }
 }

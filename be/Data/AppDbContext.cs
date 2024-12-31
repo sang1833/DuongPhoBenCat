@@ -45,6 +45,12 @@ namespace be.Data
                 .HasForeignKey(si => si.StreetId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<Visitor>()
+                .HasMany(s => s.VisitorDetails)
+                .WithOne(si => si.Visitor)
+                .HasForeignKey(si => si.VisitorId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.Entity<StreetHistory>()
                 .Property(sh => sh.CreatedDate)
                 .ValueGeneratedOnAdd()
@@ -74,13 +80,13 @@ namespace be.Data
                 .Property(s => s.UpdatedDate)
                 .ValueGeneratedOnAddOrUpdate()
                 .HasDefaultValueSql("now()");
-
+            
             builder.Entity<StreetType>().HasData(
                 new StreetType {Id = 1, StreetTypeName = "Đường lớn"},
                 new StreetType {Id = 2, StreetTypeName = "Đường nhỏ"},
                 new StreetType {Id = 3, StreetTypeName = "Hẻm"}
             );
-
+            
             builder.Entity<AppUser>()
                 .Property(s => s.CreatedDate)
                 .ValueGeneratedOnAdd()
@@ -91,14 +97,14 @@ namespace be.Data
                 .ValueGeneratedOnAddOrUpdate()
                 .HasDefaultValueSql("now()");
 
-            builder.Entity<Visitor>()
-                .Property(tr => tr.FirstVisit)
-                .ValueGeneratedOnAdd()
-                .HasDefaultValueSql("now()");
-
             builder.Entity<Suggestion>()
                 .Property(tr => tr.CreatedDate)
                 .ValueGeneratedOnAdd()
+                .HasDefaultValueSql("now()");
+
+            builder.Entity<VisitorDetail>()
+                .Property(tr => tr.AccessTime)
+                .ValueGeneratedOnAddOrUpdate()
                 .HasDefaultValueSql("now()");
         }
 
@@ -107,6 +113,7 @@ namespace be.Data
         public required DbSet<StreetHistory> StreetHistories { get; set; }
         public required DbSet<StreetImage> StreetImages { get; set; }
         public required DbSet<Visitor> Visitors { get; set; }
+        public required DbSet<VisitorDetail> VisitorDetails { get; set; }
         public required DbSet<Suggestion> Suggestions { get; set; }
     }
 }

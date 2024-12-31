@@ -22,7 +22,6 @@ namespace be.Mappers
         {
             return new VisitorDto
             {
-                Id = model.Id,
                 VisitorId = model.VisitorId,
                 VisitCount = model.VisitCount,
                 FirstVisit = model.FirstVisit,

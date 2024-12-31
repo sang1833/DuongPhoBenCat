@@ -12,5 +12,6 @@ namespace be.Interfaces
     {
         Task<(List<AdminGetUserDto> users, int totalPages)> GetAllUser(UserQueryObject userQueryObject);
         Task<AdminGetUserDto?> GetUserById(string id);
+        Task<int> GetUserCount();
     }
 }

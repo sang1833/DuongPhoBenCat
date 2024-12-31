@@ -111,6 +111,7 @@ namespace be.Controllers
                 return NotFound();
             }
             StreetDto streetDto = street.ToStreetDto();
+            streetDto.CombineRoutes();
 
             return Ok(streetDto);
         }

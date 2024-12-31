@@ -8,7 +8,6 @@ namespace be.Dtos.Visitor
 {
     public class VisitorDto
     {
-        public int Id { get; set; }
         public required string VisitorId { get; set; }
         public int VisitCount { get; set; }  
         public DateTime FirstVisit { get; set; }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using be.Dtos.Dashboard;
 using be.Interfaces;
 using be.Models;
 using Microsoft.AspNetCore.Identity;
@@ -15,25 +16,61 @@ namespace be.Controllers
     {
         private readonly IStreetRepository _streetRepo;
         private readonly IVisitorRepository _visitorRepo;
-        private readonly UserManager<AppUser> _userManager;
+        private readonly IUserRepository _userRepo;
 
         public DashboardController(
             IStreetRepository streetRepo,
             IVisitorRepository visitorRepo,
-            UserManager<AppUser> userManager
+            IUserRepository userRepo
         )
         {
             _streetRepo = streetRepo;
             _visitorRepo = visitorRepo;
-            _userManager = userManager;
+            _userRepo = userRepo;
         }
 
-        [HttpGet("getAll")]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("getDashboard")]
+        public async Task<ActionResult<DashboardReturnDto>> GetAll()
         {
-            await Task.Delay(100);
+            // Get visitor visit count
+            var visitorVisitCount = await _visitorRepo.GetVisitorVisitCountAsync();
 
-            return Ok(new { message = "Dashboard data" });
+            // Get visitor today
+            (int visitorsToday, double visitorsTodayChange) = await _visitorRepo.GetVisitorTodayCountAsync();
+
+            // Get street count
+            (int streetCount, double streetChange) = await _streetRepo.GetStreetCountWithChangeTodayAsync();
+
+            // Get user count
+            var userCount = await _userRepo.GetUserCount();
+
+            // Get address chart
+            var addressChart = await _streetRepo.GetAddressChartAsync();
+
+            DashboardReturnDto returnDto = new DashboardReturnDto
+            {
+                TotalUserAccess = new TotalUserAccessCount
+                {
+                    Total = visitorVisitCount,
+                },
+                TotalUserToday = new TotalUserToday
+                {
+                    Total = visitorsToday,
+                    ChangeValue = visitorsTodayChange
+                },
+                TotalStreetCount = new TotalStreetCount
+                {
+                    Total = streetCount,
+                    ChangeValue = streetChange
+                },
+                TotalEmployeeCount = new TotalEmployeeCount
+                {
+                    Total = userCount,
+                },
+                AddressChart = addressChart
+            };
+
+            return Ok(returnDto);
         }
     }
 }

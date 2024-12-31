@@ -29,10 +29,10 @@ namespace be.Controllers
                 return BadRequest(ModelState);
             }
 
-            var visitor = request.ToVisitorFromCreateDto();
-            var result = await _visitorRepo.TrackVisitorAsync(visitor);
+            Visitor visitor = request.ToVisitorFromCreateDto();
+            Visitor result = await _visitorRepo.TrackVisitorAsync(visitor);
 
-            return Ok(result);
+            return Ok(result.MapToVisitorDto());
         }
     }
 }

@@ -33,5 +33,17 @@ namespace be.Dtos
         public LineString? ManualWayPoints { get; set; }
         public List<HistoryInStreetDto>? Histories { get; set; }
         public List<ImageInStreetDto>? Images { get; set; }
+        public void CombineRoutes()
+        {
+            if (Route != null && ManualRoute != null)
+            {
+                var combinedCoordinates = Route.Coordinates.Concat(ManualRoute.Coordinates).ToArray();
+                Route = new LineString(combinedCoordinates);
+            }
+            else if (ManualRoute != null)
+            {
+                Route = ManualRoute;
+            }
+        }
     }
 }
