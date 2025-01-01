@@ -1,8 +1,9 @@
 import { ApexOptions } from "apexcharts";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
+import { accessByDay, accessByMonth, accessByYear } from "@api";
 
-const options: ApexOptions = {
+const initialOptions: ApexOptions = {
   legend: {
     show: false,
     position: "top",
@@ -21,7 +22,6 @@ const options: ApexOptions = {
       left: 0,
       opacity: 0.1
     },
-
     toolbar: {
       show: false
     }
@@ -48,10 +48,6 @@ const options: ApexOptions = {
     width: [2, 2],
     curve: "straight"
   },
-  // labels: {
-  //   show: false,
-  //   position: "top",
-  // },
   grid: {
     xaxis: {
       lines: {
@@ -83,20 +79,7 @@ const options: ApexOptions = {
   },
   xaxis: {
     type: "category",
-    categories: [
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug"
-    ],
+    categories: [],
     axisBorder: {
       show: false
     },
@@ -120,6 +103,7 @@ interface ChartOneState {
     name: string;
     data: number[];
   }[];
+  options: ApexOptions;
 }
 
 const ChartOne: React.FC = () => {
@@ -127,16 +111,57 @@ const ChartOne: React.FC = () => {
     series: [
       {
         name: "Product One",
-        data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45]
+        data: []
       }
-    ]
+    ],
+    options: initialOptions
   });
+  const [time, setTime] = useState("day");
 
-  const handleReset = () => {
-    setState((prevState) => ({
-      ...prevState
-    }));
+  const fetchData = async () => {
+    try {
+      let response;
+      if (time === "day") {
+        response = await accessByDay();
+      } else if (time === "month") {
+        response = await accessByMonth();
+      } else if (time === "year") {
+        response = await accessByYear();
+      }
+      const data = response?.data.data.map(
+        (item: { time: string; count: number }) => item.count
+      );
+      const categories = response?.data.data.map(
+        (item: { time: string; count: number }) => item.time
+      );
+      const maxCount = Math.max(...data);
+      setState({
+        series: [
+          {
+            name: "Product One",
+            data: data
+          }
+        ],
+        options: {
+          ...state.options,
+          xaxis: {
+            ...state.options.xaxis,
+            categories: categories
+          },
+          yaxis: {
+            ...state.options.yaxis,
+            max: maxCount
+          }
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [time]);
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
@@ -155,22 +180,28 @@ const ChartOne: React.FC = () => {
         <div className="flex w-full max-w-45 justify-end">
           <div className="inline-flex items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4">
             <button
-              onClick={handleReset}
-              className="rounded bg-white py-1 px-3 text-xs font-medium text-black shadow-card hover:bg-white hover:shadow-card dark:bg-boxdark dark:text-white dark:hover:bg-boxdark"
-            >
-              Ngày
-            </button>
-            <button
-              onClick={handleReset}
-              className="rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark"
+              onClick={() => setTime("day")}
+              className={`"rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:bg-boxdark dark:text-white dark:hover:bg-boxdark" + ${
+                time === "day" ? "bg-white shadow-card" : ""
+              }`}
             >
               Tuần
             </button>
             <button
-              onClick={handleReset}
-              className="rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark"
+              onClick={() => setTime("month")}
+              className={`"rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark" + ${
+                time === "month" ? "bg-white shadow-card" : ""
+              }`}
             >
               Tháng
+            </button>
+            <button
+              onClick={() => setTime("year")}
+              className={`"rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark" + ${
+                time === "year" ? "bg-white shadow-card" : ""
+              }`}
+            >
+              Năm
             </button>
           </div>
         </div>
@@ -179,7 +210,7 @@ const ChartOne: React.FC = () => {
       <div>
         <div id="chartOne" className="-ml-5">
           <ReactApexChart
-            options={options}
+            options={state.options}
             series={state.series}
             type="area"
             height={350}

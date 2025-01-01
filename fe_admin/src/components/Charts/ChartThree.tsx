@@ -1,9 +1,10 @@
 import { ApexOptions } from "apexcharts";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 
 interface ChartThreeState {
   series: number[];
+  labels: string[];
 }
 
 const options: ApexOptions = {
@@ -12,12 +13,10 @@ const options: ApexOptions = {
     type: "donut"
   },
   colors: ["#3C50E0", "#6577F3", "#8FD0EF", "#0FADCF"],
-  labels: ["Thới Hoà", "Tân Định", "An Tây", "Chánh Phú Hoà"],
   legend: {
     show: false,
     position: "bottom"
   },
-
   plotOptions: {
     pie: {
       donut: {
@@ -49,32 +48,38 @@ const options: ApexOptions = {
   ]
 };
 
-const ChartThree: React.FC = () => {
+const ChartThree: React.FC<{
+  addressChart: {
+    addressPercentages: { address: string; percentage: number }[];
+  };
+}> = ({ addressChart }) => {
   const [state, setState] = useState<ChartThreeState>({
-    series: [65, 34, 12, 56]
+    series: [],
+    labels: []
   });
 
-  const handleReset = () => {
-    setState((prevState) => ({
-      ...prevState,
-      series: [65, 34, 12, 56]
-    }));
-  };
+  useEffect(() => {
+    const series = addressChart.addressPercentages.map(
+      (item) => item.percentage
+    );
+    const labels = addressChart.addressPercentages.map((item) => item.address);
+    setState({ series, labels });
+  }, [addressChart]);
 
   return (
     <div className="sm:px-7.5 col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
       <div className="mb-3 justify-between gap-4 sm:flex">
         <div>
           <h5 className="text-xl font-semibold text-black dark:text-white">
-            Biểu đồ tuyến đường theo khu vực
+            Tuyến đường theo khu vực
           </h5>
         </div>
-        <div>
+        {/* <div>
           <div className="relative z-20 inline-block">
             <select
               name=""
               id=""
-              onSelect={handleReset}
+              onSelect={() => setState({ series: [], labels: [] })}
               className="relative z-20 inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
             >
               <option value="" className="dark:bg-boxdark">
@@ -105,13 +110,13 @@ const ChartThree: React.FC = () => {
               </svg>
             </span>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="mb-2">
         <div id="chartThree" className="mx-auto flex justify-center">
           <ReactApexChart
-            options={options}
+            options={{ ...options, labels: state.labels }}
             series={state.series}
             type="donut"
           />
@@ -119,42 +124,24 @@ const ChartThree: React.FC = () => {
       </div>
 
       <div className="-mx-8 flex flex-wrap items-center justify-center gap-y-3">
-        <div className="sm:w-1/2 w-full px-8">
-          <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-primary"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
-              <span> Thới Hoà </span>
-              <span> 65% </span>
-            </p>
+        {state.labels.map((label, index) => (
+          <div key={index} className="sm:w-1/2 w-full px-8">
+            <div className="flex w-full items-center">
+              <span
+                className="mr-2 block h-3 w-full max-w-3 rounded-full"
+                style={{
+                  backgroundColor: (options.colors || [])[
+                    index % (options.colors || []).length
+                  ]
+                }}
+              ></span>
+              <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
+                <span>{label}</span>
+                <span>{state.series[index]}%</span>
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="sm:w-1/2 w-full px-8">
-          <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#6577F3]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
-              <span> Tân Định </span>
-              <span> 34% </span>
-            </p>
-          </div>
-        </div>
-        <div className="sm:w-1/2 w-full px-8">
-          <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#8FD0EF]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
-              <span> An Tây </span>
-              <span> 45% </span>
-            </p>
-          </div>
-        </div>
-        <div className="sm:w-1/2 w-full px-8">
-          <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#0FADCF]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
-              <span> Chánh Phú Hoà </span>
-              <span> 12% </span>
-            </p>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );

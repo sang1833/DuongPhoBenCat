@@ -77,3 +77,27 @@ export interface LoginRequestDto {
   username: string;
   password: string;
 }
+
+// dashboard
+export interface DashboardResponse {
+  totalUserAccess: {
+    total: number;
+  };
+  totalUserToday: {
+    total: number;
+    changeValue: number;
+  };
+  totalStreetCount: {
+    total: number;
+    changeValue: number;
+  };
+  totalEmployeeCount: {
+    total: number;
+  };
+  addressChart: {
+    addressPercentages: {
+      address: string;
+      percentage: number;
+    }[];
+  };
+}

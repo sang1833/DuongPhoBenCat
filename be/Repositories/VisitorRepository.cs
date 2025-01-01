@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using be.Data;
+using be.Dtos.Dashboard;
 using be.Dtos.Visitor;
 using be.Helpers;
 using be.Interfaces;
@@ -39,6 +40,7 @@ namespace be.Repositories
                 visitor = new Visitor
                 {
                     VisitorId = request.VisitorId,
+                    VisitCount = 1,
                     FirstVisit = DateTime.Now,
                     LastAccess = DateTime.Now,
                     VisitorDetails = new List<VisitorDetail>
@@ -56,6 +58,7 @@ namespace be.Repositories
             else
             {
                 visitor.LastAccess = DateTime.Now;
+                visitor.VisitCount++;
                 visitor.VisitorDetails?.Add(new VisitorDetail
                 {
                     VisitorId = request.VisitorId,
@@ -68,40 +71,11 @@ namespace be.Repositories
             return visitor;
         }
 
-        public IEnumerable<Visitor> GetVisitorsToday()
-        {
-            var today = DateTime.Today;
-            return _context.Visitors.Where(v => v.LastAccess.Date == today);
-        }
-
-        public IEnumerable<Visitor> GetVisitorsThisWeek()
-        {
-            var startOfWeek = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
-            return _context.Visitors.Where(v => v.LastAccess >= startOfWeek);
-        }
-
-        public IEnumerable<Visitor> GetVisitorsThisMonth()
-        {
-            var startOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-            return _context.Visitors.Where(v => v.LastAccess >= startOfMonth);
-        }
-
-        public IEnumerable<Visitor> GetVisitorsThisYear()
-        {
-            var startOfYear = new DateTime(DateTime.Today.Year, 1, 1);
-            return _context.Visitors.Where(v => v.LastAccess >= startOfYear);
-        }
-
-        public IEnumerable<Visitor> GetAllVisitors()
-        {
-            return _context.Visitors;
-        }
-
         public async Task<(int, double)> GetVisitorTodayCountAsync()
         {
             var today = DateTime.Today;
-            var todayCount = await _context.Visitors.CountAsync(v => v.LastAccess.Date == today);
-            var yesterdayCount = await _context.Visitors.CountAsync(v => v.LastAccess.Date == today.AddDays(-1));
+            var todayCount = await _context.VisitorDetails.CountAsync(v => v.AccessTime.Date == today);
+            var yesterdayCount = await _context.VisitorDetails.CountAsync(v => v.AccessTime.Date == today.AddDays(-1));
 
             double changeValue = 0;
             if (yesterdayCount != 0)
@@ -110,6 +84,78 @@ namespace be.Repositories
             }
 
             return (todayCount, changeValue);
+        }
+
+        public async Task<AccessChartDto> GetAccessByDayAsync()
+        {
+            var last7Days = DateTime.Today.AddDays(-6);
+            var dateRange = Enumerable.Range(0, 7).Select(i => last7Days.AddDays(i)).ToList();
+        
+            var data = await _context.VisitorDetails
+                .Where(v => v.AccessTime.Date >= last7Days)
+                .GroupBy(v => v.AccessTime.Date)
+                .Select(g => new AccessChartDto.AccessData
+                {
+                    Time = g.Key.ToString("dd-MM-yyyy"),
+                    Count = g.Count()
+                })
+                .ToListAsync();
+        
+            var result = dateRange.Select(date => new AccessChartDto.AccessData
+            {
+                Time = date.ToString("dd-MM-yyyy"),
+                Count = data.FirstOrDefault(d => d.Time == date.ToString("dd-MM-yyyy"))?.Count ?? 0
+            }).ToList();
+        
+            return new AccessChartDto { Data = result };
+        }
+        
+        public async Task<AccessChartDto> GetAccessByMonthAsync()
+        {
+            var last12Months = DateTime.Today.AddMonths(-11);
+            var dateRange = Enumerable.Range(0, 12).Select(i => last12Months.AddMonths(i)).ToList();
+        
+            var data = await _context.VisitorDetails
+                .Where(v => v.AccessTime >= last12Months)
+                .GroupBy(v => new { v.AccessTime.Year, v.AccessTime.Month })
+                .Select(g => new AccessChartDto.AccessData
+                {
+                    Time = new DateTime(g.Key.Year, g.Key.Month, 1).ToString("MM-yyyy"),
+                    Count = g.Count()
+                })
+                .ToListAsync();
+        
+            var result = dateRange.Select(date => new AccessChartDto.AccessData
+            {
+                Time = date.ToString("MM-yyyy"),
+                Count = data.FirstOrDefault(d => d.Time == date.ToString("MM-yyyy"))?.Count ?? 0
+            }).ToList();
+        
+            return new AccessChartDto { Data = result };
+        }
+        
+        public async Task<AccessChartDto> GetAccessByYearAsync()
+        {
+            var lastYears = DateTime.Today.AddYears(-4).Year;
+            var currentYear = DateTime.Today.Year;
+            var yearRange = Enumerable.Range(lastYears, currentYear - lastYears + 1).ToList();
+        
+            var data = await _context.VisitorDetails
+                .GroupBy(v => v.AccessTime.Year)
+                .Select(g => new AccessChartDto.AccessData
+                {
+                    Time = g.Key.ToString(),
+                    Count = g.Count()
+                })
+                .ToListAsync();
+        
+            var result = yearRange.Select(year => new AccessChartDto.AccessData
+            {
+                Time = year.ToString(),
+                Count = data.FirstOrDefault(d => d.Time == year.ToString())?.Count ?? 0
+            }).ToList();
+        
+            return new AccessChartDto { Data = result };
         }
     }
 }

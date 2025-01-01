@@ -2,6 +2,7 @@ import { reApi } from "./config";
 import {
   CreateStreetRequestDto,
   CreateStreetTypeRequestDto,
+  DashboardResponse,
   UpdateStreetRequestDto,
   UpdateStreetTypeRequestDto
 } from "./types";
@@ -362,6 +363,48 @@ export const getSuggestionById = async (suggestionId: string) => {
     return response;
   } catch (error) {
     console.error("Get suggestion by id error:", error);
+    throw error;
+  }
+};
+
+export const getDashboard = async (): Promise<DashboardResponse> => {
+  try {
+    const response = await reApi.get<DashboardResponse>(
+      "/api/dashboard/getDashboard"
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Get dashboard error:", error);
+    throw error;
+  }
+};
+
+export const accessByDay = async () => {
+  try {
+    const response = await reApi.get("/api/dashboard/accessByDay");
+    return response;
+  } catch (error) {
+    console.error("Access by day error:", error);
+    throw error;
+  }
+};
+
+export const accessByMonth = async () => {
+  try {
+    const response = await reApi.get("/api/dashboard/accessByMonth");
+    return response;
+  } catch (error) {
+    console.error("Access by month error:", error);
+    throw error;
+  }
+};
+
+export const accessByYear = async () => {
+  try {
+    const response = await reApi.get("/api/dashboard/accessByYear");
+    return response;
+  } catch (error) {
+    console.error("Access by year error:", error);
     throw error;
   }
 };

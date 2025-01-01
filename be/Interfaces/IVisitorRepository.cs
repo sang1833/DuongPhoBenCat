@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using be.Dtos.Dashboard;
 using be.Dtos.Visitor;
 using be.Helpers;
 using be.Models;
@@ -15,10 +16,8 @@ namespace be.Interfaces
         Task<int> GetVisitorCountAsync();
         Task<int> GetVisitorVisitCountAsync();
         Task<(int, double)> GetVisitorTodayCountAsync();
-        IEnumerable<Visitor> GetVisitorsToday();
-        IEnumerable<Visitor> GetVisitorsThisWeek();
-        IEnumerable<Visitor> GetVisitorsThisMonth();
-        IEnumerable<Visitor> GetVisitorsThisYear();
-        IEnumerable<Visitor> GetAllVisitors();
+        Task<AccessChartDto> GetAccessByDayAsync();
+        Task<AccessChartDto> GetAccessByMonthAsync();
+        Task<AccessChartDto> GetAccessByYearAsync();
     }
 }
