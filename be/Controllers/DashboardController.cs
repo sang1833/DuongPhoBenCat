@@ -33,7 +33,7 @@ namespace be.Controllers
         public async Task<ActionResult<DashboardReturnDto>> GetAll()
         {
             // Get visitor visit count
-            var visitorVisitCount = await _visitorRepo.GetVisitorVisitCountAsync();
+            int visitorVisitCount = await _visitorRepo.GetVisitorVisitCountAsync();
 
             // Get visitor today
             (int visitorsToday, double visitorsTodayChange) = await _visitorRepo.GetVisitorTodayCountAsync();
@@ -71,6 +71,27 @@ namespace be.Controllers
             };
 
             return Ok(returnDto);
+        }
+    
+        [HttpGet("accessByDay")]
+        public async Task<ActionResult<AccessChartDto>> GetAccessByDay()
+        {
+            var data = await _visitorRepo.GetAccessByDayAsync();
+            return Ok(data);
+        }
+
+        [HttpGet("accessByMonth")]
+        public async Task<ActionResult<AccessChartDto>> GetAccessByMonth()
+        {
+            var data = await _visitorRepo.GetAccessByMonthAsync();
+            return Ok(data);
+        }
+
+        [HttpGet("accessByYear")]
+        public async Task<ActionResult<AccessChartDto>> GetAccessByYear()
+        {
+            var data = await _visitorRepo.GetAccessByYearAsync();
+            return Ok(data);
         }
     }
 }
