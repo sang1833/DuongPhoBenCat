@@ -10,17 +10,16 @@
   - Username: `SuperAdmin`
   - Password: `Superadmin$123`
 
-## Quick run
+## Quick run (be)
 
-1. Pull image from docker:
-2. Run
+1. Pull image from docker: `docker pull thanhsang1833/bcapi`
+2. Run this image port 8080
 
 ## How to use this code
 
 1. Download code `gh repo clone sang1833/DuongPhoBenCat`
 2. Using VS code (_or any text editor/ IDE you want, I use VS code to make this project_), make 3 .env file for 3 folder: **be**, **fe** and **fe_admin**
-3. ...
-4. Use command:
+3. Use command below:
 
 - FE: `npm install && npm run dev`
 - FE_ADMIN: `npm install && npm run dev`
