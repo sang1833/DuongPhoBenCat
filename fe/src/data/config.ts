@@ -4,6 +4,7 @@ export default {
     width: 2
   },
   street: {
-    color: "#2563eb"
+    color: "#2563eb",
+    seletedColor: "#ff0000"
   }
 };
