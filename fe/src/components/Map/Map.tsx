@@ -43,9 +43,15 @@ const Map: React.FC<MapProps> = ({
       {streets.map((street) => (
         <>
           <Polyline
-            key={street.id}
+            key={`${street.id}-${
+              selectedStreet?.id === street.id ? "selected" : "unselected"
+            }`}
             positions={street.route.coordinates}
-            color={config.street.color}
+            color={
+              selectedStreet?.id === street.id
+                ? config.street.seletedColor
+                : config.street.color
+            }
             weight={5}
             eventHandlers={{
               click: () => onStreetClick(street.id)
@@ -53,6 +59,7 @@ const Map: React.FC<MapProps> = ({
           >
             <Popup>{street.streetName}</Popup>
           </Polyline>
+
           <Polyline
             positions={street.route.coordinates}
             color="transparent"

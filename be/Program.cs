@@ -162,6 +162,8 @@ builder.Services.AddScoped<ISuggestRepository, SuggestRepository>();
 
 var app = builder.Build();
 
+app.UsePathBase("/be");
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
