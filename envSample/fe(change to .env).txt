@@ -1,0 +1,3 @@
+# Url for backend api
+VITE_BASE_URL = 
+VITE_BASE_DEV_URL = http://localhost:5208

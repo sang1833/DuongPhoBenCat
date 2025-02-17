@@ -1,0 +1,8 @@
+# Url for backend api
+VITE_BASE_URL = http://localhost:5208/
+VITE_BASE_DEV_URL = http://localhost:5208/
+# Url for OSRM api (remember to run OSRM docker)
+VITE_OSRM_URL = 
+VITE_OSRM_DEV_URL = 
+# Url for cloudinary api
+VITE_CLOUDINARY_NAME = 
