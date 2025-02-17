@@ -35,3 +35,11 @@
 
 - VScode
 - Nodejs: 18.18.0
+
+## Note
+
+Export data:
+`pg_dump -h (oldHostUrl) -U doadmin -d (database) --encoding=UTF8 -p (port) -F c -f backup.dump`
+
+Import:
+`pg_restore -h (newHostUrl) -U doadmin --no-owner -d (database) -F c backup.dump`
